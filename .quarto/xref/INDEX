@@ -1,0 +1,20 @@
+{
+  "index.qmd": {
+    "index.html": "319bf41d"
+  },
+  "about.qmd": {
+    "about.html": "71bae44e"
+  },
+  "y3_data/01_run_descriptives.qmd": {
+    "01_run_descriptives.html": "b2457d9f"
+  },
+  "y3_data/02_report.qmd": {
+    "02_report.html": "56e423ee"
+  },
+  "y3_data/03_report_full.qmd": {
+    "03_report_full.html": "438881b8"
+  },
+  "y3_data/04_neighborhood_report.qmd": {
+    "04_neighborhood_report.html": "08861e7e"
+  }
+}

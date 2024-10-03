@@ -1,0 +1,103 @@
+---
+title: "LAUSD HR Data Study 2 - Brief Report"
+execute:
+  echo: false
+  message: false
+  warning: false
+format: 
+  html:
+    embed-resources: true
+editor: visual
+---
+
+## Purpose
+
+Purposes of this document:
+
+1.  Provides Analyses of 
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+## Housekeeping
+
+## ---------------------------
+## libraries
+## ---------------------------
+library(tidyverse)
+library(readxl)
+library(openxlsx)
+library(janitor)
+library(kableExtra)
+library(pwr)
+library(kableExtra)
+
+## ---------------------------
+## directory paths
+## ---------------------------
+
+#see current directory
+#getwd()
+
+#set current directory
+code_file_dir<-file.path("C:/Users/yjeff/Desktop/Community Schools/Teacher Retention Data",
+                "Analyses", "y3_data")
+
+data_file_dir<-file.path("C:/Users/yjeff/Box/LAUSD TR Data Year 3")
+
+## ---------------------------
+## helper functions
+## ---------------------------
+
+## ---------------------------
+## load & inspect data
+## ---------------------------
+
+load(file.path(code_file_dir, "rent_tbls.RData"))
+load(file.path(code_file_dir, "rent_plots.RData"))
+
+```
+
+# Descriptive Analyses
+
+## Retention Rate: All Schools
+
+<details>
+
+```{r}
+combined_tbls[["overall"]] %>% kable()
+bar_plots_combined[["overall"]]
+```
+
+</details>
+
+
+## Retention Rate: Elementary Schools
+<details>
+```{r}
+combined_tbls[["elem"]] %>% kable()
+bar_plots_combined[["elem"]]
+```
+</details>
+
+## Retention: Middle/High Schools
+<details>
+```{r}
+combined_tbls[["ms_hs"]] %>% kable()
+bar_plots_combined[["ms_hs"]]
+```
+</details>
+
+
+
+
+
+
+
+
+
+
+
+

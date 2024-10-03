@@ -1,0 +1,188 @@
+---
+title: "LAUSD HR Data Study 2 - Neighborhood Report"
+execute:
+  echo: false
+  message: false
+  warning: false
+format: 
+  html:
+    embed-resources: true
+editor: visual
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+## Housekeeping
+
+## ---------------------------
+## libraries
+## ---------------------------
+library(tidyverse)
+library(readxl)
+library(openxlsx)
+library(janitor)
+library(kableExtra)
+library(pwr)
+library(kableExtra)
+library(knitr)
+
+## ---------------------------
+## directory paths
+## ---------------------------
+
+#see current directory
+#getwd()
+
+#set current directory
+code_file_dir<-file.path("C:/Users/yjeff/Desktop/Community Schools/Teacher Retention Data",
+                "Analyses", "y3_data")
+
+data_file_dir<-file.path("C:/Users/yjeff/Box/LAUSD TR Data Year 3")
+
+## ---------------------------
+## helper functions
+## ---------------------------
+
+update_tbl_names<-function(df){
+  df_update<-df
+  colnames(df_update)<-c("School", "2019", "2020", "2021", "2022", "2023")
+  return(df_update)
+}
+
+## ---------------------------
+## load & inspect data
+## ---------------------------
+
+load(file.path(code_file_dir, "rent_tbls.RData"))
+load(file.path(code_file_dir, "rent_plots.RData"))
+
+#toc tables
+load(file.path(code_file_dir, "toc_rent_tbls.RData"))
+load(file.path(code_file_dir, "rent_plots_toc.RData"))
+
+load(file.path(code_file_dir, "hr_by_sch.RData"))
+
+
+## Add Lists
+source(file.path(code_file_dir, "00_school_lists.R"))
+
+
+```
+
+## Purpose
+
+The purpose of this document is to present neighborhood-specific retention rates. We begin with an overview, categorizing neighborhoods based on where community schools (CS) exhibit higher, mixed/neutral, or lower retention rates compared to traditional public schools (TS). Following the overview, we provide more details of the retention rates for each neighborhood.
+
+## Overview
+
++--------------------------------------------------+---------------------------------------------------+-------------------------------------------------+
+| Neighborhoods where CS have Higher Rates than TS | Neighborhoods where CS have Similar Rates than TS | Neighborhoods where CS have Lower Rates than TS |
++==================================================+===================================================+=================================================+
+| 1.  LA Mid-City                                  | 1.  Hamilton                                      | 1.  Gardena                                     |
+|                                                  |                                                   |                                                 |
+| 2.  HEET                                         | 2.  Monroe                                        | 2.  South LA                                    |
+|                                                  |                                                   |                                                 |
+| 3.  Boyle Heights                                | 3.  Bell Cuday Monroe                             | 3.  Venice                                      |
+|                                                  |                                                   |                                                 |
+| 4.  Lincoln Heights El Sereno                    | 4.  Downtown                                      | 4.  Macarthur Park                              |
+|                                                  |                                                   |                                                 |
+| 5.  Van Nuys Valley Glen                         | 5.  Sun Valley                                    | 5.  Panorama City                               |
+|                                                  |                                                   |                                                 |
+| 6.  Hollywood                                    | 6.  Riveria                                       |                                                 |
+|                                                  |                                                   |                                                 |
+| 7.  Carson                                       | 7.  Fremont                                       |                                                 |
+|                                                  |                                                   |                                                 |
+|                                                  | 8.  Huntington Park/Vernon                        |                                                 |
++--------------------------------------------------+---------------------------------------------------+-------------------------------------------------+
+
+## Neighborhoods where CS have Higher Retention Rates than TS
+
+<details>
+
+```{r, echo = FALSE, results='asis'}
+
+neighborhood_string<-c("LA Mid-City", "Heet", "Boyle Heights",
+                    "Lincoln Heights El Sereno",
+                    "Van Nuys Valley Glen", "Hollywood", "Carson")
+
+neighborhood_num<-which(update_neigh_string %in% neighborhood_string)
+
+gxs<-lapply(1:length(neighborhood_string), function(x){
+  
+  neighborhood_title <- update_neigh_string[neighborhood_num][[x]]
+  neighborhood<-names(rent_by_neighborhood)[neighborhood_num][[x]]
+
+  knit_child(
+    '_03.2_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+  
+})
+
+cat(unlist(gxs), sep = '\n')
+
+```
+
+</details>
+
+## Neighborhoods where CS have Similar Retention Rates than TS
+
+<details>
+
+```{r, echo = FALSE, results='asis'}
+
+neighborhood_string<-c("Hamilton", "Monroe", "Bell Cuday Monroe",
+                    "Downtown", "Sun Valley", "Riveria",
+                    "Fremont", "Huntington Park Vernon")
+
+neighborhood_num<-which(update_neigh_string %in% neighborhood_string)
+
+gxs<-lapply(1:length(neighborhood_string), function(x){
+  
+  neighborhood_title <- update_neigh_string[neighborhood_num][[x]]
+  neighborhood<-names(rent_by_neighborhood)[neighborhood_num][[x]]
+
+  knit_child(
+    '_03.2_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+  
+})
+
+cat(unlist(gxs), sep = '\n')
+
+```
+
+</details>
+
+## Neighborhoods where CS have Lower Retention Rates than TS
+
+<details>
+
+```{r, echo = FALSE, results='asis'}
+
+neighborhood_string<-c("Gardena", "South LA", "Venice",
+                    "Macarthur Park", "Panorama City")
+
+neighborhood_num<-which(update_neigh_string %in% neighborhood_string)
+
+gxs<-lapply(1:length(neighborhood_string), function(x){
+  
+  neighborhood_title <- update_neigh_string[neighborhood_num][[x]]
+  neighborhood<-names(rent_by_neighborhood)[neighborhood_num][[x]]
+
+  knit_child(
+    '_03.2_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+  
+})
+
+cat(unlist(gxs), sep = '\n')
+
+```
+
+</details>

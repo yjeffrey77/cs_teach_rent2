@@ -1,0 +1,760 @@
+---
+title: "LAUSD HR Data Study 2 Report"
+execute:
+  echo: false
+  message: false
+  warning: false
+format: 
+  html:
+    embed-resources: true
+editor: visual
+---
+
+## Purpose
+
+Purposes of this document:
+
+1.  Provide general background of the HR Data that we received from LAUSD.
+2.  Layout our proposed analyses.
+3.  Share our questions.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+## Housekeeping
+
+## ---------------------------
+## libraries
+## ---------------------------
+library(tidyverse)
+library(readxl)
+library(openxlsx)
+library(janitor)
+library(kableExtra)
+library(pwr)
+
+## ---------------------------
+## directory paths
+## ---------------------------
+
+#see current directory
+#getwd()
+
+#set current directory
+code_file_dir<-file.path("C:/Users/yjeff/Desktop/Community Schools/Teacher Retention Data",
+                "Analyses", "y3_data")
+
+data_file_dir<-file.path("C:/Users/yjeff/Box/LAUSD TR Data Year 3")
+
+## ---------------------------
+## helper functions
+## ---------------------------
+
+#source(file.path(code_file_dir, "functions.R"))
+
+## ---------------------------
+## load & inspect data
+## ---------------------------
+
+hr_data<-read_excel(file.path(data_file_dir,
+                              "CoS_Employee_Retention_HR_Data_20240523.xlsx"))
+
+hr_data_norm<-read_excel(file.path(data_file_dir,
+                                   "CoS_Full_Certificated_Employee_Norm_Day_List_20240523.xlsx"))
+
+
+## Clean Data
+
+#create cleaned version
+hr_data_norm_c<-clean_names(hr_data_norm)
+
+school_names_tbl<-hr_data_norm_c %>% count(parent_school_name)
+
+#add strings
+
+#CS strings
+cs_string_cohort1_elem<-
+  c("74th Street Elementary",
+    "93rd Street Elementary",
+    "93rd Street Elementary DL Two-Way Im Spanish",
+    "Alta California Elementary",
+    "Alta Loma Elementary",
+    "Alta Loma Elementary DL Two-Way Im Spanish",
+    "Catskill Avenue Elementary",
+    "Catskill Avenue Elementary DL Two-Way Im Spanish",
+    "Euclid Avenue Elementary",
+    "Euclid Avenue Elementary DL Two-Way Im Spanish",
+    "Farmdale Elementary",
+    "Farmdale Elementary DL Two-Way Im Spanish",
+    "Miramonte Elementary",
+    "Miramonte Elementary DL Two-Way Im Spanish",
+    "Van Nuys Elementary",
+    "Vine Street Elementary",
+    "Walnut Park Elementary",
+    "Walnut Park Elementary DL Two-Way Im Spanish")
+
+cs_string_cohort1_ms_hi<-
+  c("Marina Del Rey Middle School",
+    "Felicitas And Gonzalo Mendez Senior High",
+    "Miguel Contreras Learning Complex - LA Sch of Global Studies",
+    "Panorama Senior High",
+    "John H Francis Polytechnic Senior High",
+    "Woodrow Wilson Senior High")
+
+cs_string_cohort2_3_elem<-
+  c("Baldwin Hills Elementary",
+    "Carlos Santana Arts Academy",
+    "Carlos Santana Arts Academy DL Two-Way Im Spanish",
+    "Ellen Ochoa LC DL Two-Way Im Spanish",
+    "Ellen Ochoa Learning Center",
+    "Gardner Street Elementary",
+    "Hillcrest Drive Elementary",
+    "Hillcrest Drive Elementary DL Two-Way Im Spanish",
+    "Logan Academy Globl Ecol Two-Way Im Spanish",
+    "Logan Academy of Global Ecology",
+    "Lucille Roybal-Allard Elementary",
+    "Lucille Roybal-Allard Elementary DL Two-Way Im Spanish",
+    "Palms Elementary",
+    "Sharp Avenue Elementary",
+    "Purche Avenue Elementary",
+    "Trinity Street ES",
+    "Trinity Street Elementary",
+    "Trinity Street Elementary DL Two-Way Im Spanish")
+
+cs_string_cohort2_3_mid_hi<-
+  c("Audubon Middle School",
+    "Carver MS",
+    "Augustus Hawkins Senior High",
+    "Augustus F Hawkins SH - Critical Design",
+    "Susan Miller Dorsey Senior High",
+    "Miguel Contreras Learning Complex - Acdemic Ldrshp Community",
+    "Venice Senior High")
+
+cs_string<-c(cs_string_cohort1_elem,
+             cs_string_cohort1_ms_hi,
+             cs_string_cohort2_3_elem,
+             cs_string_cohort2_3_mid_hi)
+
+cs_cohort1_string<-c(cs_string_cohort1_elem,cs_string_cohort1_ms_hi)
+cs_cohort2_3_string<-c(cs_string_cohort2_3_elem,cs_string_cohort2_3_mid_hi)
+cs_elem<-c(cs_string_cohort1_elem,cs_string_cohort2_3_elem)
+cs_mid_hi<-c(cs_string_cohort1_ms_hi,cs_string_cohort2_3_mid_hi)
+
+
+#Neighborhood strings
+hamilton<-c("Baldwin Hills Elementary",
+            "Charnock Road Elementary",
+            "Palms Elementary",
+            "Shenandoah Street Elementary")
+
+monroe<-c("Alta California Elementary",
+          "Carlos Santana Arts Academy",
+          "Carlos Santana Arts Academy DL Two-Way Im Spanish",
+          "Chase Street Elementary",
+          "Langdon Avenue Elementary",
+          "Liggett Street Elementary",
+          "Panorama City Elementary",
+          "Plummer Elementary",
+          "Rosa Parks Learning Center")
+
+bell_cuday_monroe<-c("Corona Avenue Elementary",
+                     "Jaime Escalante Elementary School",
+                     "Loma Vista Elementary",
+                     "Loma Vista Elementary DL Two-Way Im Spanish",
+                     "Woodlawn Avenue Elementary",
+                     "Woodlawn Avenue Elementary DL Two-Way Im Spanish",
+                     "Orchard Academies 2B",
+                     "Orchard Academies 2C",
+                     "Elizabeth Learning Center",
+                     "Elizabeth LC DL Two-Way Im Arabic",
+                     "Ellen Ochoa Learning Center",
+                     "Ellen Ochoa LC DL Two-Way Im Spanish")
+
+hollywood<-c("Gardner Street Elementary",
+             "Harvard Elementary",
+             "Harvard Elementary DL Two-Way Im Spanish",
+             "Hollywood Elementary",
+             "Van Ness Avenue Elementary",
+             "Cheremoya Avenue Elementary",
+             "Vine Street Elementary")
+
+la_mid_city<-c("Alta Loma Elementary",
+               "Alta Loma Elementary DL Two-Way Im Spanish",
+               "Arlington Heights Elementary",
+               "Arlington Heights Elementary DL Two-Way Im Spanish",
+               "Cienega Elementary",
+               "Cienega Elementary DL Two-Way Im Spanish",
+               "54th Street Elementary",
+               "Virginia Road Elementary",
+               "Virginia Road Elementary DL Two-Way Im Spanish")
+  
+downtown<-c("Logan Academy of Global Ecology",
+            "Logan Academy Globl Ecol Two-Way Im Spanish",
+            "Frank Del Olmo Elementary",
+            "Rosemont Elementary",
+            "Rosemont Avenue Elementary")
+
+sun_valley<-
+  c("Beachy Avenue Elementary",
+    "Julie Korenstein Elementary",
+    "Sharp Avenue Elementary",
+    "Fernangeles Elementary",
+    "Fernangeles DL One & Two-Way Im Spanish",
+    "Arminta Street Elementary",
+    "Arleta Senior High",
+    "John H Francis Polytechnic Senior High")
+
+gardena<-c("153rd Street Elementary",
+           "153rd Street Elementary DL Two-Way Im Spanish",
+           "Amestoy Elementary",
+           "Chapman Elementary",
+           "Chapman Elementary DL Two-Way Im Mandarin",
+           "Denker Avenue Elementary",
+           "Denker Avenue Elementary DL Two-Way Im Korean",
+           "Purche Avenue Elementary")
+
+south_la<-c("9th Street ES",
+            "9th Street Elementary",
+            "28th Street ES",
+            "28th Street Elementary",
+            "28th Street Elementary DL One-Way Im Spanish",
+            "Ricardo Lizarraga ES",
+            "Ricardo Lizarraga Elementary",
+            "Ricardo Lizarraga Elementary DL Two-Way Im Spanish",
+            "Trinity Street ES",
+            "Trinity Street Elementary",
+            "Trinity Street Elementary DL Two-Way Im Spanish",
+            "Wadsworth Ave ES",
+            "Wadsworth Avenue Elementary",
+            "West Vernon Ave ES",
+            "West Vernon Avenue Elementary")
+
+riveria<-c("66th Street Elementary",
+           "Judith F Baca Arts Academy",
+           "Judith F Baca Arts Acad DL Two-Way Im Spanish",
+           "McKinley Avenue Elementary",
+           "Miramonte Elementary",
+           "Miramonte Elementary DL Two-Way Im Spanish",
+           "Parmelee Avenue Elementary",
+           "Parmelee Avenue Elementary DL Two-Way Im Spanish",
+           "Russell Elementary",
+           "Wisdom Elementary")
+
+south_mid_city<-c("Augustus Hawkins Senior High",
+                  "Augustus F Hawkins SH - Critical Design")
+
+venice<-c("Marina Del Rey Middle School",
+          "Mark Twain Middle School",
+          "Venice Senior High")
+          
+heet<-c("42nd Street Elementary",
+        "42nd Street Elementary DL World Lang Im Spanish",
+        "59th Street Elementary",
+        "74th Street Elementary",
+        "Hillcrest Drive Elementary",
+        "Hillcrest Drive Elementary DL Two-Way Im Spanish",
+        "Young Empowered Scholars Academy",
+        "Coliseum Street Elementary",
+        "Manhattan Place Elementary",
+        "Manhatten Place Elementary",
+        "Audubon Middle School",
+        "Susan Miller Dorsey Senior High")
+
+macarthur_park<-
+  c("Harold McAlister High School CYESIS",
+    "Miguel Contreras Learning Complex - Acdemic Ldrshp Community",
+    "Miguel Contreras Learning Complex - Business and Tourism",
+    "Miguel Contreras Learning Complex - LA Sch of Global Studies",
+    "Miguel Contreras Learning Complex - School of Social Justice")
+
+historic_central_ave<-
+  c("Carver MS",
+    "George Washington Carver Middle School",
+    "Los Angeles Acad MS",
+    "Los Angeles Academy Middle School")
+
+fremont<-
+  c("107th Street Elementary",
+    "75th Street Elementary",
+    "75Th Street Elementary DL Two-Way Im Spanish",
+    "93rd Street Elementary",
+    "93rd Street Elementary DL Two-Way Im Spanish",
+    "99th Street Elementary",
+    "Figueroa Street Elementary",
+    "Florence Griffith Joyner Elementary",
+    "South Park Elementary",
+    "South Park Elementary DL Two-Way Im Spanish")
+
+carson<-
+  c("Bonita Street Elementary",
+    "Caroldale Learning Community",
+    "Catskill Avenue Elementary",
+    "Catskill Avenue Elementary DL Two-Way Im Spanish",
+    "Dolores Street Elementary",
+    "Glenn Hammond Curtiss Middle School")
+
+boyle_heights<-
+  c("1st Street Elementary",
+    "Euclid Avenue Elementary",
+    "Euclid Avenue Elementary DL Two-Way Im Spanish",
+    "Carmen Lomas Garza Primary Center",
+    "2nd Street Elementary",
+    "2nd Street Elementary DL Two-Way Im Spanish",
+    "Malabar Street Elementary",
+    "Soto Street Elementary",
+    "Felicitas And Gonzalo Mendez Senior High",
+    "Theodore Roosevelt Senior High")
+
+lincoln_heights_el_sereno<-
+  c("El Sereno Elementary",
+    "Farmdale Elementary",
+    "Farmdale Elementary DL Two-Way Im Spanish",
+    "Multnomah Street Elementary",
+    "Sierra Park Elementary",
+    "Abraham Lincoln Senior High",
+    "Woodrow Wilson Senior High")
+
+van_nuys_valley_glen<-
+  c("Columbus Avenue Elementary",
+    "Erwin Elementary",
+    "Hazeltine Avenue Elementary",
+    "Kittridge Street Elementary",
+    "Kittridge Street Elementary DL Two-Way Im Armenian",
+    "Kittridge Street Elementary DL Two-Way Im Spanish",
+    "Sylvan Park Elementary",
+    "Van Nuys Elementary")
+
+huntington_park_vernon<-
+  c("Florence Avenue Elementary",
+    "Florence Avenue Elementary DL Two-Way Im Spanish",
+    "Hope Street Elementary",
+    "Huntington Park Elementary",
+    "Huntington Park Elementary DL Two-Way Im Spanish",
+    "Lucille Roybal-Allard Elementary",
+    "Lucille Roybal-Allard Elementary DL Two-Way Im Spanish",
+    "Middleton Street Elementary",
+    "Miles Avenue Elementary",
+    "Miles Avenue Elementary DL Two-Way Im Spanish",
+    "San Antonio Elementary",
+    "Walnut Park Elementary",
+    "Walnut Park Elementary DL Two-Way Im Spanish")
+
+panorama_city<-
+  c("Cal Burke High School",
+    "Panorama Senior High")
+
+#create indicator variable
+
+hr_data_norm_c<-hr_data_norm_c %>% 
+  mutate(
+    cs = case_when(
+      parent_school_name %in% cs_string_cohort1_elem ~ "cs1_elem",
+      parent_school_name %in% cs_string_cohort1_ms_hi ~ "cs1_ms_hi",
+      parent_school_name %in% cs_string_cohort2_3_elem ~ "cs2_3_elem",
+      parent_school_name %in% cs_string_cohort2_3_mid_hi ~ "cs2_3_ms_hi",
+      TRUE ~ "comp"
+    ),
+    cos = case_when(
+      parent_school_name %in% hamilton ~ "Hamilton",
+      parent_school_name %in% monroe ~ "Monroe",
+      parent_school_name %in% bell_cuday_monroe ~ "Bell|Cuday|Monroe",
+      parent_school_name %in% hollywood ~ "Hollywood",
+      parent_school_name %in% la_mid_city ~ "LA Mid-City",
+      parent_school_name %in% downtown ~ "Downtown",
+      parent_school_name %in% sun_valley ~ "Sun Valley",
+      parent_school_name %in% gardena ~ "Gardena",
+      parent_school_name %in% south_la ~ "South Los Angeles",
+      parent_school_name %in% riveria ~ "Riveria",
+      parent_school_name %in% south_mid_city ~ "South Mid-City",
+      parent_school_name %in% venice ~ "Venice",
+      parent_school_name %in% heet ~ "HEET",
+      parent_school_name %in% macarthur_park ~ "MacArthur Park",
+      parent_school_name %in% historic_central_ave ~ "Historic Central Avenue",
+      parent_school_name %in% fremont ~ "Fremont",
+      parent_school_name %in% carson ~ "Carson",
+      parent_school_name %in% boyle_heights ~ "Boyle Heights",
+      parent_school_name %in% lincoln_heights_el_sereno ~ "Lincoln Heights/El Sereno",
+      parent_school_name %in% van_nuys_valley_glen ~ "Van Nuys/Valley Glen",
+      parent_school_name %in% huntington_park_vernon ~ "Huntington Park/Vernon",
+      parent_school_name %in% panorama_city ~ "Panorama City",
+      TRUE ~ NA
+    ))
+      
+check<-hr_data_norm_c %>% filter(is.na(cos))
+test<-hr_data_norm_c %>% count(cs)
+
+#add binary CS variable
+
+hr_data_norm_c<-hr_data_norm_c %>% mutate(
+  cs_binary = case_when(
+    parent_school_name %in% cs_string ~ 1,
+    TRUE ~ 0
+  )
+)
+
+```
+
+## Background
+
+This study was motivated by our previous findings, which showed no significant differences in teacher retention between LAUSD Community Schools (CS) and comparable traditional LAUSD public schools (TS). One potential reason for this could be methodological.
+
+In our previous study, we used a 1:1 matching approach, pairing each CS with one TS. This was problematic due to the difficulty of finding TS that truly matched CS.
+
+To address this, **we decided to compare each community school (cohorts 1-3) with the average retention rate of nearby neighboring schools of the same type, using LAUSD's "Community of Schools" as a guide.** For example, an elementary Community School is compared only with traditional public elementary schools within its community of schools, excluding magnets, community day schools, etc.
+
+Hence, this HR data includes retention rates for LAUSD Community Schools (cohorts 1-3) and nearby, similar LAUSD public schools.
+
+### Dataset
+
+This dataset contains a LAUSD Human Resources (HR) data from LAUSD. Some quick facts:
+
+-   Data is taken from 2018 to 2023
+-   Each year contains about 4,500 teachers each year.
+-   There are 158 schools; 47 are considered community schools (CS) through LAUSD's Community School's Initiative, and 111 are traditional LAUSD public schools (TS).
+-   Schools range from 4 to 141 in the number of staff.
+-   Data also includes other variables **such as demographic variables (race/ethnicity, gender, specific job title, and teacher tenure).**
+
+Each LAUSD public school were selected if they had these characteristics:
+
+-   They **are located in the same Community of Schools (COS, a geographic area marked by LAUSD)** for one or more community schools.
+
+-   They **served similar student race/ethnic demographics**.
+
+-   They **served the same grade levels** as one or more community schools. For example, a K-5 LAUSD public school would be selected to serve as a comparison school for one or more community schools within a COS.
+
+-   The LAUSD public school is **within one quintile away in the [Student Needs Equity Index](https://www.lausd.org/Page/17238) (SENI) score from a Community School.** The SENI score is based on a set of academic and community indicators to determine the amount of funds they receive from the district. It can be used to measure the level of student need in a school.
+
+**Other Notes:**
+
+-   This HR dataset is a long file. Teacher IDs are repeated several times. There could be a need to transform data to wide data
+
+### Dataset Exploration
+
+```{r}
+#| eval: false
+#| echo: false
+colnames(hr_data)
+colnames(hr_data_norm)
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+#hr_data_norm - look at counts
+for(i in 1:16){
+  colnames(hr_data_norm)[i] %>% print()
+  hr_data_norm %>% count(get(colnames(hr_data_norm)[i])) %>% print()
+}
+```
+
+#### Overall
+
+**Number of Staff in Comparison and Community Schools**
+
+```{r}
+#| echo: false
+
+teacher_tbl<-hr_data_norm_c %>% group_by(cs_binary, school_year) %>% summarize(
+  n_teacher = n() 
+) 
+
+teacher_tbl<-teacher_tbl %>%
+  pivot_wider(names_from = cs_binary, values_from = n_teacher) %>% 
+  select(school_year, `1`, `0`)
+
+colnames(teacher_tbl)<-c("School Year", "CS",  "TS")
+
+teacher_tbl %>% kable()
+```
+
+**Number of Schools by Community Schools and Comparison Schools**
+
+```{r}
+#| echo: false
+
+sch_tbl<-hr_data_norm_c %>% group_by(cs_binary, school_year, parent_school_name) %>% summarize(
+  n_teacher_by_sch = n()
+)
+
+sch_tbl<-sch_tbl %>% group_by(cs_binary, school_year) %>% 
+  summarize(
+    n_sch = n()
+  )
+
+sch_tbl<-sch_tbl %>% 
+  pivot_wider(names_from = cs_binary, values_from = n_sch) %>% 
+  select(school_year, `1`, `0`)
+
+colnames(sch_tbl)<-c("School Year", "CS",  "TS")
+
+sch_tbl %>% kable()
+```
+
+#### By Neighborhood
+
+**Number of Community and Comparison Schools**
+
+```{r}
+#| echo: false
+
+cos_sch_tbl<-hr_data_norm_c %>% group_by(cs_binary, school_year,cos, parent_school_name) %>% summarize(
+  n_teacher_by_sch = n()
+)
+
+cos_sch_tbl<-cos_sch_tbl %>% group_by(cs_binary, school_year, cos) %>%
+  summarize(
+    n_sch = n()
+  )
+
+cos_sch_tbl1<-cos_sch_tbl %>% filter(cs_binary == 1) %>%
+  ungroup() %>% select(-c(cs_binary))
+
+cos_sch_tbl0<-cos_sch_tbl %>% filter(cs_binary == 0) %>%
+  ungroup() %>% select(-c(cs_binary))
+
+cos_sch_tbl<-left_join(cos_sch_tbl1,cos_sch_tbl0,
+                   by = c("school_year","cos"))
+
+colnames(cos_sch_tbl)<-c("School Year", "Community of School",  "CS", "TS")
+
+cos_sch_tbl<-cos_sch_tbl %>% pivot_wider(names_from = `School Year`,
+                  values_from = c(CS, TS)) %>% 
+  select(
+    "Community of School",
+    "CS_2023-24","TS_2023-24")
+
+
+colnames(cos_sch_tbl)<-c("School Year", "CS",  "TS")
+
+cos_sch_tbl %>% kable()
+```
+
+**Number of Teachers**
+
+```{r}
+#| echo: false
+
+cos_tbl<-hr_data_norm_c %>% group_by(cs_binary, school_year, cos) %>% summarize(
+  n_teacher = n()
+)
+
+cos_tbl1<-cos_tbl %>% filter(cs_binary == 1) %>%
+  ungroup() %>% select(-c(cs_binary))
+
+cos_tbl0<-cos_tbl %>% filter(cs_binary == 0) %>%
+  ungroup() %>% select(-c(cs_binary))
+
+cos_tbl<-left_join(cos_tbl1,cos_tbl0,
+                   by = c("school_year","cos"))
+
+colnames(cos_tbl)<-c("School Year", "Community of School",  "CS", "TS")
+
+cos_tbl<-cos_tbl %>% pivot_wider(names_from = `School Year`,
+                  values_from = c(CS, TS)) %>% 
+  select(
+    "Community of School",
+    "CS_2018-19","TS_2018-19",
+    "CS_2019-20","TS_2019-20",
+    "CS_2020-21","TS_2020-21",
+    "CS_2021-22","TS_2021-22",
+    "CS_2022-23","TS_2022-23",
+    "CS_2023-24","TS_2023-24")
+
+cos_tbl %>% kable()
+```
+
+## Power Analysis (for T-Test)
+
+### Two-Sided T-test
+
+Cohen suggests that d values of 0.2, 0.5, and 0.8 represent small, medium, and large effect sizes, respectively.
+
+**Overall**
+
+```{r}
+
+extract_pwr_output <- function(n1, n2, d, sig.level, power) {
+  
+result <- pwr.t2n.test(n1 = n1, n2 = n2, d = d,
+                       sig.level = sig.level, power = power)
+
+  # Convert the result to a dataframe
+result[["n1"]]<-ceiling(result[["n1"]])
+
+result_df <- data.frame(result[["n1"]],result[["n2"]],result[["d"]],
+                        result[["sig.level"]],
+                        result[["power"]],result[["alternative"]],
+                        result[["method"]])
+
+colnames(result_df)<-c("n1","n2","d","sig.level",
+                       "power", "alternative", "method")
+
+return(result_df)
+    
+}
+
+small<-extract_pwr_output(n1 = NULL, n2= 3000, d = 0.2,
+             sig.level = 0.05, power = 0.8)
+medium<-extract_pwr_output(n1 = NULL, n2= 3000, d = 0.5,
+             sig.level = 0.05, power = 0.8)
+large<-extract_pwr_output(n1 = NULL, n2= 3000, d = 0.9,
+             sig.level = 0.05, power = 0.8)
+
+overall_pwr_tbl<-rbind(small,medium,large)
+
+overall_pwr_tbl %>% kable()
+
+
+```
+
+**To detect a small, medium, and large effect, we would need a 211, 32, and 10 community school staff, respectively. As we have over 1300 teachers each year, we should have enough power to conduct t-tests.**
+
+**By Neighborhood**
+
+As a reference point, looking at the number of TS staff in the 23-24 year, the distribution of staff by neighborhood is as follows:
+
+| Min | 1st Quartile | Median | 3rd Quartile | Max |
+|-----|--------------|--------|--------------|-----|
+| 9   | 71           | 125    | 209          | 309 |
+
+**Max**
+
+```{r}
+
+combine_pwr_tbl<-function(n2){
+ 
+small<-extract_pwr_output(n1 = NULL, n2= n2, d = 0.2,
+             sig.level = 0.05, power = 0.8)
+medium<-extract_pwr_output(n1 = NULL, n2= n2, d = 0.5,
+             sig.level = 0.05, power = 0.8)
+large<-extract_pwr_output(n1 = NULL, n2= n2, d = 0.9,
+             sig.level = 0.05, power = 0.8)
+
+overall_pwr_tbl<-rbind(small,medium,large)
+
+return(overall_pwr_tbl)
+}
+  
+
+combine_pwr_tbl(309) %>% kable()
+
+```
+
+**3rd Quartile**
+
+```{r}
+combine_pwr_tbl(209) %>% kable()
+```
+
+**Median**
+
+```{r}
+
+small<-data.frame(n1 = NA, n2= 125, d = 0.5,
+             sig.level = 0.05, power = 0.8, alternative = "two.sided",
+             method = "t test power calculation")
+
+medium<-extract_pwr_output(n1 = NULL, n2= 125, d = 0.5,
+             sig.level = 0.05, power = 0.8)
+
+large<-extract_pwr_output(n1 = NULL, n2= 125, d = 0.9,
+             sig.level = 0.05, power = 0.8)
+
+rbind(small,medium,large) %>% kable()
+
+```
+
+**1st Quartile**
+
+```{r}
+
+small<-data.frame(n1 = NA, n2= 71, d = 0.5,
+             sig.level = 0.05, power = 0.8, alternative = "two.sided",
+             method = "t test power calculation")
+
+medium<-extract_pwr_output(n1 = NULL, n2= 71, d = 0.5,
+             sig.level = 0.05, power = 0.8)
+
+large<-extract_pwr_output(n1 = NULL, n2= 71, d = 0.9,
+             sig.level = 0.05, power = 0.8)
+
+rbind(small,medium,large) %>% kable()
+
+```
+
+These power analyses indicate that analyzing at the neighborhood level would allow us to detect, in most cases, medium and large effect sizes, but not small effect sizes.
+
+## Proposed Analyses
+
+Given our data and power analyses, we have several proposed analyses in mind:
+
+-   **Descriptive Analyses:** We plan to calculate the retention rate for each school and represent this information though descriptive tables and bar graphs.
+
+    -   Retention Rates of CS vs. TS overall
+
+    -   Retention Rates of CS vs. TS elementary Schools
+
+    -   Retention Rates of CS vs. TS middle/high schools
+
+    -   Retention Rates of CS vs. TS among novice teachers
+
+    -   Retention Rates of CS vs. TS among veteran teachers
+
+    -   Retention Rates of CS vs. TS by neighborhood
+
+-   **Conduct analyses through t-tests:**
+
+    -   t-test for the sample overall
+
+    -   t-tests by school type (e.g., elementary school vs. middle school)
+
+    -   t-tests by neighborhood
+
+We will conduct this for each year to see if there are significant differences over time.
+
+-   **Logistic Regression:** We can run a logistic regression analysis:
+    -   **Outcome:** the likelihood of a teacher leaving a school
+    -   **Predictor:** Whether the teacher resides in a Community school.
+    -   **Covariates:**
+        -   Fidelity of CS implementation measure. We plan to take teacher and staff school-aggregated responses from LAUSD's School Experience Survey (SES).
+
+## Questions
+
+-   What are your thoughts about using the SES items to measure CS implementation fidelity? Are there other ways we can incorporate implementation fidelity into our study?
+
+-   For the regression analyses, should we be concerned about any clustering of the data?
+
+-   Are there any issues with our study design that we should consider?
+
+-   Are there any things we are overlooking or things we need to emphasize in our analyses?
+
+## Appendix
+
+**Number of Staff by School**
+
+```{r}
+#| echo: false
+
+teacher_tbl2<-hr_data_norm_c %>% group_by(cs_binary, school_year, parent_school_name) %>% summarize(
+  n_teacher = n() 
+) 
+
+teacher_tbl2<-teacher_tbl2 %>%
+  pivot_wider(names_from = school_year, values_from = n_teacher)
+
+#%>% 
+#   select(school_year, `1`, `0`)
+# 
+# colnames(teacher_tbl)<-c("School Year", "CS",  "TS")
+
+teacher_tbl2 %>% kable()
+```
+
+### Information about Each LAUSD Dataset
+
+**CoS_Employee_Retention_HR_Data** - provides all the staff employed on Norm Day 2018 (18-19 school year) at any of the cohort schools you provided. It then follows them over the next 5 years til the this years norm day, so you can see if they left the district or moved to work in other roles/schools.
+
+**CoS_Full_Certificated_Employee_Norm_Day_List** - I clarified with HR and found out that the first file only contained employees if they were present on Norm Day 2018 (i.e., if they first began teaching in, for example, 2020-21, then they would not be in that file.) Because we figured you need all employees at the cohort schools for every year, we requested they also provide the full list of certificated employees for each school year, which is what is in this file.
