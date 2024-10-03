@@ -14,6 +14,7 @@ website:
    style: floating
    search: TRUE
    contents: 
+    - index.qmd
     - section: Reports
       contents: 
         - y3_data/01_run_descriptives.qmd
