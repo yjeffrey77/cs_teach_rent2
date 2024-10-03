@@ -2,9 +2,14 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "cs_teacher_rent2",
+    "title": "Community Schools Teacher Retention Study",
     "section": "",
-    "text": "Test"
+    "text": "Website shows reports for all related to the the Community Schools Teacher Retention Study.",
+    "crumbs": [
+      "Home",
+      "Reports",
+      "Community Schools Teacher Retention Study"
+    ]
   },
   {
     "objectID": "y3_data/04_neighborhood_report.html",
@@ -320,5 +325,12 @@
       "Reports",
       "LAUSD HR Data Study 2 - Full Report"
     ]
+  },
+  {
+    "objectID": "index.html#report-breakdown",
+    "href": "index.html#report-breakdown",
+    "title": "Community Schools Teacher Retention Study",
+    "section": "Report Breakdown:",
+    "text": "Report Breakdown:\n\n[General Descriptives] (y3_data/01_run_descriptives.qmd)"
   }
 ]
