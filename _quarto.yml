@@ -3,31 +3,22 @@ project:
   output-dir: docs
   
 website:
-  title: "Community Schools Retention"
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      
-      
 
   sidebar: 
    title: Topics
    style: floating
+   search: TRUE
    contents: 
+    - index.qmd
     - section: Reports
       contents: 
-        - index.qmd
         - y3_data/01_run_descriptives.qmd
         - y3_data/02_report.qmd
         - y3_data/03_report_full.qmd
         - y3_data/04_neighborhood_report.qmd
 
-  
 format:
   html:
     theme: cosmo
     css: styles.css
     toc: true
-
-editor: visual
