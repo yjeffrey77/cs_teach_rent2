@@ -22,16 +22,21 @@ website:
           url: https://github.com/yjeffrey77/cs_teach_rent2
 
   sidebar:
+    
+    - title: "Home"
+      contents: 
+       - index.qmd
+       - y3_data/01_run_descriptives.qmd
+       - y3_data/03_report_full.qmd
+       - y3_data/04_neighborhood_report.qmd
+       # navigation items
+
     - id: reports
       title: "Reports"
-      style: "floating"
-      background: light
-      collapse-level: 2
       contents: 
        - y3_data/01_run_descriptives.qmd
        - y3_data/03_report_full.qmd
        - y3_data/04_neighborhood_report.qmd
-  
 
 format:
   html:
