@@ -7,4 +7,4 @@ center-title-slide: true
 
 Website contains reports related to Year 2 of the Community Schools Teacher Retention Study.
 
-To access a report, please click on the links at the **top**. 
+Please click on the links to access the reports. 
