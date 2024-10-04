@@ -1,7 +1,10 @@
 ---
-title: "Community Schools Teacher Retention Study"
+title: "Reports Central"
+center-title-slide: true
 ---
 
-Website shows reports for all related to the the Community Schools Teacher Retention Study.
+## Purpose
 
+Website contains reports related to Year 2 of the Community Schools Teacher Retention Study.
 
+To access a report, please click on the links to the right. 
