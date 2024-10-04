@@ -1,6 +1,5 @@
 ---
 title: "Reports Central"
-center-title-slide: true
 ---
 
 ## Purpose
