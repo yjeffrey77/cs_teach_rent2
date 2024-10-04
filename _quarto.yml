@@ -11,7 +11,9 @@ website:
   navbar:
     left:
       - href: index.qmd
-        text: "Reports Central"
+        text: "Home"
+      - sidebar:reports
+      
     background: "#2774AE"
     right:
     - icon: github
@@ -19,13 +21,17 @@ website:
         - text: Source Code
           url: https://github.com/yjeffrey77/cs_teach_rent2
 
-  sidebar: 
-   style: floating
-   search: TRUE
-   contents: 
-    - y3_data/01_run_descriptives.qmd
-    - y3_data/03_report_full.qmd
-    - y3_data/04_neighborhood_report.qmd
+  sidebar:
+    - id: reports
+      title: "Reports"
+      style: "floating"
+      background: light
+      collapse-level: 2
+      contents: 
+       - y3_data/01_run_descriptives.qmd
+       - y3_data/03_report_full.qmd
+       - y3_data/04_neighborhood_report.qmd
+  
 
 format:
   html:
