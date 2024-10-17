@@ -1,0 +1,164 @@
+---
+title: "Teacher Veteran Status Report"
+execute:
+  echo: false
+  message: false
+  warning: false
+format: 
+  html:
+    embed-resources: true
+editor: visual
+---
+
+## Purpose
+
+1.  Analyzes the teacher retention based on teacher veteran status. This is an updated version, which now looks at teacher veteran status across the following categories:
+    -   0-3 Years
+    -   4-5 Years
+    -   6-10 Years
+    -   11-15 Years
+    -   Over 15 Years
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+## Housekeeping
+
+## ---------------------------
+## libraries
+## ---------------------------
+library(tidyverse)
+library(readxl)
+library(openxlsx)
+library(janitor)
+library(kableExtra)
+library(pwr)
+library(kableExtra)
+library(knitr)
+
+## ---------------------------
+## directory paths
+## ---------------------------
+
+#see current directory
+#getwd()
+
+#set current directory
+code_file_dir<-file.path("C:/Users/yjeff/Desktop/Community Schools/Teacher Retention Data","Analyses", "cs_teach_rent2","y3_data")
+
+data_file_dir<-file.path("C:/Users/yjeff/Box/LAUSD TR Data Year 3")
+
+## ---------------------------
+## helper functions
+## ---------------------------
+
+update_tbl_names<-function(df){
+  df_update<-df
+  colnames(df_update)<-c("School", "2019", "2020", "2021", "2022", "2023")
+  return(df_update)
+}
+
+## ---------------------------
+## load & inspect data
+## ---------------------------
+
+load(file.path(code_file_dir, "veteran_rent_tbls.RData"))
+load(file.path(code_file_dir, "veteran_plots.RData"))
+
+## Add Lists
+source(file.path(code_file_dir, "00_school_lists.R"))
+
+
+```
+
+# Descriptive Analyses - Retention Rates
+
+## All Schools
+
+<details>
+```{r, echo = FALSE, results='asis'}
+teach_yr_string<-names(toc_rent_overall[["ts"]][["original_5"]])
+
+
+gxs<-lapply(1:length(teach_yr_string), function(x){
+  
+  teach_year <- teach_yr_string[[x]]
+  type<-"overall"
+  df_cs<-toc_rent_overall2[["cs"]][["original_5"]][[teach_year]]
+  df_ts<-toc_rent_overall2[["ts"]][["original_5"]][[teach_year]]
+  
+  #neighborhood<-names(rent_by_neighborhood)[[x]]
+
+  knit_child(
+    '_06_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+  
+})
+
+cat(unlist(gxs), sep = '\n')
+
+```
+
+</details>
+
+## Elementary Schools
+
+<details>
+```{r, echo = FALSE, results='asis'}
+teach_yr_string<-names(toc_rent_overall[["ts"]][["original_5"]])
+
+
+gxs<-lapply(1:length(teach_yr_string), function(x){
+  
+  teach_year <- teach_yr_string[[x]]
+  type<-"elem"
+  df_cs<-toc_rent_overall_elem[["cs"]][["original_5"]][[teach_year]]
+  df_ts<-toc_rent_overall_elem[["ts"]][["original_5"]][[teach_year]]
+  
+  #neighborhood<-names(rent_by_neighborhood)[[x]]
+
+  knit_child(
+    '_06_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+  
+})
+
+cat(unlist(gxs), sep = '\n')
+
+```
+
+</details>
+
+## Middle/High Schools
+
+<details>
+```{r, echo = FALSE, results='asis'}
+teach_yr_string<-names(toc_rent_overall[["ts"]][["original_5"]])
+
+
+gxs<-lapply(1:length(teach_yr_string), function(x){
+  
+  teach_year <- teach_yr_string[[x]]
+  type<-"ms_hs"
+  df_cs<-toc_rent_overall_ms_hs[["cs"]][["original_5"]][[teach_year]]
+  df_ts<-toc_rent_overall_ms_hs[["ts"]][["original_5"]][[teach_year]]
+  
+  #neighborhood<-names(rent_by_neighborhood)[[x]]
+
+  knit_child(
+    '_06_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+  
+})
+
+cat(unlist(gxs), sep = '\n')
+
+```
+
+</details>
+
