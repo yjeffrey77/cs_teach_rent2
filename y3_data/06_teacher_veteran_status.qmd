@@ -1,5 +1,5 @@
 ---
-title: "Teacher Veteran Status Report"
+title: "Teacher Veteran Status Report - Average Teacher Retention"
 execute:
   echo: false
   message: false
@@ -18,6 +18,11 @@ editor: visual
     -   6-10 Years
     -   11-15 Years
     -   Over 15 Years
+
+
+## Calculation
+
+Rates shown here are the average teacher retention rate across schools. These rates are calculated by taking the retention rate of each school and dividing it by the number of schools in the sample. If there are cases where, in a school cell, there are no teachers, then that school is not included in the average calculation. 
 
 ```{r}
 #| echo: false
@@ -115,8 +120,8 @@ gxs<-lapply(1:length(teach_yr_string), function(x){
   
   teach_year <- teach_yr_string[[x]]
   type<-"elem"
-  df_cs<-toc_rent_overall_elem[["cs"]][["original_5"]][[teach_year]]
-  df_ts<-toc_rent_overall_elem[["ts"]][["original_5"]][[teach_year]]
+  df_cs<-toc_rent_overall_elem2[["cs"]][["original_5"]][[teach_year]]
+  df_ts<-toc_rent_overall_elem2[["ts"]][["original_5"]][[teach_year]]
   
   #neighborhood<-names(rent_by_neighborhood)[[x]]
 
@@ -144,8 +149,8 @@ gxs<-lapply(1:length(teach_yr_string), function(x){
   
   teach_year <- teach_yr_string[[x]]
   type<-"ms_hs"
-  df_cs<-toc_rent_overall_ms_hs[["cs"]][["original_5"]][[teach_year]]
-  df_ts<-toc_rent_overall_ms_hs[["ts"]][["original_5"]][[teach_year]]
+  df_cs<-toc_rent_overall_ms_hs2[["cs"]][["original_5"]][[teach_year]]
+  df_ts<-toc_rent_overall_ms_hs2[["ts"]][["original_5"]][[teach_year]]
   
   #neighborhood<-names(rent_by_neighborhood)[[x]]
 

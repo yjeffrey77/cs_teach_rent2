@@ -159,7 +159,7 @@ combined_tbls[["ms_hs"]]<-map2(toc_rent_overall_ms_hs[["cs"]],
 
 #create plot tables
 plot_combined_tbls<-map(combined_tbls,
-                        function(b) map(combined_tbls[["overall"]],
+                        function(b) map(b,
                         function(a) map(a,create_plot_tbl)))
 
 
@@ -299,14 +299,14 @@ toc_bar_plots_neigh<-map2(plot_neigh_tbls_toc, update_neigh_string,
 ## Part 3 - Save Data
 ## -----------------------------------------------------------------------------
 
-save(combined_tbls,plot_combined_tbls,bar_plots_combined,
-     plot_neigh_tbls, bar_plots_neigh, update_neigh_string,
-     file = file.path(code_file_dir, "rent_plots.RData"))
-
-
-save(toc_combined_tbls,toc_plot_combined_tbls,toc_bar_plots_combined,
-     plot_neigh_tbls_toc, toc_bar_plots_neigh, update_neigh_string,
-     file = file.path(code_file_dir, "rent_plots_toc.RData"))
+# save(combined_tbls,plot_combined_tbls,bar_plots_combined,
+#      plot_neigh_tbls, bar_plots_neigh, update_neigh_string,
+#      file = file.path(code_file_dir, "rent_plots.RData"))
+# 
+# 
+# save(toc_combined_tbls,toc_plot_combined_tbls,toc_bar_plots_combined,
+#      plot_neigh_tbls_toc, toc_bar_plots_neigh, update_neigh_string,
+#      file = file.path(code_file_dir, "rent_plots_toc.RData"))
 
 ## -----------------------------------------------------------------------------
 ## END SCRIPT

@@ -356,6 +356,83 @@ create_overall_rent_tbl<-function(df, school_string, tbl_type){
   return(rent_overall)
 }
 
+
+create_overall_rent_tbl2<-function(df, school_string, tbl_type){
+  
+  df_update<-df %>% keep(names(df) %in% school_string)
+  
+  df_update<-map2(df_update, names(df_update),
+                  function(x,y){add_names_to_tables(x,y)})
+  
+  #Create Overall Retention Rate
+  
+  
+  rent_overall<-bind_rows(df_update) %>%
+    filter(rent == "Retention Rate %")
+  
+  rent_overall<-rent_overall %>%
+    mutate(
+      yr_2019 = as.numeric(yr_2019),
+      yr_2020 = as.numeric(yr_2020),
+      yr_2021 = as.numeric(yr_2021),
+      yr_2022 = as.numeric(yr_2022),
+      yr_2023 = as.numeric(yr_2023),
+    )
+  
+  #Make sure all missing values are consistent
+  # rent_overall<-rent_overall %>% mutate(
+  #   yr_2019 = case_when(yr_2019 == NaN ~ NA)
+  # )
+  
+  
+  
+  pivot_rent<-rent_overall %>%
+    summarize(
+      yr_2019 = sum(yr_2019, na.rm = T)/sum(!is.na(yr_2019)) %>% round(),
+      yr_2020 = sum(yr_2020, na.rm = T)/sum(!is.na(yr_2020)) %>% round(),
+      yr_2021 = sum(yr_2021, na.rm = T)/sum(!is.na(yr_2021)) %>% round(),
+      yr_2022 = sum(yr_2022, na.rm = T)/sum(!is.na(yr_2022)) %>% round(),
+      yr_2023 = sum(yr_2023, na.rm = T)/sum(!is.na(yr_2023)) %>% round(),
+    )
+  
+  pivot_rent$school<- "Overall Retention Rate %"
+  
+  pivot_rent$rent<- "Overall Retention Rate %"
+  
+  pivot_rent<-pivot_rent %>% select(school, rent, everything())
+  
+  if (tbl_type == "Retention Rate %"){
+    rent_overall<-rbind(rent_overall, pivot_rent)
+    
+    #round rental numbers to whole numbers
+    
+    rent_overall<-rent_overall %>% 
+      mutate(yr_2019 = round(yr_2019),
+             yr_2020 = round(yr_2020),
+             yr_2021 = round(yr_2021),
+             yr_2022 = round(yr_2022),
+             yr_2023 = round(yr_2023))
+  }
+  
+  if (tbl_type == "Retention Rate % (n)"){
+    
+    rent_overall<-bind_rows(df_update) %>%
+      filter(rent == "Retention Rate % (n)")
+    
+    pivot_rent<-pivot_rent %>% mutate(
+      yr_2019 = str_c(as.character(yr_2019 %>% round()), "%"),
+      yr_2020 = str_c(as.character(yr_2020 %>% round()), "%"),
+      yr_2021 = str_c(as.character(yr_2021 %>% round()), "%"),
+      yr_2022 = str_c(as.character(yr_2022 %>% round()), "%"),
+      yr_2023 = str_c(as.character(yr_2023 %>% round()), "%"))
+    
+    rent_overall<-rbind(rent_overall, pivot_rent)
+  }
+  
+  return(rent_overall)
+}
+
+
 ## -----------------------------------------------------------------------------
 ## Part 2.2 - Create Retention Tables - Overall
 ## -----------------------------------------------------------------------------
@@ -462,11 +539,11 @@ toc_rent_overall<-vector("list",2)
 names(toc_rent_overall)<-c("cs","ts")
 
 toc_rent_overall[["cs"]]<-map(hr_color_by_sch_rent_exp, function(a){
-  map(a,function(x) create_overall_rent_tbl(x,cs_string,"Retention Rate %"))
+  map(a,function(x) create_overall_rent_tbl2(x,cs_string,"Retention Rate %"))
 })
 
 toc_rent_overall[["ts"]]<-map(hr_color_by_sch_rent_exp, function(a){
-  map(a,function(x) create_overall_rent_tbl(x,ts_sch_string,"Retention Rate %"))
+  map(a,function(x) create_overall_rent_tbl2(x,ts_sch_string,"Retention Rate %"))
 })
 
 #Version 2 with Sample Size
@@ -474,11 +551,11 @@ toc_rent_overall2<-vector("list",2)
 names(toc_rent_overall2)<-c("cs","ts")
 
 toc_rent_overall2[["cs"]]<-map(hr_color_by_sch_rent_exp, function(a){
-  map(a,function(x) create_overall_rent_tbl(x,cs_string,"Retention Rate % (n)"))
+  map(a,function(x) create_overall_rent_tbl2(x,cs_string,"Retention Rate % (n)"))
 })
 
 toc_rent_overall2[["ts"]]<-map(hr_color_by_sch_rent_exp, function(a){
-  map(a,function(x) create_overall_rent_tbl(x,ts_sch_string,"Retention Rate % (n)"))
+  map(a,function(x) create_overall_rent_tbl2(x,ts_sch_string,"Retention Rate % (n)"))
 })
 
 
@@ -491,11 +568,11 @@ create_overall_list2<-function(df1,  string1, string2, tbl_type,
   names(toc_rent_overall2)<-c("cs","ts")
   
   toc_rent_overall2[["cs"]]<-map(df1, function(a){
-    map(a,function(x) create_overall_rent_tbl(x,string1,tbl_type))
+    map(a,function(x) create_overall_rent_tbl2(x,string1,tbl_type))
   })
   
   toc_rent_overall2[["ts"]]<-map(df1, function(a){
-    map(a,function(x) create_overall_rent_tbl(x,string2,tbl_type))
+    map(a,function(x) create_overall_rent_tbl2(x,string2,tbl_type))
   })
   
   return(toc_rent_overall2)
@@ -564,7 +641,18 @@ toc_rent_overall_ms_hs<-create_overall_list2(hr_color_by_sch_rent_exp,
 toc_rent_overall_span<-create_overall_list2(hr_color_by_sch_rent_exp,
                                             cs_mid_hi, ts_span_string,
                                             "Retention Rate %")
-  
+
+toc_rent_overall_elem2<-create_overall_list2(hr_color_by_sch_rent_exp,
+                                            cs_elem, ts_elem_string,
+                                            "Retention Rate % (n)")
+
+toc_rent_overall_ms_hs2<-create_overall_list2(hr_color_by_sch_rent_exp,
+                                             cs_mid_hi, ts_ms_hs_string,
+                                             "Retention Rate % (n)")
+
+toc_rent_overall_span2<-create_overall_list2(hr_color_by_sch_rent_exp,
+                                            cs_mid_hi, ts_span_string,
+                                            "Retention Rate % (n)")  
 
 ## -----------------------------------------------------------------------------
 ## Part 2.5 - Create Retention Tables - By Neighborhood
@@ -650,6 +738,8 @@ toc_rent_overall_span<-create_overall_list2(hr_color_by_sch_rent_exp,
 save(hr_color_by_sch_rent_exp,toc_rent_overall,
      toc_rent_overall2,toc_rent_overall_elem,
      toc_rent_overall_ms_hs,toc_rent_overall_span,
+     toc_rent_overall_elem2,
+     toc_rent_overall_ms_hs2,toc_rent_overall_span2,
      file = file.path(code_file_dir,"veteran_rent_tbls.RData"))
 
 
