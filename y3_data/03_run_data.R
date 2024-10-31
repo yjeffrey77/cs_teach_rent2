@@ -32,7 +32,7 @@ getwd()
 ## ---------------------------
 
 code_file_dir<-file.path("C:/Users/yjeff/Desktop/Community Schools/Teacher Retention Data",
-                         "Analyses", "y3_data")
+                         "Analyses", "cs_teach_rent2", "y3_data")
 
 data_file_dir<-file.path("C:/Users/yjeff/Box/LAUSD TR Data Year 3")
 
