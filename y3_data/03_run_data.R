@@ -520,8 +520,8 @@ save(cs_rent_tbls, cs_rent_tbls2, ts_rent_tbls,
 
 
 save(toc_rent_overall,toc_rent_overall2, toc_rent_overall_elem,
-     toc_rent_overall_ms_hs,toc_rent_overall_span,
-     rent_by_neighborhood_toc,
+     toc_rent_overall_ms_hs,toc_rent_overall_span, 
+     rent_by_neighborhood_toc,toc_rent_tbls, toc_rent_tbls_update,
      file = file.path(code_file_dir, "toc_rent_tbls.RData"))
 
 ## -----------------------------------------------------------------------------

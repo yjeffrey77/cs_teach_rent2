@@ -1,0 +1,167 @@
+---
+title: "School Analysis Report"
+execute:
+  echo: false
+  message: false
+  warning: false
+format: 
+  html:
+    embed-resources: true
+editor: visual
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+## Housekeeping
+
+## ---------------------------
+## libraries
+## ---------------------------
+library(tidyverse)
+library(readxl)
+library(openxlsx)
+library(janitor)
+library(kableExtra)
+library(pwr)
+library(kableExtra)
+library(knitr)
+
+## ---------------------------
+## directory paths
+## ---------------------------
+
+#see current directory
+#getwd()
+
+#set current directory
+code_file_dir<-file.path("C:/Users/yjeff/Desktop/Community Schools/Teacher Retention Data",
+                "Analyses", "y3_data")
+
+data_file_dir<-file.path("C:/Users/yjeff/Box/LAUSD TR Data Year 3")
+
+## ---------------------------
+## helper functions
+## ---------------------------
+
+update_tbl_names<-function(df){
+  df_update<-df
+  colnames(df_update)<-c("School", "2019", "2020", "2021", "2022", "2023")
+  return(df_update)
+}
+
+## ---------------------------
+## load & inspect data
+## ---------------------------
+
+# load(file.path(code_file_dir, "rent_tbls.RData"))
+# load(file.path(code_file_dir, "rent_plots.RData"))
+
+#toc tables
+load(file.path(code_file_dir, "toc_rent_tbls.RData"))
+load(file.path(code_file_dir, "rent_plots_toc.RData"))
+
+#load(file.path(code_file_dir, "hr_by_sch.RData"))
+
+
+## Add Lists
+source(file.path(code_file_dir, "00_school_lists.R"))
+
+
+```
+
+```{r}
+#Create additional school lists
+cs_toc_sch_list <- toc_rent_tbls[["overall"]][toc_rent_overall[["cs"]][["overall"]]$school]
+
+
+cs_toc_sch_list_0_5<-toc_rent_tbls_update[["0-5 years"]][toc_rent_overall[["cs"]][["overall"]]$school]
+
+cs_toc_sch_list_6_10<-toc_rent_tbls_update[["6-10 years"]][toc_rent_overall[["cs"]][["overall"]]$school]
+
+cs_toc_sch_list_11_15<-toc_rent_tbls_update[["11-15 years"]][toc_rent_overall[["cs"]][["overall"]]$school]
+
+cs_toc_sch_list_15_over<-toc_rent_tbls_update[["15+ years"]][toc_rent_overall[["cs"]][["overall"]]$school]
+
+
+ts_toc_sch_list <- toc_rent_tbls[["overall"]][toc_rent_overall[["ts"]][["overall"]]$school]
+
+ts_toc_sch_list_0_5<-toc_rent_tbls_update[["0-5 years"]][toc_rent_overall[["ts"]][["overall"]]$school]
+
+ts_toc_sch_list_6_10<-toc_rent_tbls_update[["6-10 years"]][toc_rent_overall[["ts"]][["overall"]]$school]
+
+ts_toc_sch_list_11_15<-toc_rent_tbls_update[["11-15 years"]][toc_rent_overall[["ts"]][["overall"]]$school]
+
+ts_toc_sch_list_15_over<-toc_rent_tbls_update[["15+ years"]][toc_rent_overall[["ts"]][["overall"]]$school]
+
+
+
+```
+
+## Purpose
+
+The purpose of this document is to show the retention tables for each schools.
+
+## Community Schools
+
+<details>
+
+```{r, echo = FALSE, results='asis'}
+
+school_string<-names(cs_toc_sch_list)
+
+gxs<-lapply(1:length(school_string), function(x){
+  
+  school_title <- school_string[[x]]
+  school<-cs_toc_sch_list[[x]]
+  school_0_5<-cs_toc_sch_list_0_5[[x]]
+  school_6_10<-cs_toc_sch_list_6_10[[x]]
+  school_11_15<-cs_toc_sch_list_11_15[[x]]
+  school_15_over<-cs_toc_sch_list_15_over[[x]]
+    
+
+  knit_child(
+    '_05_school_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+  
+})
+
+cat(unlist(gxs), sep = '\n')
+
+```
+
+</details>
+
+## Traditional Public Schools
+
+<details>
+
+```{r, echo = FALSE, results='asis'}
+
+school_string<-names(ts_toc_sch_list)
+
+gxs<-lapply(1:length(school_string), function(x){
+
+  school_title <- school_string[[x]]
+  school<-ts_toc_sch_list[[x]]
+  school_0_5<-ts_toc_sch_list_0_5[[x]]
+  school_6_10<-ts_toc_sch_list_6_10[[x]]
+  school_11_15<-ts_toc_sch_list_11_15[[x]]
+  school_15_over<-ts_toc_sch_list_15_over[[x]]
+  
+  
+  knit_child(
+    '_05_school_report_full - child.Rmd', envir = environment(), quiet = TRUE
+
+  )
+
+})
+
+cat(unlist(gxs), sep = '\n')
+
+```
+
+</details>

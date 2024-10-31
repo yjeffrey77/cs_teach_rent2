@@ -104,7 +104,7 @@ cs_mid_hi<-c(cs_string_cohort1_ms_hi,cs_string_cohort2_3_mid_hi)
 ## Part 2 - Neighborhood Strings
 ## -----------------------------------------------------------------------------
 
-neighborhood_strings<-c("hamilton","monroe","bell_cuday_monroe",
+neighborhood_strings<-c("hamilton","monroe","bell_cudahy_maywood",
                         "hollywood","la_mid_city","downtown","sun_valley",
                         "gardena","south_la","riveria","south_mid_city",
                         "venice","heet","macarthur_park",
@@ -132,7 +132,7 @@ neighborhood_string_list[["monroe"]]<-c("Alta California Elementary",
           "Plummer Elementary",
           "Rosa Parks Learning Center")
 
-neighborhood_string_list[["bell_cuday_monroe"]]<-c("Corona Avenue Elementary",
+neighborhood_string_list[["bell_cudahy_maywood"]]<-c("Corona Avenue Elementary",
                      "Jaime Escalante Elementary School",
                      "Loma Vista Elementary",
                      "Loma Vista Elementary DL Two-Way Im Spanish",

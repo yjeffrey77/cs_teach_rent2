@@ -19,10 +19,9 @@ editor: visual
     -   11-15 Years
     -   Over 15 Years
 
-
 ## Calculation
 
-Rates shown here are the average teacher retention rate across schools. These rates are calculated by taking the retention rate of each school and dividing it by the number of schools in the sample. If there are cases where, in a school cell, there are no teachers, then that school is not included in the average calculation. 
+Rates shown here are the average teacher retention rate across schools. These rates are calculated by taking the retention rate of each school and dividing it by the number of schools in the sample. If there are cases where, in a school cell, there are no teachers, then that school is not included in the average calculation.
 
 ```{r}
 #| echo: false
@@ -83,6 +82,7 @@ source(file.path(code_file_dir, "00_school_lists.R"))
 ## All Schools
 
 <details>
+
 ```{r, echo = FALSE, results='asis'}
 teach_yr_string<-names(toc_rent_overall[["ts"]][["original_5"]])
 
@@ -112,6 +112,7 @@ cat(unlist(gxs), sep = '\n')
 ## Elementary Schools
 
 <details>
+
 ```{r, echo = FALSE, results='asis'}
 teach_yr_string<-names(toc_rent_overall[["ts"]][["original_5"]])
 
@@ -141,6 +142,7 @@ cat(unlist(gxs), sep = '\n')
 ## Middle/High Schools
 
 <details>
+
 ```{r, echo = FALSE, results='asis'}
 teach_yr_string<-names(toc_rent_overall[["ts"]][["original_5"]])
 
@@ -166,4 +168,3 @@ cat(unlist(gxs), sep = '\n')
 ```
 
 </details>
-

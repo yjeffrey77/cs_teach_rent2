@@ -1,0 +1,54 @@
+
+### `r school_title` 
+
+
+<details>
+
+
+**Overall**
+<details>
+```{r, echo=FALSE}
+
+school%>% kable()
+
+```
+</details>
+
+
+**0-5 Years**
+<details>
+```{r, echo=FALSE}
+
+school_0_5%>% kable()
+
+```
+</details>
+
+**6-10 Years**
+<details>
+```{r, echo=FALSE}
+
+school_6_10%>% kable()
+
+```
+</details>
+
+**11-15 Years**
+<details>
+```{r, echo=FALSE}
+
+school_11_15%>% kable()
+
+```
+</details>
+
+**15+ Years**
+<details>
+```{r, echo=FALSE}
+
+school_15_over%>% kable()
+
+```
+</details>
+
+</details>
