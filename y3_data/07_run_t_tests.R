@@ -32,7 +32,7 @@ getwd()
 ## ---------------------------
 
 code_file_dir<-file.path("C:/Users/yjeff/Desktop/Community Schools/Teacher Retention Data",
-                         "Analyses","cs_teach_rent2","y3_data")
+                         "Analyses", "y3_data")
 
 data_file_dir<-file.path("C:/Users/yjeff/Box/LAUSD TR Data Year 3")
 
@@ -125,7 +125,7 @@ rownames(combined_t_test)<-NULL
 ## -----------------------------------------------------------------------------
 
 save(neighborhood_t_test,combined_t_test,
-     file = file.path(code_file_dir,"test_tbls.RData"))
+     file = file.path(code_file_dir,"cs_teach_rent2", "test_tbls.RData"))
 
 
 

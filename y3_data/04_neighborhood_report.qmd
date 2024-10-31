@@ -85,7 +85,7 @@ The purpose of this document is to present neighborhood-specific retention rates
 |                                                  |                                                   |                                                 |
 | 2.  HEET                                         | 2.  Monroe                                        | 2.  South LA                                    |
 |                                                  |                                                   |                                                 |
-| 3.  Boyle Heights                                | 3.  Bell Cuday Monroe                             | 3.  Venice                                      |
+| 3.  Boyle Heights                                | 3.  Bell Cudahy Maywood                             | 3.  Venice                                      |
 |                                                  |                                                   |                                                 |
 | 4.  Lincoln Heights El Sereno                    | 4.  Downtown                                      | 4.  Macarthur Park                              |
 |                                                  |                                                   |                                                 |
@@ -134,7 +134,7 @@ cat(unlist(gxs), sep = '\n')
 
 ```{r, echo = FALSE, results='asis'}
 
-neighborhood_string<-c("Hamilton", "Monroe", "Bell Cuday Monroe",
+neighborhood_string<-c("Hamilton", "Monroe", "Bell Cudahy Maywood",
                     "Downtown", "Sun Valley", "Riveria",
                     "Fremont", "Huntington Park Vernon")
 

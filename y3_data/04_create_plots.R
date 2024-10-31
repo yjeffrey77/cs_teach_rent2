@@ -305,7 +305,7 @@ save(combined_tbls,plot_combined_tbls,bar_plots_combined,
 
 save(toc_combined_tbls,toc_plot_combined_tbls,toc_bar_plots_combined,
      plot_neigh_tbls_toc, toc_bar_plots_neigh, update_neigh_string,
-     file = file.path(code_file_dir, "rent_plots_toc.RData"))
+     file = file.path(code_file_dir,  "rent_plots_toc.RData"))
 
 ## -----------------------------------------------------------------------------
 ## END SCRIPT

@@ -436,7 +436,7 @@ toc_rent_overall_span<-toc_rent_overall_span[["ts"]]
 ## Part 2.5 - Create Retention Tables - By Neighborhood
 ## -----------------------------------------------------------------------------
 
-neighborhood_strings<-c("hamilton","monroe","bell_cuday_monroe",
+neighborhood_strings<-c("hamilton","monroe","bell_cudahy_maywood",
                          "hollywood","la_mid_city","downtown","sun_valley",
                          "gardena","south_la","riveria","south_mid_city",
                          "venice","heet","macarthur_park",
