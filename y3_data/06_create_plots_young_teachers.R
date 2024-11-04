@@ -83,6 +83,60 @@ create_plot_tbl <- function(df) {
   return(data_long)
 }
 
+create_plot_tbl2 <- function(df) {
+  
+  if(is.null(colnames(df[["cs"]]))){
+    
+    cs_data_long<-data.frame(school = "a",
+                             Year = "a",
+                             Retention = "a",
+                             School = "a")
+  }
+  
+  if(!is.null(colnames(df[["cs"]]))){
+    cs_data_long <- pivot_longer(df[["cs"]], 
+                                 cols = c("2019","2020","2021","2022","2023"), 
+                                 names_to = "Year", 
+                                 values_to = "Retention") %>% 
+      mutate(
+        School = case_when(
+          school == "Overall Retention Rate (%)" ~ "CS",
+        )) %>% filter(School == "CS")
+  }
+
+      
+  if(is.null(colnames(df[["ts"]]))){
+    
+    
+    ts_data_long<-data.frame(school = "a",
+                             Year = "a",
+                             Retention = "a",
+                             School = "a")
+  }
+  
+  else{
+    ts_data_long <- pivot_longer(df[["ts"]], 
+                                 cols = c("2019","2020","2021","2022","2023"), 
+                                 names_to = "Year", 
+                                 values_to = "Retention") %>% 
+      mutate(
+        School = case_when(
+          school == "Overall Retention Rate (%)" ~ "TS",
+        )) %>% filter(School == "TS")
+    
+  }
+
+  data_long<-rbind(cs_data_long, ts_data_long)
+  
+  #filter out any invalid "a" values
+  data_long<-data_long %>% filter(school != "a")
+  data_long<-data_long %>% mutate(
+    Retention = as.numeric(Retention)
+  )
+  
+  return(data_long)
+}
+
 create_bar_plot1<-function(df, graph_title){
   
   bar_graph<-ggplot(df, aes(x = Year, y = Retention, fill = School)) +
@@ -127,7 +181,7 @@ create_bar_plot2<-function(df, graph_title){
 load(file.path(code_file_dir, "veteran_rent_tbls.RData"))
 
 ## -----------------------------------------------------------------------------
-## Part 1 - Create CS/TS Combined Tables 
+## Part 1.1 - Create CS/TS Combined Tables 
 ## -----------------------------------------------------------------------------
 
 combined_tbls<-vector("list", 3)
@@ -152,9 +206,109 @@ combined_tbls[["ms_hs"]]<-map2(toc_rent_overall_ms_hs[["cs"]],
                                function(a,b) map2(a,b,
                                function(x,y) create_combined_tbl(x,y))) 
 
+## -----------------------------------------------------------------------------
+## Part 1.2 - Create Neighborhood Tables by Veteran Status 
+## -----------------------------------------------------------------------------
+
+#Get neighborhood string list
+source(file.path(".","y3_data", "00_school_lists.R"))
+
+#create functions
+create_rent_tbl<-function(sch_string, df_list){
+  
+  sch_list<-df_list[sch_string]
+  
+  # Remove NULL values
+  sch_list <- sch_list[!is.na(names(sch_list))]
+  #sch_list <- Filter(Negate(is.null), sch_string)
+  
+  #filter by retention rate
+  update_sch_list<-map(sch_list, function(a){
+    update_df<-a %>% filter(rent == "Retention Rate %") %>% 
+      mutate(
+        yr_2019 = as.numeric(yr_2019),
+        yr_2020 = as.numeric(yr_2020),
+        yr_2021 = as.numeric(yr_2021),
+        yr_2022 = as.numeric(yr_2022),
+        yr_2023 = as.numeric(yr_2023),
+      ) %>% select(-c(rent))
+    
+    return(update_df)
+  } )
+  
+  #rowbind for them to come together
+  update_sch_df<-bind_rows(update_sch_list, .id = "school")
+  
+  if(nrow(update_sch_df)==0){
+    update_sch_df<-NA
+  }
+  
+  else{
+    #clean dataset
+    # update_sch_df<-update_sch_df %>% mutate(
+    #   yr_2019 = as.numeric(yr_2019),
+    #   yr_2020 = as.numeric(yr_2020),
+    #   yr_2021 = as.numeric(yr_2021),
+    #   yr_2022 = as.numeric(yr_2022),
+    #   yr_2023 = as.numeric(yr_2023),
+    # ) %>% select(-c(rent))
+    
+    overall<- update_sch_df %>% summarize(
+      school = "Overall Retention Rate (%)",
+      yr_2019 = mean(yr_2019, na.rm = T),
+      yr_2020 = mean(yr_2020, na.rm = T),
+      yr_2021 = mean(yr_2021, na.rm = T),
+      yr_2022 = mean(yr_2022, na.rm = T),
+      yr_2023 = mean(yr_2023, na.rm = T),
+    )
+    
+    update_sch_df<-rbind(update_sch_df, overall)
+    
+    colnames(update_sch_df)<-c("school", "2019", "2020", "2021", "2022", "2023")
+    
+  }
+  return(update_sch_df)
+}
+
+create_neighborhood_list<-function(neighborhood_string,
+                                   cs_sch_string, df_list){
+  #create strings
+  cs_neighborhood_string<-cs_sch_string[cs_sch_string %in% neighborhood_string]
+  ts_neighborhood_string<-neighborhood_string[!c(neighborhood_string %in% cs_neighborhood_string)]
+  
+  #create rent datasets
+  cs_tbls<-create_rent_tbl(cs_neighborhood_string,df_list)
+  ts_tbls<-create_rent_tbl(ts_neighborhood_string,df_list)
+  
+  neigh_tbls<-list(cs_tbls, ts_tbls)
+  names(neigh_tbls)<-c("cs", "ts")
+  
+  return(neigh_tbls)
+}
+
+create_specific_strings<-function(neighborhood_string,
+                                  cs_sch_string){
+  #create strings
+  cs_neighborhood_string_cs<-cs_sch_string[cs_sch_string %in% neighborhood_string]
+  ts_neighborhood_string_cs<-neighborhood_string[!c(neighborhood_string %in% cs_neighborhood_string_cs)]
+  
+  return(list(cs_neighborhood_string_cs,
+              ts_neighborhood_string_cs))
+}
+
+#create tables
+toc_neigh_rent_tbls<-map(hr_color_by_sch_rent_exp,
+                         function(type){
+                           map(type,
+                               function(veteran_status){
+                                 map(neighborhood_string_list,
+                                     function(neighborhood){
+                                       create_neighborhood_list(neighborhood,cs_string,
+                                                                veteran_status)})
+                               })})
 
 ## -----------------------------------------------------------------------------
-## Part 2 - Create CS/TS Plots
+## Part 2.1 - Create CS/TS Plots Combined
 ## -----------------------------------------------------------------------------
 
 #create plot tables
@@ -163,7 +317,7 @@ plot_combined_tbls<-map(combined_tbls,
                         function(a) map(a,create_plot_tbl)))
 
 
-#create bar plots
+#create bar plots - combined
 bar_plots_combined<-vector("list", 3)
 names(bar_plots_combined)<-c("overall", "elem", "ms_hs")
 
@@ -185,128 +339,37 @@ bar_plots_combined[["ms_hs"]]<-map(plot_combined_tbls[["ms_hs"]],
                                   str_c("2019-2023 Middle/High TOC Retention: ",
                                         y))))
 
-#Save For now
-save(plot_combined_tbls,combined_tbls,bar_plots_combined,
-     file = file.path(code_file_dir,"veteran_plots.RData"))
 
-
-
-
-#Stop Here
-
-
-
-
-#TOC
-toc_plot_combined_tbls<-vector("list", 3)
-names(toc_plot_combined_tbls)<-c("overall", "elem", "ms_hs")
+## -----------------------------------------------------------------------------
+## Part 2.1 - Create CS/TS Plots by Neighborhood & Veteran Status
+## -----------------------------------------------------------------------------
 
 #create plot tables
-
-for (a in names(toc_plot_combined_tbls)){
-  toc_plot_combined_tbls[[a]]<-
-    map(toc_combined_tbls[[a]], create_plot_tbl)
-}
+neigh_plot_tbls_veteran<-map(toc_neigh_rent_tbls,
+           function(type) map(type,
+           function(a) map(a,create_plot_tbl2)))
 
 #create bar plots
-toc_bar_plots_combined<-vector("list", 3)
-names(toc_bar_plots_combined)<-c("overall", "elem", "ms_hs")
-
-for (teach_type in names(toc_combined_tbls)){
-  toc_bar_plots_combined[[teach_type]]<-vector("list", 5)
-  names(toc_bar_plots_combined[[teach_type]])<-teach_year_string
-}
-
-toc_bar_plots_combined[["overall"]][["overall"]]<-
-  create_bar_plot1(toc_plot_combined_tbls[["overall"]][["overall"]],
-                   "2019-2023 TOC Retention Rate: Overall")
-
-for (a in c("0-5 years","6-10 years","11-15 years","15+ years")){
-  
-  toc_bar_plots_combined[["overall"]][[a]]<-
-    create_bar_plot1(toc_plot_combined_tbls[["overall"]][[a]],
-                     str_c("2019-2023 TOC Retention Rate: ", a))
-}
-
-#Elementary and High School
-
-for (b in c("elem", "ms_hs")){
-  
-  if (b == "elem"){c = "Elementary"}
-  
-  if (b == "ms_hs"){c = "Middle/High School"}
-  
-  toc_bar_plots_combined[[b]][["overall"]]<-
-    create_bar_plot1(toc_plot_combined_tbls[["overall"]][["overall"]],
-                     str_c("2019-2023 TOC ", c,
-                           " Retention Rate: Overall"))
-  
-  for (a in c("0-5 years","6-10 years","11-15 years","15+ years")){
-    
-    toc_bar_plots_combined[[b]][[a]]<-
-      create_bar_plot1(toc_plot_combined_tbls[["overall"]][[a]],
-                       str_c("2019-2023 TOC ",c,
-                             " Retention Rate: ", a))
-  }
-  
-}
-
-
-## -----------------------------------------------------------------------------
-## Part 2 - Neighborhood Combined Tables & Plots
-## -----------------------------------------------------------------------------
-
-plot_neigh_tbls<-map(names(rent_by_neighborhood),
-                              function(x) create_plot_tbl(rent_by_neighborhood[[x]][["combined_overall"]]))
-names(plot_neigh_tbls)<-names(rent_by_neighborhood)
-
-#create function to transform string
-transform_neighborhood_string <- function(string) {
-  string %>%
-    str_replace_all("_", " ") %>%  # Replace underscores with spaces
-    str_to_title() %>%             # Capitalize each word
-    str_replace_all("\\bLa\\b", "LA") %>%   # Capitalize "la" as "LA"
-    str_replace_all("\\bMid City\\b", "Mid-City")
-}
-
-update_neigh_string<-transform_neighborhood_string(names(plot_neigh_tbls))
-
-#create list to store bar plots
-#bar_plots_neigh<-vector("list", length(update_neigh_string))
-
-bar_plots_neigh<-map2(plot_neigh_tbls, update_neigh_string,
-                      function(x,y) create_bar_plot2(x,
-                                                     str_c("2019-2023 Retention Rate: ",
-                                                           y)))
-
-#TOC
-plot_neigh_tbls_toc<-map(names(rent_by_neighborhood_toc),
-                     function(x) create_plot_tbl(rent_by_neighborhood_toc[[x]][["combined_overall"]]))
-names(plot_neigh_tbls_toc)<-names(rent_by_neighborhood_toc)
-
-
-update_neigh_string<-transform_neighborhood_string(names(plot_neigh_tbls_toc))
-
-#create list to store bar plots
-#bar_plots_neigh<-vector("list", length(update_neigh_string))
-
-toc_bar_plots_neigh<-map2(plot_neigh_tbls_toc, update_neigh_string,
-                      function(x,y) create_bar_plot2(x,
-                                                     str_c("2019-2023 TOC Retention Rate: ",
-                                                           y)))
+neigh_bar_plot_tbls<-map(neigh_plot_tbls_veteran,
+           function(type) map2(type,names(type),
+                               function(df2, year){
+                                 map2(df2,names(df2),
+                                      function(df1, neigh_name){
+                                        create_bar_plot1(df1,
+                                                         str_c(str_to_title(str_replace_all(neigh_name, "_", " ")),
+                                                               " TOC Retention: ",
+                                                               str_to_title(year)))
+                                      })
+                               })) 
 
 ## -----------------------------------------------------------------------------
 ## Part 3 - Save Data
 ## -----------------------------------------------------------------------------
 
-# save(combined_tbls,plot_combined_tbls,bar_plots_combined,
-#      plot_neigh_tbls, bar_plots_neigh, update_neigh_string,
-#      file = file.path(code_file_dir, "rent_plots.RData"))
-# 
-# 
-# save(toc_combined_tbls,toc_plot_combined_tbls,toc_bar_plots_combined,
-#      plot_neigh_tbls_toc, toc_bar_plots_neigh, update_neigh_string,
-#      file = file.path(code_file_dir, "rent_plots_toc.RData"))
+save(combined_tbls, toc_neigh_rent_tbls,
+     plot_combined_tbls,bar_plots_combined,
+     neigh_plot_tbls_veteran,neigh_bar_plot_tbls,
+     file = file.path(code_file_dir,"veteran_plots.RData"))
 
 ## -----------------------------------------------------------------------------
 ## END SCRIPT

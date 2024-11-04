@@ -74,9 +74,12 @@ safe_function_df<-function(expr){
 ## load & inspect data
 ## ---------------------------
 
- load(file.path(code_file_dir, "hr_by_sch.RDATA"))
- 
- load(file.path(code_file_dir, "rent_plots_toc.RData"))
+ # load(file.path(code_file_dir, "hr_by_sch.RDATA"))
+ # 
+ # load(file.path(code_file_dir, "rent_plots_toc.RData"))
+ load(file.path(code_file_dir, "veteran_plots.RData"))
+
+load(file.path(code_file_dir, "veteran_rent_tbls.RData"))
 
 ## -----------------------------------------------------------------------------
 ## Part 1 - T-test
@@ -103,12 +106,16 @@ create_t_test_output<-function(df){
   return(t_test_df)
 }
 
+ #By Neighborhood
 neighborhood_t_test<-map(plot_neigh_tbls_toc,
                          function(x){create_t_test_output(x) %>%
                              safe_function_df()})
 
 combined_t_test<-bind_rows(.id = "neigborhood", neighborhood_t_test)
 rownames(combined_t_test)<-NULL
+
+#By Veteran Status
+
 
 
 ## -----------------------------------------------------------------------------
