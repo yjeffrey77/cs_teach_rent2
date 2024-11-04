@@ -244,22 +244,14 @@ create_rent_tbl<-function(sch_string, df_list){
   }
   
   else{
-    #clean dataset
-    # update_sch_df<-update_sch_df %>% mutate(
-    #   yr_2019 = as.numeric(yr_2019),
-    #   yr_2020 = as.numeric(yr_2020),
-    #   yr_2021 = as.numeric(yr_2021),
-    #   yr_2022 = as.numeric(yr_2022),
-    #   yr_2023 = as.numeric(yr_2023),
-    # ) %>% select(-c(rent))
-    
+
     overall<- update_sch_df %>% summarize(
       school = "Overall Retention Rate (%)",
-      yr_2019 = mean(yr_2019, na.rm = T),
-      yr_2020 = mean(yr_2020, na.rm = T),
-      yr_2021 = mean(yr_2021, na.rm = T),
-      yr_2022 = mean(yr_2022, na.rm = T),
-      yr_2023 = mean(yr_2023, na.rm = T),
+      yr_2019 = mean(yr_2019, na.rm = T) %>% round(),
+      yr_2020 = mean(yr_2020, na.rm = T) %>% round(),
+      yr_2021 = mean(yr_2021, na.rm = T) %>% round(),
+      yr_2022 = mean(yr_2022, na.rm = T) %>% round(),
+      yr_2023 = mean(yr_2023, na.rm = T) %>% round(),
     )
     
     update_sch_df<-rbind(update_sch_df, overall)

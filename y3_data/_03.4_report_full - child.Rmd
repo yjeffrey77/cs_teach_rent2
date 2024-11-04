@@ -1,0 +1,155 @@
+
+### `r neighborhood_title` 
+
+<details>
+
+**Overall**
+<details>
+
+```{r, echo = FALSE, results='asis'}
+
+#gxs<-lapply(1:length(neighborhood_string), function(x){
+  
+  #neighborhood_title <- update_neigh_string[neighborhood_num][[x]]
+  neighborhood_df<-rent_by_neighborhood_toc
+  neighborhood<-names(rent_by_neighborhood)[neighborhood_num][[x]]
+  bar_plots_neigh_df<-bar_plots_neigh
+  
+  cat(knit_child(
+    '_03.3_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  ))
+  
+#})
+
+#cat(unlist(gxs), sep = '\n')
+
+```
+
+</details>
+
+
+**0-3 Years**
+<details>
+
+```{r, echo = FALSE, results='asis'}
+
+# gxs<-lapply(1:length(neighborhood_string), function(x){
+#   
+  neighborhood_df<-toc_neigh_rent_tbls[["original_5"]][["0-3 years"]]
+  neighborhood<-names(rent_by_neighborhood)[neighborhood_num][[x]]
+  bar_plots_neigh_df<-neigh_bar_plot_tbls[["original_5"]][["0-3 years"]]
+
+
+  cat(knit_child(
+    '_03.3_report_full - child.Rmd', envir = environment(), quiet = TRUE
+
+  ))
+#   
+# })
+# 
+# cat(unlist(gxs), sep = '\n')
+
+```
+
+</details>
+
+**4-5 Years**
+<details>
+
+```{r, echo = FALSE, results='asis'}
+
+# gxs<-lapply(1:length(neighborhood_string), function(x){
+#   
+  neighborhood_df<-toc_neigh_rent_tbls[["original_5"]][["4-5 years"]]
+  neighborhood<-names(rent_by_neighborhood)[neighborhood_num][[x]]
+  bar_plots_neigh_df<-neigh_bar_plot_tbls[["original_5"]][["4-5 years"]]
+
+  cat(knit_child(
+    '_03.3_report_full - child.Rmd', envir = environment(), quiet = TRUE
+
+  ))
+#   
+# })
+# 
+# cat(unlist(gxs), sep = '\n')
+
+```
+
+</details>
+
+**6-10 years**
+<details>
+
+```{r, echo = FALSE, results='asis'}
+
+
+# gxs<-lapply(1:length(neighborhood_string), function(x){
+#   
+  neighborhood_df<-toc_neigh_rent_tbls[["original_5"]][["6-10 years"]]
+  neighborhood<-names(rent_by_neighborhood)[neighborhood_num][[x]]
+  bar_plots_neigh_df<-neigh_bar_plot_tbls[["original_5"]][["6-10 years"]]
+
+  cat(knit_child(
+    '_03.3_report_full - child.Rmd', envir = environment(), quiet = TRUE
+
+  ))
+#   
+# })
+# 
+# cat(unlist(gxs), sep = '\n')
+
+```
+
+</details>
+
+**11-15 years**
+<details>
+
+```{r, echo = FALSE, results='asis'}
+
+# gxs<-lapply(1:length(neighborhood_string), function(x){
+#   
+  neighborhood_df<-toc_neigh_rent_tbls[["original_5"]][["11-15 years"]]
+  neighborhood<-names(rent_by_neighborhood)[neighborhood_num][[x]]
+  bar_plots_neigh_df<-neigh_bar_plot_tbls[["original_5"]][["11-15 years"]]
+
+  cat(knit_child(
+    '_03.3_report_full - child.Rmd', envir = environment(), quiet = TRUE
+
+  ))
+#   
+# })
+# 
+# cat(unlist(gxs), sep = '\n')
+
+```
+
+</details>
+
+
+**15+ years**
+<details>
+
+```{r, echo = FALSE, results='asis'}
+
+# gxs<-lapply(1:length(neighborhood_string), function(x){
+#   
+  neighborhood_df<-toc_neigh_rent_tbls[["original_5"]][["15+ years"]]
+  neighborhood<-names(rent_by_neighborhood)[neighborhood_num][[x]]
+  bar_plots_neigh_df<-neigh_bar_plot_tbls[["original_5"]][["15+ years"]]
+
+  cat(knit_child(
+    '_03.3_report_full - child.Rmd', envir = environment(), quiet = TRUE
+
+  ))
+#   
+# })
+# 
+# cat(unlist(gxs), sep = '\n')
+
+```
+
+</details>
+
+</details>

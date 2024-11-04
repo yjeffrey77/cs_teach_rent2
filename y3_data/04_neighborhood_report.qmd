@@ -38,7 +38,7 @@ library(knitr)
 
 #set current directory
 code_file_dir<-file.path("C:/Users/yjeff/Desktop/Community Schools/Teacher Retention Data",
-                "Analyses", "y3_data")
+                "Analyses", "cs_teach_rent2", "y3_data")
 
 data_file_dir<-file.path("C:/Users/yjeff/Box/LAUSD TR Data Year 3")
 
@@ -64,12 +64,22 @@ load(file.path(code_file_dir, "toc_rent_tbls.RData"))
 load(file.path(code_file_dir, "rent_plots_toc.RData"))
 
 load(file.path(code_file_dir, "hr_by_sch.RData"))
-
+load(file.path(code_file_dir, "veteran_rent_tbls.RData"))
+load(file.path(code_file_dir, "veteran_plots.RData"))
 
 ## Add Lists
 source(file.path(code_file_dir, "00_school_lists.R"))
 
-
+#Clean Original Tables
+rent_by_neighborhood_toc<-map(rent_by_neighborhood_toc,
+          function(neighborhood) map(neighborhood,
+          function(a){
+            update_df<-a %>% select(-c(rent))
+            colnames(update_df)<-c('school', "2019",
+                                   "2020","2021","2022","2023")
+            return(update_df)
+            }
+          ))
 ```
 
 ## Purpose
@@ -113,10 +123,9 @@ neighborhood_num<-which(update_neigh_string %in% neighborhood_string)
 gxs<-lapply(1:length(neighborhood_string), function(x){
   
   neighborhood_title <- update_neigh_string[neighborhood_num][[x]]
-  neighborhood<-names(rent_by_neighborhood)[neighborhood_num][[x]]
-
+  
   knit_child(
-    '_03.2_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    '_03.4_report_full - child.Rmd', envir = environment(), quiet = TRUE
     
   )
   
@@ -143,10 +152,13 @@ neighborhood_num<-which(update_neigh_string %in% neighborhood_string)
 gxs<-lapply(1:length(neighborhood_string), function(x){
   
   neighborhood_title <- update_neigh_string[neighborhood_num][[x]]
-  neighborhood<-names(rent_by_neighborhood)[neighborhood_num][[x]]
-
+  # neighborhood_df<-rent_by_neighborhood_toc
+  # neighborhood<-names(rent_by_neighborhood)[neighborhood_num][[x]]
+  # bar_plots_neigh_df<-bar_plots_neigh
+  
+  
   knit_child(
-    '_03.2_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    '_03.4_report_full - child.Rmd', envir = environment(), quiet = TRUE
     
   )
   
@@ -172,10 +184,9 @@ neighborhood_num<-which(update_neigh_string %in% neighborhood_string)
 gxs<-lapply(1:length(neighborhood_string), function(x){
   
   neighborhood_title <- update_neigh_string[neighborhood_num][[x]]
-  neighborhood<-names(rent_by_neighborhood)[neighborhood_num][[x]]
-
+  
   knit_child(
-    '_03.2_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    '_03.4_report_full - child.Rmd', envir = environment(), quiet = TRUE
     
   )
   

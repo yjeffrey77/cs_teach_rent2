@@ -1,0 +1,66 @@
+
+
+**Tables**
+
+
+**CS**
+
+```{r, echo=FALSE, results='asis'}
+if(is.na(rent_by_neighborhood[[neighborhood]][["cs"]])){
+  
+  NA
+}
+
+if(!is.na(rent_by_neighborhood[[neighborhood]][["cs"]])){
+neighborhood_df[[neighborhood]][["cs"]]<-neighborhood_df[[neighborhood]][["cs"]] 
+
+#%>% select(-c(rent))
+
+neighborhood_df[[neighborhood]][["cs"]]<-neighborhood_df[[neighborhood]][["cs"]] 
+
+#%>% select(-c(rent))
+
+# if (colnames(neighborhood_df[[neighborhood]][["cs"]])[3] == "yr_2019"){
+#   neighborhood_df[[neighborhood]][["cs"]]<-update_tbl_names(neighborhood_df[[neighborhood]][["cs"]])
+# }
+
+
+neighborhood_df[[neighborhood]][["cs"]] %>% kable()
+}
+```
+
+
+**TS**
+
+```{r, echo=FALSE, results='asis'}
+if(is.na(rent_by_neighborhood[[neighborhood]][["ts"]])){
+  
+  NA
+}
+
+
+if(!is.na(rent_by_neighborhood[[neighborhood]][["ts"]])){
+neighborhood_df[[neighborhood]][["ts"]]<-neighborhood_df[[neighborhood]][["ts"]] #%>% select(-c(rent))
+
+# if (colnames(neighborhood_df[[neighborhood]][["ts"]])[3] == "yr_2019"){
+# neighborhood_df[[neighborhood]][["ts"]]<-update_tbl_names(neighborhood_df[[neighborhood]][["ts"]])
+# }
+
+neighborhood_df[[neighborhood]][["ts"]] %>% kable()
+}
+```
+
+
+
+**Graph**
+
+```{r, echo=FALSE, results='asis'}
+bar_plots_neigh_df[[neighborhood]]
+```
+
+**Number of CS:** `r nrow(neighborhood_df[[neighborhood]][["cs"]]) -1` 
+
+**Number of TS:** `r nrow(neighborhood_df[[neighborhood]][["ts"]]) -1` 
+
+
+
