@@ -83,6 +83,9 @@ Notes: NA values are due to missing cases. For example, if a Community School do
 
 ### Overall
 <details>
+::: panel-tabset
+
+#### Full
 
 ```{r, echo = FALSE, results='asis'}
 
@@ -95,11 +98,31 @@ colnames(t_test)<-c('Neighborhood',"CS", "TS",
 t_test %>% kable()
 ```
 
+#### Curated
+
+```{r, echo = FALSE, results='asis'}
+
+t_test<-combined_t_test %>% 
+  select(-c(conf_low, conf_high, statistic)) 
+
+colnames(t_test)<-c('Neighborhood',"CS", "TS",
+                    "Diff.", "p-value", "df")
+
+t_test<-t_test %>% 
+  filter(`p-value`< 0.05) 
+
+t_test %>% kable()
+```
+
+::: 
 </details>
 
 ### 0-3 Years
 
 <details>
+::: panel-tabset
+
+#### Full
 ```{r, echo = FALSE, results='asis'}
 
 t_test<-combined_t_test_veteran[["original_5"]][["0-3 years"]] %>% 
@@ -111,11 +134,30 @@ colnames(t_test)<-c('Neighborhood',"CS", "TS",
 t_test %>% kable()
 
 ```
+
+#### Curated
+```{r, echo = FALSE, results='asis'}
+
+t_test<-combined_t_test_veteran[["original_5"]][["0-3 years"]] %>% 
+  select(-c(conf_low, conf_high, statistic)) 
+
+colnames(t_test)<-c('Neighborhood',"CS", "TS",
+                    "Diff.", "p-value", "df")
+
+t_test<-t_test %>% 
+  filter(`p-value`< 0.05) 
+
+t_test %>% kable()
+```
+
+:::
 </details>
 
 ### 4-5 Years
 
 <details>
+::: panel-tabset
+#### All
 ```{r, echo = FALSE, results='asis'}
 
 t_test<-combined_t_test_veteran[["original_5"]][["4-5 years"]] %>% 
@@ -127,11 +169,31 @@ colnames(t_test)<-c('Neighborhood',"CS", "TS",
 t_test %>% kable()
 
 ```
+
+#### Curated
+```{r, echo = FALSE, results='asis'}
+
+t_test<-combined_t_test_veteran[["original_5"]][["4-5 years"]] %>% 
+  select(-c(conf_low, conf_high, statistic)) 
+
+colnames(t_test)<-c('Neighborhood',"CS", "TS",
+                    "Diff.", "p-value", "df")
+
+t_test<-t_test %>% 
+  filter(`p-value`< 0.05) 
+
+t_test %>% kable()
+```
+:::
 </details>
+
 
 ### 6-10 Years
 
 <details>
+::: panel-tabset
+#### All
+
 ```{r, echo = FALSE, results='asis'}
 
 t_test<-combined_t_test_veteran[["original_5"]][["6-10 years"]] %>% 
@@ -143,11 +205,33 @@ colnames(t_test)<-c('Neighborhood',"CS", "TS",
 t_test %>% kable()
 
 ```
+
+
+#### Curated
+
+```{r, echo = FALSE, results='asis'}
+
+t_test<-combined_t_test_veteran[["original_5"]][["6-10 years"]] %>% 
+  select(-c(conf_low, conf_high, statistic)) 
+
+colnames(t_test)<-c('Neighborhood',"CS", "TS",
+                    "Diff.", "p-value", "df")
+
+t_test<-t_test %>% 
+  filter(`p-value`< 0.05) 
+
+t_test %>% kable()
+```
+:::
+
 </details>
 
 ### 11-15 Years
 
 <details>
+::: panel-tabset
+#### Full
+
 ```{r, echo = FALSE, results='asis'}
 
 t_test<-combined_t_test_veteran[["original_5"]][["11-15 years"]] %>% 
@@ -159,11 +243,31 @@ colnames(t_test)<-c('Neighborhood',"CS", "TS",
 t_test %>% kable()
 
 ```
+
+#### Curated
+```{r, echo = FALSE, results='asis'}
+
+t_test<-combined_t_test_veteran[["original_5"]][["11-15 years"]] %>% 
+  select(-c(conf_low, conf_high, statistic)) 
+
+colnames(t_test)<-c('Neighborhood',"CS", "TS",
+                    "Diff.", "p-value", "df")
+
+t_test<-t_test %>% 
+  filter(`p-value`< 0.05) 
+
+t_test %>% kable()
+```
+:::
+
 </details>
 
 ### 15+ Years
 
 <details>
+::: panel-tabset
+#### Full
+
 ```{r, echo = FALSE, results='asis'}
 
 t_test<-combined_t_test_veteran[["original_5"]][["15+ years"]] %>% 
@@ -175,4 +279,22 @@ colnames(t_test)<-c('Neighborhood',"CS", "TS",
 t_test %>% kable()
 
 ```
+
+#### Curated
+
+```{r, echo = FALSE, results='asis'}
+
+t_test<-combined_t_test_veteran[["original_5"]][["15+ years"]] %>% 
+  select(-c(conf_low, conf_high, statistic)) 
+
+colnames(t_test)<-c('Neighborhood',"CS", "TS",
+                    "Diff.", "p-value", "df")
+
+t_test<-t_test %>% 
+  filter(`p-value`< 0.05) 
+
+t_test %>% kable()
+```
+:::
+
 </details>
