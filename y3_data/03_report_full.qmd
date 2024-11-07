@@ -44,7 +44,7 @@ library(knitr)
 
 #set current directory
 code_file_dir<-file.path("C:/Users/yjeff/Desktop/Community Schools/Teacher Retention Data",
-                "Analyses", "y3_data")
+                "Analyses", "cs_teach_rent2", "y3_data")
 
 data_file_dir<-file.path("C:/Users/yjeff/Box/LAUSD TR Data Year 3")
 
@@ -192,6 +192,36 @@ toc_bar_plots_combined[["ms_hs"]][["overall"]]
 **Findings**: Overall retention rates between CS and TS Middle/High schools are very similar from each other.
 
 </details>
+
+## Retention: By Cohort
+
+### Cohort 1
+
+<details>
+
+```{r}
+rent_cohort_1[["cs"]] %>% kable()
+```
+</details>
+
+### Cohort 2 and 3
+
+<details>
+
+```{r}
+rent_cohort_2_3[["cs"]] %>% kable()
+```
+</details>
+
+### Cohort 2 Only
+
+<details>
+
+```{r}
+rent_cohort_2_only[["cs"]] %>% kable()
+```
+</details>
+
 
 ## Retention by Teacher Veteran Status (Teachers of Color)
 
@@ -459,6 +489,8 @@ rent_by_neighborhood[["macarthur_park"]][["combined_overall"]] %>% kable()
 ```
 
 </details>
+
+
 
 # Appendix
 

@@ -100,6 +100,27 @@ cs_elem<-c(cs_string_cohort1_elem,cs_string_cohort2_3_elem)
 cs_mid_hi<-c(cs_string_cohort1_ms_hi,cs_string_cohort2_3_mid_hi)
 
 
+#cohort 2 string
+
+cs_cohort2_string<-c("Baldwin Hills Elementary",
+                     "Carlos Santana Arts Academy",
+                     "Carlos Santana Arts Academy DL Two-Way Im Spanish",
+                     "Ellen Ochoa LC DL Two-Way Im Spanish",
+                     "Ellen Ochoa Learning Center",
+                     "Gardner Street Elementary",
+                     "Logan Academy Globl Ecol Two-Way Im Spanish",
+                     "Logan Academy of Global Ecology",
+                     "Lucille Roybal-Allard Elementary",
+                     "Lucille Roybal-Allard Elementary DL Two-Way Im Spanish",
+                     "Palms Elementary",
+                     "Sharp Avenue Elementary",
+                     "Audubon Middle School",
+                     "Carver MS",
+                     "Augustus Hawkins Senior High",
+                     "Augustus F Hawkins SH - Critical Design",
+                     "Susan Miller Dorsey Senior High")
+                     
+
 ## -----------------------------------------------------------------------------
 ## Part 2 - Neighborhood Strings
 ## -----------------------------------------------------------------------------

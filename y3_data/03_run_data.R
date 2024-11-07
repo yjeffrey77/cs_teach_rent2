@@ -66,6 +66,7 @@ safe_function_df<-function(expr, version){
 ## ---------------------------
 
 load(file.path(code_file_dir, "hr_by_sch.RDATA"))
+source(file.path(code_file_dir, "00_school_lists.R"))
 
 ## -----------------------------------------------------------------------------
 ## Part 1 - Retention Rate Function
@@ -227,8 +228,6 @@ add_names_to_tables<-function(df, sch_name){
   return(df_update)
 }
 
-source(file.path(code_file_dir, "00_school_lists.R"))
-
 create_overall_rent_tbl<-function(df, school_string, tbl_type){
   
   df_update<-df %>% keep(names(df) %in% school_string)
@@ -237,7 +236,6 @@ create_overall_rent_tbl<-function(df, school_string, tbl_type){
                      function(x,y){add_names_to_tables(x,y)})
   
   #Create Overall Retention Rate
-  
   
   rent_overall<-bind_rows(df_update) %>%
     filter(rent == "Retention Rate %")
@@ -510,6 +508,27 @@ rent_by_neighborhood_toc<-map2(rent_by_neighborhood,
 
 
 ## -----------------------------------------------------------------------------
+## Part 2.6 - Create Retention Tables - By Cohort
+## -----------------------------------------------------------------------------
+
+test_df<-list(overall = NA, cs = NA, ts = NA)
+
+#cohort 1
+rent_cohort_1<-create_neighborhood_rent_tbls(test_df,toc_rent_tbls[["overall"]],
+                                               cs_cohort1_string,
+                                               "Retention Rate %")
+
+#cohort 2 only
+rent_cohort_2_only<-create_neighborhood_rent_tbls(test_df,toc_rent_tbls[["overall"]],
+                                                  cs_cohort2_string,
+                                               "Retention Rate %")
+
+#cohort 2 and 3
+rent_cohort_2_3<-create_neighborhood_rent_tbls(test_df,toc_rent_tbls[["overall"]],
+                                    cs_cohort2_3_string,
+                                    "Retention Rate %")
+
+## -----------------------------------------------------------------------------
 ## Part 3 - Save Data
 ## -----------------------------------------------------------------------------
 
@@ -522,6 +541,7 @@ save(cs_rent_tbls, cs_rent_tbls2, ts_rent_tbls,
 save(toc_rent_overall,toc_rent_overall2, toc_rent_overall_elem,
      toc_rent_overall_ms_hs,toc_rent_overall_span, 
      rent_by_neighborhood_toc,toc_rent_tbls, toc_rent_tbls_update,
+     rent_cohort_1, rent_cohort_2_3,rent_cohort_2_only,
      file = file.path(code_file_dir, "toc_rent_tbls.RData"))
 
 ## -----------------------------------------------------------------------------
