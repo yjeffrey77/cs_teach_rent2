@@ -72,19 +72,107 @@ source(file.path(code_file_dir, "00_school_lists.R"))
 
 ```
 
-
 ## Purpose
 
 The purpose of this document is to show the test results comparing Community Schools with their Traditional Public Schools.
 
 ## T-Test Results
 
+Notes: NA values are due to missing cases. For example, if a Community School does not have any 4-5 teachers for a given year, then running t-test results was not available.
+
+
+### Overall
 <details>
 
 ```{r, echo = FALSE, results='asis'}
 
-combined_t_test %>% kable()
+t_test<-combined_t_test %>% 
+  select(-c(conf_low, conf_high, statistic)) 
 
+colnames(t_test)<-c('Neighborhood',"CS", "TS",
+                    "Diff.", "p-value", "df")
+
+t_test %>% kable()
 ```
 
+</details>
+
+### 0-3 Years
+
+<details>
+```{r, echo = FALSE, results='asis'}
+
+t_test<-combined_t_test_veteran[["original_5"]][["0-3 years"]] %>% 
+  select(-c(conf_low, conf_high, statistic)) 
+
+colnames(t_test)<-c('Neighborhood',"CS", "TS",
+                    "Diff.", "p-value", "df")
+
+t_test %>% kable()
+
+```
+</details>
+
+### 4-5 Years
+
+<details>
+```{r, echo = FALSE, results='asis'}
+
+t_test<-combined_t_test_veteran[["original_5"]][["4-5 years"]] %>% 
+  select(-c(conf_low, conf_high, statistic)) 
+
+colnames(t_test)<-c('Neighborhood',"CS", "TS",
+                    "Diff.", "p-value", "df")
+
+t_test %>% kable()
+
+```
+</details>
+
+### 6-10 Years
+
+<details>
+```{r, echo = FALSE, results='asis'}
+
+t_test<-combined_t_test_veteran[["original_5"]][["6-10 years"]] %>% 
+  select(-c(conf_low, conf_high, statistic)) 
+
+colnames(t_test)<-c('Neighborhood',"CS", "TS",
+                    "Diff.", "p-value", "df")
+
+t_test %>% kable()
+
+```
+</details>
+
+### 11-15 Years
+
+<details>
+```{r, echo = FALSE, results='asis'}
+
+t_test<-combined_t_test_veteran[["original_5"]][["11-15 years"]] %>% 
+  select(-c(conf_low, conf_high, statistic)) 
+
+colnames(t_test)<-c('Neighborhood',"CS", "TS",
+                    "Diff.", "p-value", "df")
+
+t_test %>% kable()
+
+```
+</details>
+
+### 15+ Years
+
+<details>
+```{r, echo = FALSE, results='asis'}
+
+t_test<-combined_t_test_veteran[["original_5"]][["15+ years"]] %>% 
+  select(-c(conf_low, conf_high, statistic)) 
+
+colnames(t_test)<-c('Neighborhood',"CS", "TS",
+                    "Diff.", "p-value", "df")
+
+t_test %>% kable()
+
+```
 </details>

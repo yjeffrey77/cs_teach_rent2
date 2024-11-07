@@ -76,7 +76,7 @@ safe_function_df<-function(expr){
 
  # load(file.path(code_file_dir, "hr_by_sch.RDATA"))
  # 
- # load(file.path(code_file_dir, "rent_plots_toc.RData"))
+ load(file.path(code_file_dir, "rent_plots_toc.RData"))
  load(file.path(code_file_dir, "veteran_plots.RData"))
 
 load(file.path(code_file_dir, "veteran_rent_tbls.RData"))
@@ -115,14 +115,36 @@ combined_t_test<-bind_rows(.id = "neigborhood", neighborhood_t_test)
 rownames(combined_t_test)<-NULL
 
 #By Veteran Status
+t_test_neighborhood_veteran<-map(neigh_plot_tbls_veteran,
+                                 function(version){
+                                   map(version,
+                                       function(veteran_status){
+                                         map(veteran_status,
+                                             function(x){create_t_test_output(x) %>%
+                                                 safe_function_df()})
+                                       })
+                                 })
 
+#combined t-test  
+create_combined_t_test_results<-function(df){
+  
+  update_df<-bind_rows(.id = "neigborhood", df)
+  rownames(update_df)<-NULL
+  return(update_df)
+}
 
-
+combined_t_test_veteran<-map(t_test_neighborhood_veteran,
+                             function(version){
+                               map(version,
+                                   create_combined_t_test_results)
+                             })
+  
 ## -----------------------------------------------------------------------------
 ## Part 2 - Proportions test
 ## -----------------------------------------------------------------------------
 
-#DO LATER
+
+
 
 
 
@@ -132,6 +154,7 @@ rownames(combined_t_test)<-NULL
 ## -----------------------------------------------------------------------------
 
 save(neighborhood_t_test,combined_t_test,
+     t_test_neighborhood_veteran, combined_t_test_veteran,
      file = file.path(code_file_dir, "test_tbls.RData"))
 
 

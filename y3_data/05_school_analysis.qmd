@@ -38,7 +38,7 @@ library(knitr)
 
 #set current directory
 code_file_dir<-file.path("C:/Users/yjeff/Desktop/Community Schools/Teacher Retention Data",
-                "Analyses", "y3_data")
+                "Analyses", "cs_teach_rent2", "y3_data")
 
 data_file_dir<-file.path("C:/Users/yjeff/Box/LAUSD TR Data Year 3")
 
@@ -56,14 +56,15 @@ update_tbl_names<-function(df){
 ## load & inspect data
 ## ---------------------------
 
-# load(file.path(code_file_dir, "rent_tbls.RData"))
-# load(file.path(code_file_dir, "rent_plots.RData"))
+load(file.path(code_file_dir, "rent_tbls.RData"))
+load(file.path(code_file_dir, "rent_plots.RData"))
 
 #toc tables
 load(file.path(code_file_dir, "toc_rent_tbls.RData"))
 load(file.path(code_file_dir, "rent_plots_toc.RData"))
+load(file.path(code_file_dir,  "veteran_rent_tbls.RData"))
 
-#load(file.path(code_file_dir, "hr_by_sch.RData"))
+load(file.path(code_file_dir, "hr_by_sch.RData"))
 
 
 ## Add Lists
@@ -74,27 +75,36 @@ source(file.path(code_file_dir, "00_school_lists.R"))
 
 ```{r}
 #Create additional school lists
-cs_toc_sch_list <- toc_rent_tbls[["overall"]][toc_rent_overall[["cs"]][["overall"]]$school]
+cs_school_list_string<-toc_rent_overall[["cs"]][["original_5"]][["0-3 years"]]$school[c(1:length(toc_rent_overall[["cs"]][["original_5"]][["0-3 years"]]$school)-1)]
+
+cs_toc_sch_list <- toc_rent_tbls[["overall"]][cs_school_list_string]
 
 
-cs_toc_sch_list_0_5<-toc_rent_tbls_update[["0-5 years"]][toc_rent_overall[["cs"]][["overall"]]$school]
+cs_toc_sch_list_0_3<-hr_color_by_sch_rent_exp[["original_5"]][["0-3 years"]][cs_school_list_string]
+  
+cs_toc_sch_list_4_5<-hr_color_by_sch_rent_exp[["original_5"]][["4-5 years"]][cs_school_list_string]
 
-cs_toc_sch_list_6_10<-toc_rent_tbls_update[["6-10 years"]][toc_rent_overall[["cs"]][["overall"]]$school]
+cs_toc_sch_list_6_10<-hr_color_by_sch_rent_exp[["original_5"]][["6-10 years"]][cs_school_list_string]
 
-cs_toc_sch_list_11_15<-toc_rent_tbls_update[["11-15 years"]][toc_rent_overall[["cs"]][["overall"]]$school]
+cs_toc_sch_list_11_15<-hr_color_by_sch_rent_exp[["original_5"]][["11-15 years"]][cs_school_list_string]
 
-cs_toc_sch_list_15_over<-toc_rent_tbls_update[["15+ years"]][toc_rent_overall[["cs"]][["overall"]]$school]
+cs_toc_sch_list_15_over<-hr_color_by_sch_rent_exp[["original_5"]][["15+ years"]][cs_school_list_string]
 
 
-ts_toc_sch_list <- toc_rent_tbls[["overall"]][toc_rent_overall[["ts"]][["overall"]]$school]
 
-ts_toc_sch_list_0_5<-toc_rent_tbls_update[["0-5 years"]][toc_rent_overall[["ts"]][["overall"]]$school]
+#Traditional Public Schools
 
-ts_toc_sch_list_6_10<-toc_rent_tbls_update[["6-10 years"]][toc_rent_overall[["ts"]][["overall"]]$school]
+ts_toc_sch_list <- toc_rent_tbls[["overall"]][ts_sch_string]
 
-ts_toc_sch_list_11_15<-toc_rent_tbls_update[["11-15 years"]][toc_rent_overall[["ts"]][["overall"]]$school]
+ts_toc_sch_list_0_3<-hr_color_by_sch_rent_exp[["original_5"]][["0-3 years"]][ts_sch_string]
 
-ts_toc_sch_list_15_over<-toc_rent_tbls_update[["15+ years"]][toc_rent_overall[["ts"]][["overall"]]$school]
+ts_toc_sch_list_4_5<-hr_color_by_sch_rent_exp[["original_5"]][["4-5 years"]][ts_sch_string]
+
+ts_toc_sch_list_6_10<-hr_color_by_sch_rent_exp[["original_5"]][["6-10 years"]][ts_sch_string]
+
+ts_toc_sch_list_11_15<-hr_color_by_sch_rent_exp[["original_5"]][["11-15 years"]][ts_sch_string]
+
+ts_toc_sch_list_15_over<-hr_color_by_sch_rent_exp[["original_5"]][["15+ years"]][ts_sch_string]
 
 
 
@@ -116,7 +126,8 @@ gxs<-lapply(1:length(school_string), function(x){
   
   school_title <- school_string[[x]]
   school<-cs_toc_sch_list[[x]]
-  school_0_5<-cs_toc_sch_list_0_5[[x]]
+  school_0_3<-cs_toc_sch_list_0_3[[x]]
+  school_4_5<-cs_toc_sch_list_4_5[[x]]
   school_6_10<-cs_toc_sch_list_6_10[[x]]
   school_11_15<-cs_toc_sch_list_11_15[[x]]
   school_15_over<-cs_toc_sch_list_15_over[[x]]
@@ -147,7 +158,8 @@ gxs<-lapply(1:length(school_string), function(x){
 
   school_title <- school_string[[x]]
   school<-ts_toc_sch_list[[x]]
-  school_0_5<-ts_toc_sch_list_0_5[[x]]
+  school_0_3<-ts_toc_sch_list_0_3[[x]]
+  school_4_5<-ts_toc_sch_list_4_5[[x]]
   school_6_10<-ts_toc_sch_list_6_10[[x]]
   school_11_15<-ts_toc_sch_list_11_15[[x]]
   school_15_over<-ts_toc_sch_list_15_over[[x]]
