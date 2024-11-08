@@ -475,7 +475,7 @@
     "href": "y3_data/07_test_results.html#overall",
     "title": "Test Results",
     "section": "Overall",
-    "text": "Overall\n\n\n\n\nType\nVeteran Status\nCS\nTS\nDiff.\np-value\ndf\n\n\n\n\noverall\noverall\n84.4\n86.2\n-1.8\n0.271\n5.882\n\n\noverall\n0-5 years\n65.8\n59.8\n6.0\n0.195\n6.530\n\n\noverall\n6-10 years\n64.8\n59.0\n5.8\n0.306\n7.935\n\n\noverall\n11-15 years\n68.2\n66.2\n2.0\n0.632\n5.819\n\n\noverall\n15+ years\n85.0\n87.8\n-2.8\n0.016\n7.720\n\n\nelem\noverall\n87.2\n86.6\n0.6\n0.699\n6.446\n\n\nelem\n0-5 years\n61.0\n59.4\n1.6\n0.756\n6.303\n\n\nelem\n6-10 years\n55.8\n56.8\n-1.0\n0.866\n7.976\n\n\nelem\n11-15 years\n66.4\n65.4\n1.0\n0.828\n7.990\n\n\nelem\n15+ years\n88.6\n88.2\n0.4\n0.774\n6.897\n\n\nms_hs\noverall\n79.8\n81.0\n-1.2\n0.635\n6.811\n\n\nms_hs\n0-5 years\n74.4\n57.2\n17.2\n0.003\n5.585\n\n\nms_hs\n6-10 years\n80.6\n65.6\n15.0\n0.015\n5.816\n\n\nms_hs\n11-15 years\n71.0\n66.6\n4.4\n0.507\n7.601\n\n\nms_hs\n15+ years\n79.4\n83.2\n-3.8\n0.118\n7.250",
+    "text": "Overall\n\n\n\n\nVeteran Status\nCS\nTS\nDiff.\np-value\ndf\n\n\n\n\nall teachers\n84.4\n86.2\n-1.8\n0.271\n5.882\n\n\n0-3 years\n76.6\n76.2\n0.4\n0.946\n7.748\n\n\n4-5 years\n83.2\n81.6\n1.6\n0.824\n6.472\n\n\n6-10 years\n86.4\n82.8\n3.6\n0.431\n7.540\n\n\n11-15 years\n82.6\n85.4\n-2.8\n0.302\n4.682\n\n\n15+ years\n85.6\n88.4\n-2.8\n0.029\n8.000",
     "crumbs": [
       "Home",
       "Test Results"

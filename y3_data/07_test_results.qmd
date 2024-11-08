@@ -81,10 +81,21 @@ The purpose of this document is to show the test results comparing Community Sch
 <details>
 ```{r, echo = FALSE, results='asis'}
 
-t_test<-overall_t_test_df %>% 
-  select(-c(conf_low, conf_high, statistic)) 
+t_test<-full_sample_test %>% mutate(
+  veteran_status = "all teachers"
+) %>% select(veteran_status, everything()) %>% 
+  select(-c(conf_low, conf_high, statistic))
+  
 
-colnames(t_test)<-c("Type", "Veteran Status",
+t_test2<-overall_t_test_df %>%
+  filter(type == "overall", version == "original_5") %>% 
+  select(-c(conf_low, conf_high, statistic, type, version)) #%>% 
+
+t_test<-rbind(t_test, t_test2)
+
+rownames(t_test)<-NULL  
+
+colnames(t_test)<-c("Veteran Status",
                     "CS", "TS",
                     "Diff.", "p-value", "df")
 

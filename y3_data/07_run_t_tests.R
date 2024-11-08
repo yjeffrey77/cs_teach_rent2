@@ -108,19 +108,34 @@ create_t_test_output<-function(df){
 
 #Overall Sample, Elementary School, Middle School
 
-overall_t_test<-map(toc_plot_combined_tbls,
-                    function(sample){
-                      map(sample,
-                          function(x){create_t_test_output(x) %>%
-                              safe_function_df()})
-                    })
-                    
-overall_t_test_df<-map(overall_t_test, function(sample){
-  bind_rows(sample, .id = "veteran_status")
-})
+# overall_t_test<-map(toc_plot_combined_tbls,
+#                     function(sample){
+#                       map(sample,
+#                           function(x){create_t_test_output(x) %>%
+#                               safe_function_df()})
+#                     })
 
+full_sample_test<-create_t_test_output(toc_plot_combined_tbls[["overall"]][["overall"]])
+
+overall_t_test<-map(plot_combined_tbls,
+                     function(b){
+                       map(b ,
+                           function(a) map(a, create_t_test_output))
+                     })
+
+overall_t_test_df<-map(overall_t_test, function(b){
+  map(b, function(sample){
+    bind_rows(sample, .id = "veteran_status")
+  })
+})
+ 
+overall_t_test_df<-map(overall_t_test_df, function(a) 
+  bind_rows(a, .id = "version"))
+
+                    
 overall_t_test_df<-bind_rows(overall_t_test_df, .id = "type")
 rownames(overall_t_test_df)<-NULL
+
 
 #By Neighborhood
 neighborhood_t_test<-map(plot_neigh_tbls_toc,
@@ -171,6 +186,7 @@ combined_t_test_veteran<-map(t_test_neighborhood_veteran,
 
 save(neighborhood_t_test,combined_t_test,
      t_test_neighborhood_veteran, combined_t_test_veteran, overall_t_test_df,
+     full_sample_test,
      file = file.path(code_file_dir, "test_tbls.RData"))
 
 
