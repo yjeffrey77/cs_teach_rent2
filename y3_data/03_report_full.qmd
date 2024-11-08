@@ -202,6 +202,7 @@ toc_bar_plots_combined[["ms_hs"]][["overall"]]
 ```{r}
 rent_cohort_1[["cs"]] %>% kable()
 ```
+
 </details>
 
 ### Cohort 2 and 3
@@ -211,6 +212,7 @@ rent_cohort_1[["cs"]] %>% kable()
 ```{r}
 rent_cohort_2_3[["cs"]] %>% kable()
 ```
+
 </details>
 
 ### Cohort 2 Only
@@ -220,8 +222,8 @@ rent_cohort_2_3[["cs"]] %>% kable()
 ```{r}
 rent_cohort_2_only[["cs"]] %>% kable()
 ```
-</details>
 
+</details>
 
 ## Retention by Teacher Veteran Status (Teachers of Color)
 
@@ -489,8 +491,6 @@ rent_by_neighborhood[["macarthur_park"]][["combined_overall"]] %>% kable()
 ```
 
 </details>
-
-
 
 # Appendix
 

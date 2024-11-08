@@ -76,8 +76,11 @@ source(file.path(code_file_dir, "00_school_lists.R"))
 
 The purpose of this document is to show the test results comparing Community Schools with their Traditional Public Schools.
 
+## T-Tests
+
 ## Overall
 
+**T-tests**
 <details>
 ```{r, echo = FALSE, results='asis'}
 
@@ -102,6 +105,105 @@ colnames(t_test)<-c("Veteran Status",
 t_test %>% kable()
 ```
 </details>
+
+**Proportions test**
+
+<details>
+
+::: panel-tabset
+
+#### Overall
+```{r, echo = FALSE, results='asis'}
+
+pr_test<-prop_test[["overall"]] %>% 
+  select(-c(conf_low, conf_high, statistic, parameter))
+
+pr_test<-pr_test %>% select(year, estimate_school1, estimate_school2,
+                            diff, p_value)
+
+colnames(pr_test)<-c("Year", "CS", "TS", "Diff.",  "P-value")
+
+pr_test %>% kable()
+
+```
+
+#### 0-3 Years
+```{r, echo = FALSE, results='asis'}
+
+pr_test<-prop_test[["0-3 years"]] %>% 
+  select(-c(conf_low, conf_high, statistic, parameter))
+
+colnames(pr_test)<-c("Year", "CS", "TS", "P-value")
+
+pr_test %>% kable()
+
+```
+
+#### 4-5 Years
+```{r, echo = FALSE, results='asis'}
+
+pr_test<-prop_test[["4-5 years"]] %>% 
+  select(-c(conf_low, conf_high, statistic, parameter))
+
+pr_test<-pr_test %>% select(year, estimate_school1, estimate_school2,
+                            diff, p_value)
+
+colnames(pr_test)<-c("Year", "CS", "TS", "Diff.",  "P-value")
+
+pr_test %>% kable()
+
+```
+
+#### 6-10 Years
+```{r, echo = FALSE, results='asis'}
+
+pr_test<-prop_test[["6-10 years"]] %>% 
+  select(-c(conf_low, conf_high, statistic, parameter))
+
+pr_test<-pr_test %>% select(year, estimate_school1, estimate_school2,
+                            diff, p_value)
+
+colnames(pr_test)<-c("Year", "CS", "TS", "Diff.",  "P-value")
+
+pr_test %>% kable()
+
+```
+
+#### 11-15 Years
+```{r, echo = FALSE, results='asis'}
+
+pr_test<-prop_test[["11-15 years"]] %>% 
+  select(-c(conf_low, conf_high, statistic, parameter))
+
+pr_test<-pr_test %>% select(year, estimate_school1, estimate_school2,
+                            diff, p_value)
+
+colnames(pr_test)<-c("Year", "CS", "TS", "Diff.",  "P-value")
+
+pr_test %>% kable()
+
+```
+
+#### 15+ Years
+```{r, echo = FALSE, results='asis'}
+
+pr_test<-prop_test[["15+ years"]] %>% 
+  select(-c(conf_low, conf_high, statistic, parameter))
+
+pr_test<-pr_test %>% select(year, estimate_school1, estimate_school2,
+                            diff, p_value)
+
+colnames(pr_test)<-c("Year", "CS", "TS", "Diff.",  "P-value")
+
+pr_test %>% kable()
+
+```
+
+::: 
+
+</details>
+
+
 
 ## By Neighborhood
 
@@ -325,3 +427,5 @@ t_test %>% kable()
 :::
 
 </details>
+
+

@@ -74,8 +74,9 @@ safe_function_df<-function(expr){
 ## load & inspect data
 ## ---------------------------
 
- # load(file.path(code_file_dir, "hr_by_sch.RDATA"))
+ load(file.path(code_file_dir, "hr_by_sch.RDATA"))
  # 
+ #load(file.path(code_file_dir, "toc_rent_tbls.RData"))
  load(file.path(code_file_dir, "rent_plots_toc.RData"))
  load(file.path(code_file_dir, "veteran_plots.RData"))
 
@@ -171,13 +172,187 @@ combined_t_test_veteran<-map(t_test_neighborhood_veteran,
                              })
   
 ## -----------------------------------------------------------------------------
-## Part 2 - Proportions test
+## Part 2.1 - Create Proportions Test Functions
 ## -----------------------------------------------------------------------------
 
+#Steps 
 
+#first step, convert table to show the number of teachers who stayed in each school
 
+# Define cleaning function
+extract_and_multiply <- function(input_string) {
+  # Use regular expressions to extract the numbers
+  # The first part extracts the percentage, the second part extracts the number in parentheses
+  percent <- as.numeric(sub("%.*", "", input_string)) / 100
+  number_in_parentheses <- as.numeric(gsub(".*\\((\\d+)\\).*", "\\1", input_string))
+  
+  # Multiply them together
+  result <- percent * number_in_parentheses
+  
+  return(result)
+}
 
+extract_and_sample_size <- function(input_string) {
+  # Use regular expressions to extract the numbers
+  number_in_parentheses <- as.numeric(gsub(".*\\((\\d+)\\).*", "\\1", input_string))
+  
+  # Multiply them together
+  result <- number_in_parentheses
+  
+  return(result)
+}
 
+create_stayed_tbl<-function(df){
+  
+  update_df<- df %>% 
+    mutate(stayed_2019 = extract_and_multiply(yr_2019) %>% round(0),
+           stayed_2020 = extract_and_multiply(yr_2020) %>% round(0),
+           stayed_2021 = extract_and_multiply(yr_2021) %>% round(0),
+           stayed_2022 = extract_and_multiply(yr_2022) %>% round(0),
+           stayed_2023 = extract_and_multiply(yr_2023) %>% round(0),
+           n_2019 = extract_and_sample_size(yr_2019),
+           n_2020 = extract_and_sample_size(yr_2020),
+           n_2021 = extract_and_sample_size(yr_2021),
+           n_2022 = extract_and_sample_size(yr_2022),
+           n_2023 = extract_and_sample_size(yr_2023)) %>% 
+    select(school,stayed_2019, stayed_2020,stayed_2021, stayed_2022, stayed_2023,
+           n_2019, n_2020, n_2021, n_2022,n_2023)
+  
+  return(update_df)
+}
+
+create_sum_tbl<-function(df){
+  
+  update_df<-data.frame(stayed_2019 = sum(df$stayed_2019, na.rm =T),
+                    stayed_2020 = sum(df$stayed_2020, na.rm =T),
+                    stayed_2021 = sum(df$stayed_2021, na.rm =T),
+                    stayed_2022 = sum(df$stayed_2022, na.rm =T),
+                    stayed_2023 = sum(df$stayed_2023, na.rm =T),
+                    n_2019 = sum(df$n_2019, na.rm =T),
+                    n_2020 = sum(df$n_2020, na.rm =T),
+                    n_2021 = sum(df$n_2021, na.rm =T),
+                    n_2022 = sum(df$n_2022, na.rm =T),
+                    n_2023 = sum(df$n_2023, na.rm =T))
+  update_df<-update_df %>% 
+    mutate(
+      prop_2019 = stayed_2019/n_2019,
+      prop_2020 = stayed_2020/n_2020,
+      prop_2021 = stayed_2021/n_2021,
+      prop_2022 = stayed_2022/n_2022,
+      prop_2023 = stayed_2023/n_2023,
+    )
+  return(update_df)
+}
+
+create_stayed_count_list<-function(df){
+  
+  list_update<-vector("list",5)
+  list_update[[1]]<-c(df$stayed_2019[1],
+                      df$stayed_2019[2])
+  list_update[[2]]<-c(df$stayed_2020[1],
+                      df$stayed_2020[2])
+  list_update[[3]]<-c(df$stayed_2021[1],
+                      df$stayed_2021[2])
+  list_update[[4]]<-c(df$stayed_2022[1],
+                      df$stayed_2022[2])
+  list_update[[5]]<-c(df$stayed_2023[1],
+                      df$stayed_2023[2])
+  
+  names(list_update)<-c(2019:2023)
+  
+  return(list_update)
+}
+
+create_n_count_list<-function(df){
+  
+  list_update<-vector("list",5)
+  list_update[[1]]<-c(df$n_2019[1],
+                      df$n_2019[2])
+  list_update[[2]]<-c(df$n_2020[1],
+                      df$n_2020[2])
+  list_update[[3]]<-c(df$n_2021[1],
+                      df$n_2021[2])
+  list_update[[4]]<-c(df$n_2022[1],
+                      df$n_2022[2])
+  list_update[[5]]<-c(df$n_2023[1],
+                      df$n_2023[2])
+  
+  names(list_update)<-c(2019:2023)
+  
+  return(list_update)
+}
+
+extract_prop_info<-function(test_results){
+  
+  result_df <- data.frame(
+    estimate_school1 = test_results$estimate[1] %>% round(2),                    # Proportion of school 1
+    estimate_school2 = test_results$estimate[2] %>% round(2),                    # Proportion of school 2
+    p_value = test_results$p.value %>% round(2),                                 # p-value of the test
+    conf_low = test_results$conf.int[1] %>% round(2),                            # Lower bound of confidence interval
+    conf_high = test_results$conf.int[2] %>% round(2),                           # Upper bound of confidence interval
+    statistic = test_results$statistic %>% round(2),                             # Test statistic
+    parameter = test_results$parameter                              # Degrees of freedom
+  )
+  return(result_df)
+}
+
+create_prop_test_df<-function(stayed_counts_df,
+                              total_counts_df){
+  
+  df <- prop.test(stayed_counts_df,
+                  total_counts_df, alternative = "two.sided")
+  
+  test_result_df<-extract_prop_info(df)
+  
+  test_result_df<-test_result_df %>% 
+    mutate(diff = estimate_school1 - estimate_school2)
+  
+  return(test_result_df)
+}
+
+create_prop_tbl<-function(cs_df, ts_df){
+  
+  #create update_df
+  cs_df_update<-create_stayed_tbl(cs_df)
+  ts_df_update<-create_stayed_tbl(ts_df)
+  
+  #sum the data together
+  cs_sum_df<-create_sum_tbl(cs_df_update)
+  ts_sum_df<-create_sum_tbl(ts_df_update)
+  
+  update_df<-rbind(cs_sum_df, ts_sum_df)
+  
+  #create lists
+  stay_list<-create_stayed_count_list(update_df)
+  n_list<-create_n_count_list(update_df)
+  
+  #run proportions test
+  prop_tbl<-map2(stay_list,n_list,
+                 function(x,y) create_prop_test_df(x,y))
+  
+  prop_tbl<-bind_rows(prop_tbl, .id = "year")
+  rownames(prop_tbl)<-NULL
+  
+  return(prop_tbl)
+}
+
+## -----------------------------------------------------------------------------
+## Part 2.2 - Create Proportions Test 
+## -----------------------------------------------------------------------------
+
+prop_test<-vector("list", 6)
+names(prop_test)<-c("overall", names(toc_rent_overall2[["cs"]][["original_5"]]))
+
+overall_prop_test<-create_prop_tbl(cs_rent_tbls2, ts_rent_tbls2)
+
+prop_test<-map2(toc_rent_overall2[["cs"]][["original_5"]],
+                toc_rent_overall2[["ts"]][["original_5"]],
+                function(x,y){
+                  create_prop_tbl(x,y)
+                })
+                
+prop_test<-c(list(overall_prop_test), prop_test)
+names(prop_test)[1]<-c("overall")
 
 
 ## -----------------------------------------------------------------------------
@@ -186,10 +361,8 @@ combined_t_test_veteran<-map(t_test_neighborhood_veteran,
 
 save(neighborhood_t_test,combined_t_test,
      t_test_neighborhood_veteran, combined_t_test_veteran, overall_t_test_df,
-     full_sample_test,
+     full_sample_test,prop_test,
      file = file.path(code_file_dir, "test_tbls.RData"))
-
-
 
 ## -----------------------------------------------------------------------------
 ## END SCRIPT

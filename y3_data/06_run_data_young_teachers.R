@@ -456,6 +456,9 @@ ts_sch_string<-all_sch_string[!all_sch_string %in% cs_string]
 ts_rent_tbls<-create_overall_rent_tbl(rent_tbls,ts_sch_string,
                                       "Retention Rate %")
 
+ts_rent_tbls2<-create_overall_rent_tbl(rent_tbls,ts_sch_string,
+                                      "Retention Rate % (n)")
+
 #TOC - create overall list
 
 create_overall_list<-function(df1, df2, string1, string2, tbl_type,
@@ -740,6 +743,7 @@ save(hr_color_by_sch_rent_exp,toc_rent_overall,
      toc_rent_overall_ms_hs,toc_rent_overall_span,
      toc_rent_overall_elem2,
      toc_rent_overall_ms_hs2,toc_rent_overall_span2,
+     cs_rent_tbls2, cs_rent_tbls,ts_rent_tbls, ts_rent_tbls2,
      file = file.path(code_file_dir,"veteran_rent_tbls.RData"))
 
 
