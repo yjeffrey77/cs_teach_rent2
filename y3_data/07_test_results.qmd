@@ -76,12 +76,28 @@ source(file.path(code_file_dir, "00_school_lists.R"))
 
 The purpose of this document is to show the test results comparing Community Schools with their Traditional Public Schools.
 
-## T-Test Results
+## Overall
+
+<details>
+```{r, echo = FALSE, results='asis'}
+
+t_test<-overall_t_test_df %>% 
+  select(-c(conf_low, conf_high, statistic)) 
+
+colnames(t_test)<-c("Type", "Veteran Status",
+                    "CS", "TS",
+                    "Diff.", "p-value", "df")
+
+t_test %>% kable()
+```
+</details>
+
+## By Neighborhood
 
 Notes: NA values are due to missing cases. For example, if a Community School does not have any 4-5 teachers for a given year, then running t-test results was not available.
 
 
-### Overall
+### All Teachers
 <details>
 ::: panel-tabset
 

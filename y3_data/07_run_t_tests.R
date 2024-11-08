@@ -1,7 +1,7 @@
 ################################################################################
 ##
 ## [ PROJ ] < Community School Teacher Retention Study >
-## [ FILE ] < 06_run_t_tests.R >
+## [ FILE ] < 07_run_t_tests.R >
 ## [ AUTH ] < Jeffrey Yo >
 ## [ INIT ] < 10/31/24 >
 ##
@@ -106,7 +106,23 @@ create_t_test_output<-function(df){
   return(t_test_df)
 }
 
- #By Neighborhood
+#Overall Sample, Elementary School, Middle School
+
+overall_t_test<-map(toc_plot_combined_tbls,
+                    function(sample){
+                      map(sample,
+                          function(x){create_t_test_output(x) %>%
+                              safe_function_df()})
+                    })
+                    
+overall_t_test_df<-map(overall_t_test, function(sample){
+  bind_rows(sample, .id = "veteran_status")
+})
+
+overall_t_test_df<-bind_rows(overall_t_test_df, .id = "type")
+rownames(overall_t_test_df)<-NULL
+
+#By Neighborhood
 neighborhood_t_test<-map(plot_neigh_tbls_toc,
                          function(x){create_t_test_output(x) %>%
                              safe_function_df()})
@@ -154,7 +170,7 @@ combined_t_test_veteran<-map(t_test_neighborhood_veteran,
 ## -----------------------------------------------------------------------------
 
 save(neighborhood_t_test,combined_t_test,
-     t_test_neighborhood_veteran, combined_t_test_veteran,
+     t_test_neighborhood_veteran, combined_t_test_veteran, overall_t_test_df,
      file = file.path(code_file_dir, "test_tbls.RData"))
 
 
