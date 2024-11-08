@@ -1,0 +1,34 @@
+
+### `r teach_year` 
+
+<details>
+
+```{r}
+combined_tbls[[type]][["original_5"]][[teach_year]]<-update_tbl_names(combined_tbls[[type]][["original_5"]][[teach_year]])
+
+combined_tbls[[type]][["original_5"]][[teach_year]] %>% kable()
+bar_plots_combined[[type]][["original_5"]][[teach_year]]
+```
+
+**Number of CS:** `r nrow(df_cs) -1`
+
+**Number of TS:** `r nrow(df_ts) -1`
+
+
+
+**CS Retention Table**
+<details>
+```{r}
+df_cs %>% kable()
+```
+</details>
+
+**TS Retention Table**
+<details>
+```{r}
+df_ts %>% kable()
+```
+</details>
+
+</details>
+
