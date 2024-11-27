@@ -1,0 +1,113 @@
+
+### `r neigh_name` 
+
+<details>
+
+**Overall**
+
+<details>
+
+::: panel-tabset
+#### All Years
+```{r}
+df_cs_neigh_overall
+```
+
+#### Years 2022-2023
+```{r}
+df_cs_neigh_overall_22_23
+```
+:::
+
+</details>
+
+
+
+
+**0-3 Years**
+
+<details>
+
+::: panel-tabset
+#### All Years
+```{r}
+df_cs_03
+```
+
+#### Years 2022-2023
+```{r}
+df_cs_03_22_23
+```
+:::
+
+</details>
+
+**4-5 Years**
+<details>
+
+::: panel-tabset
+#### All Years
+```{r}
+df_cs_45
+```
+
+#### Years 2022-2023
+```{r}
+df_cs_45_22_23
+```
+:::
+
+</details>
+
+
+**6-10 Years**
+
+<details>
+::: panel-tabset
+#### All Years
+```{r}
+df_cs_6_10
+```
+
+#### Years 2022-2023
+```{r}
+df_cs_6_10_22_23
+```
+:::
+
+</details>
+
+**11-15 Years**
+<details>
+::: panel-tabset
+#### All Years
+```{r}
+df_cs_11_15
+```
+
+#### Years 2022-2023
+```{r}
+df_cs_11_15_22_23
+```
+:::
+
+</details>
+
+**15+ Years**
+<details>
+
+::: panel-tabset
+#### All Years
+```{r}
+df_cs_15_over
+```
+
+#### Years 2022-2023
+```{r}
+df_cs_15_over_22_23
+```
+:::
+
+</details>
+
+</details>

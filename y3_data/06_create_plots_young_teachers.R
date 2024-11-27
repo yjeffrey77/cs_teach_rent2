@@ -170,15 +170,33 @@ create_bar_plot2<-function(df, graph_title){
   return(bar_graph)
 }
 
+create_bar_plot_cs<-function(df, graph_title){
+  
+  bar_graph<-ggplot(df, aes(x = Year, y = Retention, fill = School)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    geom_text(aes(label = paste0(Retention, "%")), 
+              position = position_dodge(width = 0.9), 
+              vjust = -0.5) +  # Places the text above the bars
+    labs(title = graph_title, x = "Year",
+         y = "Retention Rate (%)") +
+    scale_fill_manual(values = c("CS" = "#2D68C4")) +
+    theme_minimal() + 
+    theme(plot.title = element_text(hjust = 0.5))
+  
+  return(bar_graph)
+}
+
 ## ---------------------------
 ## load & inspect data
 ## ---------------------------
 
 # load(file.path(code_file_dir, "rent_tbls.RData"))
 # 
-# load(file.path(code_file_dir, "toc_rent_tbls.RData"))
+#load(file.path(code_file_dir, "toc_rent_tbls.RData"))
 
 load(file.path(code_file_dir, "veteran_rent_tbls.RData"))
+
+load(file.path(code_file_dir, "rent_plots_toc.RData"))
 
 ## -----------------------------------------------------------------------------
 ## Part 1.1 - Create CS/TS Combined Tables 
@@ -354,13 +372,120 @@ neigh_bar_plot_tbls<-map(neigh_plot_tbls_veteran,
                                       })
                                })) 
 
+#create only CS school version
+cs_neigh_plot_tbls_veteran<-map(neigh_plot_tbls_veteran,
+          function(type){
+            map(type,
+                function(veteran_status){
+                  map(veteran_status,
+                      function(neighborhood){
+                        neighborhood %>% 
+                          filter(School == "CS")
+                      })})})
+  
+cs_only_plots<-map(cs_neigh_plot_tbls_veteran,
+          function(type){
+            map2(type,
+                 str_to_title(names(type)),
+                 function(a,b){
+                   
+                   map2(a,str_replace_all(names(a), "_", " ") %>% str_to_title(),
+                        function(x,y){
+                          create_bar_plot_cs(x,
+                                             str_c("2019-2023 Retention: ", y,
+                                                   ", Teacher Status: ", b))
+                          })})})
+
+## -----------------------------------------------------------------------------
+## Part 2.2 - Create CS/TS Plots by for combined Years
+## -----------------------------------------------------------------------------
+
+
+#filter by group and only keep the last 2 years
+
+create_cs_plots_y1_y2<-function(df, sch_type, y1, y2, plot_title){
+  
+  df_update<-df %>% filter(School == sch_type)
+  
+  df_update<-df_update %>% filter(Year %in% c(y1:y2))
+  
+  df_plot<-create_bar_plot_cs(df_update, plot_title)
+  
+  return(df_plot)
+  
+}
+
+cs_overall_22_23<-map(plot_combined_tbls,
+                function(sch_type){
+                  map(sch_type,
+                      function(type){
+                        map2(type,
+                             names(type),
+                             function(x,y){
+                               create_cs_plots_y1_y2(x, "CS", 2022, 2023,
+                                                     str_c("2022-2023 Retention: Overall, Teacher Status: ", 
+                                                           str_to_title(y)))}
+                        )})})
+
+
+cs_overall_all_yrs<-map(plot_combined_tbls,
+                        function(sch_type){
+                          map(sch_type,
+                              function(type){
+                                map2(type,
+                                     names(type),
+                                     function(x,y){
+                                       create_cs_plots_y1_y2(x, "CS", 2019, 2023,
+                                                             str_c("2019-2023 Retention: Overall, Teacher Status: ",
+                                                                   str_to_title(y)))}
+                                )})})
+
+
+#by neigborhood
+
+cs_only_plots_22_23_neigh<-map(cs_neigh_plot_tbls_veteran,
+                   function(type){
+                     map2(type,
+                          str_to_title(names(type)),
+                          function(a,b){
+                            
+                            map2(a,str_replace_all(names(a), "_", " ") %>% str_to_title(),
+                                 function(x,y){
+                                   create_cs_plots_y1_y2(x,"CS",2022,2023,
+                                                      str_c("2022-2023 Retention: ", y,
+                                                            ", Teacher Status: ", b))
+                                 })})})
+
+
+#overall neighborhood plots
+
+cs_overall_22_23_neigh_plots<-map2(plot_neigh_tbls_toc,
+           names(plot_neigh_tbls_toc),
+          function(neigh, sch_name){
+            create_cs_plots_y1_y2(neigh,"CS",2022,2023,
+                                  str_c("2022-2023 CS Overall Retention: ",
+                                        str_to_title(sch_name)))  
+            
+          })
+  
+cs_overall_all_yrs_neigh_plots<-map2(plot_neigh_tbls_toc,
+                               names(plot_neigh_tbls_toc),
+                               function(neigh, sch_name){
+                                 create_cs_plots_y1_y2(neigh,"CS",2019,2023,
+                                                       str_c("2019-2023 CS Overall Retention: ",
+                                                             str_to_title(sch_name)))  
+                                 
+                               })  
+
 ## -----------------------------------------------------------------------------
 ## Part 3 - Save Data
 ## -----------------------------------------------------------------------------
 
 save(combined_tbls, toc_neigh_rent_tbls,
      plot_combined_tbls,bar_plots_combined,
-     neigh_plot_tbls_veteran,neigh_bar_plot_tbls,
+     neigh_plot_tbls_veteran,neigh_bar_plot_tbls, cs_only_plots,
+     cs_overall_22_23,cs_overall_all_yrs,cs_only_plots_22_23_neigh,
+     cs_overall_22_23_neigh_plots, cs_overall_all_yrs_neigh_plots,
      file = file.path(code_file_dir,"veteran_plots.RData"))
 
 ## -----------------------------------------------------------------------------

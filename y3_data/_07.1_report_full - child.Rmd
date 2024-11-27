@@ -3,32 +3,43 @@
 
 <details>
 
+::: panel-tabset
+#### Only 2022-23 Years
 ```{r}
-combined_tbls[[type]][["original_5"]][[teach_year]]<-update_tbl_names(combined_tbls[[type]][["original_5"]][[teach_year]])
+cs_overall_22_23[["overall"]][["original_5"]][[teach_year]]
+```
+
+#### All Years
+```{r}
+cs_overall_all_yrs[["overall"]][["original_5"]][[teach_year]]
+
+```
+:::
+
+
+**Retention Table**
+
+```{r}
+combined_tbls[[type]][["original_5"]][[teach_year]]<-update_tbl_names(combined_tbls[[type]][["original_5"]][[teach_year]]) %>% 
+  filter(School == "CS Overall Retention Rate")
 
 combined_tbls[[type]][["original_5"]][[teach_year]] %>% kable()
-bar_plots_combined[[type]][["original_5"]][[teach_year]]
+#bar_plots_combined[[type]][["original_5"]][[teach_year]]
 ```
 
 **Number of CS:** `r nrow(df_cs) -1`
 
-**Number of TS:** `r nrow(df_ts) -1`
 
 
+**CS Overall Retention Table**
 
-**CS Retention Table**
 <details>
 ```{r}
 df_cs %>% kable()
 ```
 </details>
 
-**TS Retention Table**
-<details>
-```{r}
-df_ts %>% kable()
-```
-</details>
+
 
 </details>
 

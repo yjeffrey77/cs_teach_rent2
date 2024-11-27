@@ -82,6 +82,8 @@ safe_function_df<-function(expr){
 
 load(file.path(code_file_dir, "veteran_rent_tbls.RData"))
 
+source(file.path(".","y3_data","00_school_lists.R"))
+
 ## -----------------------------------------------------------------------------
 ## Part 1 - T-test
 ## -----------------------------------------------------------------------------
@@ -340,6 +342,7 @@ create_prop_tbl<-function(cs_df, ts_df){
 ## Part 2.2 - Create Proportions Test 
 ## -----------------------------------------------------------------------------
 
+#overall group
 prop_test<-vector("list", 6)
 names(prop_test)<-c("overall", names(toc_rent_overall2[["cs"]][["original_5"]]))
 
@@ -353,6 +356,34 @@ prop_test<-map2(toc_rent_overall2[["cs"]][["original_5"]],
                 
 prop_test<-c(list(overall_prop_test), prop_test)
 names(prop_test)[1]<-c("overall")
+
+
+#by neighborhood
+
+hr_color_by_sch_rent_exp
+
+#extract tables by neighborhood
+
+rent_tbl_neighborhood<-map(hr_color_by_sch_rent_exp,
+          function(type){
+            map(type,
+                function(veteran_status){
+                  map(neighborhood_string_list,
+                      function(neighborhood){
+                        veteran_status[names(veteran_status) %in% neighborhood]
+                      })})})
+  
+#Extract last line for each rent expense
+#get the total number
+#remove the number of 
+  
+  
+
+
+
+#check
+test<-create_stayed_tbl(cs_rent_tbls2)
+test<-create_sum_tbl(test)
 
 
 ## -----------------------------------------------------------------------------
