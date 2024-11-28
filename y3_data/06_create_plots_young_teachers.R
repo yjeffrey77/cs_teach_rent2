@@ -407,7 +407,9 @@ create_cs_plots_y1_y2<-function(df, sch_type, y1, y2, plot_title){
   
   df_update<-df %>% filter(School == sch_type)
   
+  df_update$Year<-as.numeric(df_update$Year) %>% round()
   df_update<-df_update %>% filter(Year %in% c(y1:y2))
+  df_update$Year<-as.character(df_update$Year)
   
   df_plot<-create_bar_plot_cs(df_update, plot_title)
   
@@ -426,6 +428,9 @@ cs_overall_22_23<-map(plot_combined_tbls,
                                                      str_c("2022-2023 Retention: Overall, Teacher Status: ", 
                                                            str_to_title(y)))}
                         )})})
+
+
+
 
 
 cs_overall_all_yrs<-map(plot_combined_tbls,
@@ -477,6 +482,40 @@ cs_overall_all_yrs_neigh_plots<-map2(plot_neigh_tbls_toc,
                                  
                                })  
 
+#overall and all years and all schools
+
+teach_status<-c(": All Years",": 0-5 Years",": 6-10 Years",
+                ": 11-15 Years",": 15+ Years")
+type_sch<-c("All", "Elementary", "Middle/High")
+
+
+cs_only_overall_plots<-vector("list",2)
+names(cs_only_overall_plots)<-c("all years", "22-23")
+
+cs_only_overall_plots[["all years"]]<-
+  map2(toc_plot_combined_tbls,type_sch,
+       function(df,sch_type){
+         map2(df,
+              teach_status,
+              function(x,y){
+                create_cs_plots_y1_y2(x,"CS", 2019, 2023,
+                                      str_c("2019-2023 Retention: ",
+                                            sch_type,
+                                            " Schools, Teacher Veteran Status", y))
+                })})
+
+cs_only_overall_plots[["22-23"]]<-
+  map2(toc_plot_combined_tbls,type_sch,
+       function(df,sch_type){
+         map2(df,
+              teach_status,
+              function(x,y){
+                create_cs_plots_y1_y2(x,"CS", 2022, 2023,
+                                      str_c("2022-2023 Retention: ",
+                                            sch_type,
+                                            " Schools, Teacher Veteran Status", y))
+              })})
+
 ## -----------------------------------------------------------------------------
 ## Part 3 - Save Data
 ## -----------------------------------------------------------------------------
@@ -486,6 +525,7 @@ save(combined_tbls, toc_neigh_rent_tbls,
      neigh_plot_tbls_veteran,neigh_bar_plot_tbls, cs_only_plots,
      cs_overall_22_23,cs_overall_all_yrs,cs_only_plots_22_23_neigh,
      cs_overall_22_23_neigh_plots, cs_overall_all_yrs_neigh_plots,
+     cs_only_overall_plots,
      file = file.path(code_file_dir,"veteran_plots.RData"))
 
 ## -----------------------------------------------------------------------------

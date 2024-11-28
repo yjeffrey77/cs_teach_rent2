@@ -75,9 +75,28 @@ source(file.path(code_file_dir, "00_school_lists.R"))
 
 # Descriptive Analyses - Retention Rates
 
+
 ## All Schools
 
 <details>
+
+### Overall
+<details>
+::: panel-tabset
+#### Only 2022-23 Years
+```{r}
+cs_only_overall_plots[["22-23"]][["overall"]][["overall"]]
+```
+
+#### All Years
+```{r}
+cs_only_overall_plots[["all years"]][["overall"]][["overall"]]
+
+```
+:::
+
+</details>
+
 
 ```{r, echo = FALSE, results='asis'}
 teach_yr_string<-names(toc_rent_overall[["ts"]][["original_5"]])
@@ -110,6 +129,23 @@ cat(unlist(gxs), sep = '\n')
 
 <details>
 
+### Overall
+<details>
+::: panel-tabset
+#### Only 2022-23 Years
+```{r}
+cs_only_overall_plots[["22-23"]][["elem"]][["overall"]]
+```
+
+#### All Years
+```{r}
+cs_only_overall_plots[["all years"]][["elem"]][["overall"]]
+
+```
+:::
+
+</details>
+
 ```{r, echo = FALSE, results='asis'}
 teach_yr_string<-names(toc_rent_overall[["ts"]][["original_5"]])
 
@@ -139,6 +175,22 @@ cat(unlist(gxs), sep = '\n')
 ## Middle/High Schools
 
 <details>
+
+### Overall
+<details>
+::: panel-tabset
+#### Only 2022-23 Years
+```{r}
+cs_only_overall_plots[["22-23"]][["ms_hs"]][["overall"]]
+```
+
+#### All Years
+```{r}
+cs_only_overall_plots[["all years"]][["ms_hs"]][["overall"]]
+
+```
+:::
+</details>
 
 ```{r, echo = FALSE, results='asis'}
 teach_yr_string<-names(toc_rent_overall[["ts"]][["original_5"]])
