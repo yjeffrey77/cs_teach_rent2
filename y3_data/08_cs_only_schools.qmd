@@ -225,12 +225,12 @@ cat(unlist(gxs), sep = '\n')
 ```{r, echo = FALSE, results='asis'}
 neigh_string<-names(cs_only_plots[["original_5"]][["0-3 years"]])
 
-#str_replace_all(names(a), "_", " ") %>% str_to_title()
 
-gxs<-lapply(1:5, function(x){
+gxs<-lapply(1:length(neigh_string), function(x){
   
   neigh <- neigh_string[[x]]
-  neigh_name<-str_replace_all(neigh, "_", " ") %>% str_to_title()
+  
+  neigh_name<-str_replace_all(neigh, "_", " ") #%>% str_to_title()
   df_cs_03<-cs_only_plots[["original_5"]][["0-3 years"]][[neigh]]
   df_cs_45<-cs_only_plots[["original_5"]][["4-5 years"]][[neigh]]
   df_cs_6_10<-cs_only_plots[["original_5"]][["6-10 years"]][[neigh]]

@@ -181,8 +181,9 @@ create_bar_plot_cs<-function(df, graph_title){
          y = "Retention Rate (%)") +
     scale_fill_manual(values = c("CS" = "#2D68C4")) +
     theme_minimal() + 
-    theme(plot.title = element_text(hjust = 0.5))
-  
+    theme(plot.title = element_text(hjust = 0.5)) +
+    ylim(0, 100)
+
   return(bar_graph)
 }
 
@@ -359,6 +360,7 @@ neigh_plot_tbls_veteran<-map(toc_neigh_rent_tbls,
            function(type) map(type,
            function(a) map(a,create_plot_tbl2)))
 
+
 #create bar plots
 neigh_bar_plot_tbls<-map(neigh_plot_tbls_veteran,
            function(type) map2(type,names(type),
@@ -382,19 +384,75 @@ cs_neigh_plot_tbls_veteran<-map(neigh_plot_tbls_veteran,
                         neighborhood %>% 
                           filter(School == "CS")
                       })})})
-  
-cs_only_plots<-map(cs_neigh_plot_tbls_veteran,
+
+#update cs_neigh_plot_tbls_veteran table
+
+update_tbl<-function(df){
+  if(nrow(df) == 0){
+    update_df<-data.frame(school = rep("NA",5),
+                          Year = as.character(c(2019:2023)),
+                          Retention = rep(0,5),
+                          School = rep("CS",5))
+    
+  }
+  if(nrow(df) != 0){
+    update_df<-df
+    
+  }
+  return(update_df)
+}
+
+
+cs_neigh_plot_tbls_veteran<-map(cs_neigh_plot_tbls_veteran,
           function(type){
-            map2(type,
-                 str_to_title(names(type)),
-                 function(a,b){
-                   
-                   map2(a,str_replace_all(names(a), "_", " ") %>% str_to_title(),
-                        function(x,y){
-                          create_bar_plot_cs(x,
-                                             str_c("2019-2023 Retention: ", y,
-                                                   ", Teacher Status: ", b))
-                          })})})
+            map(type,
+                function(status){
+                  map(status,update_tbl)
+                })})
+  
+#update names for cs_neigh_plot_tbls_veteran
+
+format_strings <- function(strings) {
+  strings <- gsub("_", " ", strings)                        # Replace underscores with spaces
+  strings <- gsub("\\b([a-z])", "\\U\\1", strings, perl = TRUE) # Capitalize each word
+  strings <- gsub("Mid City", "Mid-City", strings)          # Add hyphen for Mid-City
+  strings <- gsub("\\bLa\\b", "LA", strings)                # Ensure "LA" is uppercase
+  strings <- gsub("\\bMacarthur Park\\b", "MacArthur Park", strings) # Fix MacArthur Park capitalization
+  strings <- gsub("\\bHeet\\b", "HEET", strings)            # Ensure HEET is uppercase
+  return(strings)
+}
+
+sch_string<-format_strings(names(cs_neigh_plot_tbls_veteran[["original_5"]][["0-3 years"]]))
+
+update_names<-function(df_list, sch_names){
+  
+  update_df_list<-df_list
+  names(update_df_list)<-sch_names
+  return(update_df_list)
+}
+
+cs_neigh_plot_tbls_veteran<-map(cs_neigh_plot_tbls_veteran,
+          function(sch_type){
+            map(sch_type,
+                function(status){
+                  update_names(status,sch_string)
+                })
+          })
+
+
+cs_only_plots<-map(cs_neigh_plot_tbls_veteran,
+                   function(type){
+                     map2(type,
+                          str_to_title(names(type)),
+                          function(a,b){
+                            map2(a,names(a),
+                                 function(x,y){
+                                   create_bar_plot_cs(x,
+                                                      str_c("2019-2023 Retention: ", y,
+                                                            ", Teacher Status: ", b))
+                                 })})})
+
+
 
 ## -----------------------------------------------------------------------------
 ## Part 2.2 - Create CS/TS Plots by for combined Years
@@ -418,18 +476,16 @@ create_cs_plots_y1_y2<-function(df, sch_type, y1, y2, plot_title){
 }
 
 cs_overall_22_23<-map(plot_combined_tbls,
-                function(sch_type){
-                  map(sch_type,
-                      function(type){
-                        map2(type,
-                             names(type),
-                             function(x,y){
-                               create_cs_plots_y1_y2(x, "CS", 2022, 2023,
-                                                     str_c("2022-2023 Retention: Overall, Teacher Status: ", 
-                                                           str_to_title(y)))}
-                        )})})
-
-
+                      function(sch_type){
+                        map(sch_type,
+                            function(type){
+                              map2(type,
+                                   names(type),
+                                   function(x,y){
+                                     create_cs_plots_y1_y2(x, "CS", 2022, 2023,
+                                                           str_c("2022-2023 Retention: Overall, Teacher Status: ", 
+                                                                 y))}
+                              )})})
 
 
 
@@ -454,7 +510,7 @@ cs_only_plots_22_23_neigh<-map(cs_neigh_plot_tbls_veteran,
                           str_to_title(names(type)),
                           function(a,b){
                             
-                            map2(a,str_replace_all(names(a), "_", " ") %>% str_to_title(),
+                            map2(a,names(a),
                                  function(x,y){
                                    create_cs_plots_y1_y2(x,"CS",2022,2023,
                                                       str_c("2022-2023 Retention: ", y,
@@ -464,12 +520,17 @@ cs_only_plots_22_23_neigh<-map(cs_neigh_plot_tbls_veteran,
 
 #overall neighborhood plots
 
+#update plot_neigh_tbls_toc
+
+names(plot_neigh_tbls_toc)<-sch_string
+
+
 cs_overall_22_23_neigh_plots<-map2(plot_neigh_tbls_toc,
            names(plot_neigh_tbls_toc),
           function(neigh, sch_name){
             create_cs_plots_y1_y2(neigh,"CS",2022,2023,
                                   str_c("2022-2023 CS Overall Retention: ",
-                                        str_to_title(sch_name)))  
+                                        sch_name))  
             
           })
   
@@ -478,9 +539,13 @@ cs_overall_all_yrs_neigh_plots<-map2(plot_neigh_tbls_toc,
                                function(neigh, sch_name){
                                  create_cs_plots_y1_y2(neigh,"CS",2019,2023,
                                                        str_c("2019-2023 CS Overall Retention: ",
-                                                             str_to_title(sch_name)))  
+                                                             sch_name))  
                                  
                                })  
+
+
+
+
 
 #overall and all years and all schools
 
