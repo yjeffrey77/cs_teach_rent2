@@ -1,0 +1,173 @@
+---
+title: "CS Only School Report - By Cohort"
+execute:
+  echo: false
+  message: false
+  warning: false
+format: 
+  html:
+    embed-resources: true
+editor: visual
+---
+
+## Purpose
+
+This is an update version of the CS Only School report. There are two updates:
+
+1. Retention rates are displayed exclusively for the period after schools became community schools, with data from years prior to this status excluded.
+
+2. Report also includes retention rates broken down by cohort. 
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+## Housekeeping
+
+## ---------------------------
+## libraries
+## ---------------------------
+library(tidyverse)
+library(readxl)
+library(openxlsx)
+library(janitor)
+library(kableExtra)
+library(pwr)
+library(kableExtra)
+library(knitr)
+
+## ---------------------------
+## directory paths
+## ---------------------------
+
+#see current directory
+#getwd()
+
+#set current directory
+code_file_dir<-file.path("C:/Users/yjeff/Desktop/Community Schools/Teacher Retention Data","Analyses", "cs_teach_rent2","y3_data")
+
+data_file_dir<-file.path("C:/Users/yjeff/Box/LAUSD TR Data Year 3")
+
+## ---------------------------
+## helper functions
+## ---------------------------
+
+update_tbl_names<-function(df){
+  df_update<-df
+  colnames(df_update)<-c("School", "2019", "2020", "2021", "2022", "2023")
+  return(df_update)
+}
+
+## ---------------------------
+## load & inspect data
+## ---------------------------
+
+load(file.path(code_file_dir, "combined_cohort_rent_tbls.RData"))
+load(file.path(code_file_dir, "by_cohort_plots.RData"))
+
+## Add Lists
+source(file.path(code_file_dir, "00_school_lists.R"))
+```
+
+# Descriptive Analyses - Retention Rates
+
+
+## Combined Overall
+Includes retention rates only from the time schools became community schools, excluding data from years prior to their community school status.
+
+
+<details>
+```{r, echo = FALSE, results='asis'}
+teach_yr_string<-names(combined_overall_bp[["22_23"]])
+
+gxs<-lapply(1:length(teach_yr_string), function(x){
+  
+  teach_year <- teach_yr_string[[x]]
+  plot_list_22_23<-combined_overall_bp[["22_23"]]
+  plot_list_all_years<-combined_overall_bp[["all_yrs"]]
+  rent_tbl<-combined_overall_rent_tbls
+
+  knit_child(
+    '_07.3_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+})
+
+cat(unlist(gxs), sep = '\n')
+
+```
+</details>
+
+
+## By Cohort Analysis
+
+### Cohort 1
+
+<details>
+
+```{r, echo = FALSE, results='asis'}
+teach_yr_string<-names(cohort_bp[["22_23"]][["cohort_1"]])
+
+gxs<-lapply(1:length(teach_yr_string), function(x){
+  
+  teach_year <- teach_yr_string[[x]]
+  plot_list_22_23<-cohort_bp[["22_23"]][["cohort_1"]]
+  plot_list_all_years<-cohort_bp[["all_yrs"]][["cohort_1"]]
+  rent_tbl<-cohort_overall_teach_exp_v2[["cohort_1"]]
+
+  knit_child(
+    '_07.3_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+})
+
+cat(unlist(gxs), sep = '\n')
+```
+</details>
+
+### Cohort 2
+
+<details>
+```{r, echo = FALSE, results='asis'}
+teach_yr_string<-names(cohort_bp[["22_23"]][["cohort_2"]])
+
+gxs<-lapply(1:length(teach_yr_string), function(x){
+  
+  teach_year <- teach_yr_string[[x]]
+  plot_list_22_23<-cohort_bp[["22_23"]][["cohort_2"]]
+  plot_list_all_years<-cohort_bp[["all_yrs"]][["cohort_2"]]
+  rent_tbl<-cohort_overall_teach_exp_v2[["cohort_2"]]
+
+  knit_child(
+    '_07.3_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+})
+
+cat(unlist(gxs), sep = '\n')
+```
+</details>
+
+### Cohort 3
+
+<details>
+```{r, echo = FALSE, results='asis'}
+teach_yr_string<-names(cohort_bp[["22_23"]][["cohort_3"]])
+
+gxs<-lapply(1:length(teach_yr_string), function(x){
+  
+  teach_year <- teach_yr_string[[x]]
+  plot_list_22_23<-cohort_bp[["22_23"]][["cohort_3"]]
+  plot_list_all_years<-cohort_bp[["all_yrs"]][["cohort_3"]]
+  rent_tbl<-cohort_overall_teach_exp_v2[["cohort_3"]]
+
+  knit_child(
+    '_07.3_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+})
+
+cat(unlist(gxs), sep = '\n')
+```
+</details>

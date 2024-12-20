@@ -1,0 +1,31 @@
+
+#### `r str_to_title(teach_year)` 
+
+<details>
+
+::: panel-tabset
+##### Only 2022-23 Years
+```{r}
+plot_list_22_23[[teach_year]]
+```
+
+##### All Years
+```{r}
+plot_list_all_years[[teach_year]]
+
+```
+:::
+
+
+
+**Retention Table**
+<details>
+```{r}
+tbl<-rent_tbl[[teach_year]]
+tbl<-tbl %>% select(-c(rent))
+colnames(tbl)<-c("School", 2019:2023)
+tbl %>% kable()
+```
+
+</details>
+</details>
