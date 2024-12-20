@@ -6,7 +6,7 @@ execute:
   warning: false
 format: 
   html:
-    embed-resources: true
+    embed-resources: false
 editor: visual
 ---
 
@@ -81,7 +81,9 @@ The purpose of this document is to show the test results comparing Community Sch
 ## Overall
 
 **T-tests**
+
 <details>
+
 ```{r, echo = FALSE, results='asis'}
 
 t_test<-full_sample_test %>% mutate(
@@ -104,6 +106,7 @@ colnames(t_test)<-c("Veteran Status",
 
 t_test %>% kable()
 ```
+
 </details>
 
 **Proportions test**
@@ -111,8 +114,8 @@ t_test %>% kable()
 <details>
 
 ::: panel-tabset
-
 #### Overall
+
 ```{r, echo = FALSE, results='asis'}
 
 pr_test<-prop_test[["overall"]] %>% 
@@ -128,6 +131,7 @@ pr_test %>% kable()
 ```
 
 #### 0-3 Years
+
 ```{r, echo = FALSE, results='asis'}
 
 pr_test<-prop_test[["0-3 years"]] %>% 
@@ -140,6 +144,7 @@ pr_test %>% kable()
 ```
 
 #### 4-5 Years
+
 ```{r, echo = FALSE, results='asis'}
 
 pr_test<-prop_test[["4-5 years"]] %>% 
@@ -155,6 +160,7 @@ pr_test %>% kable()
 ```
 
 #### 6-10 Years
+
 ```{r, echo = FALSE, results='asis'}
 
 pr_test<-prop_test[["6-10 years"]] %>% 
@@ -170,6 +176,7 @@ pr_test %>% kable()
 ```
 
 #### 11-15 Years
+
 ```{r, echo = FALSE, results='asis'}
 
 pr_test<-prop_test[["11-15 years"]] %>% 
@@ -185,6 +192,7 @@ pr_test %>% kable()
 ```
 
 #### 15+ Years
+
 ```{r, echo = FALSE, results='asis'}
 
 pr_test<-prop_test[["15+ years"]] %>% 
@@ -198,22 +206,19 @@ colnames(pr_test)<-c("Year", "CS", "TS", "Diff.",  "P-value")
 pr_test %>% kable()
 
 ```
-
-::: 
+:::
 
 </details>
-
-
 
 ## By Neighborhood
 
 Notes: NA values are due to missing cases. For example, if a Community School does not have any 4-5 teachers for a given year, then running t-test results was not available.
 
-
 ### All Teachers
-<details>
-::: panel-tabset
 
+<details>
+
+::: panel-tabset
 #### Full
 
 ```{r, echo = FALSE, results='asis'}
@@ -242,16 +247,17 @@ t_test<-t_test %>%
 
 t_test %>% kable()
 ```
+:::
 
-::: 
 </details>
 
 ### 0-3 Years
 
 <details>
-::: panel-tabset
 
+::: panel-tabset
 #### Full
+
 ```{r, echo = FALSE, results='asis'}
 
 t_test<-combined_t_test_veteran[["original_5"]][["0-3 years"]] %>% 
@@ -265,6 +271,7 @@ t_test %>% kable()
 ```
 
 #### Curated
+
 ```{r, echo = FALSE, results='asis'}
 
 t_test<-combined_t_test_veteran[["original_5"]][["0-3 years"]] %>% 
@@ -278,15 +285,17 @@ t_test<-t_test %>%
 
 t_test %>% kable()
 ```
-
 :::
+
 </details>
 
 ### 4-5 Years
 
 <details>
+
 ::: panel-tabset
 #### All
+
 ```{r, echo = FALSE, results='asis'}
 
 t_test<-combined_t_test_veteran[["original_5"]][["4-5 years"]] %>% 
@@ -300,6 +309,7 @@ t_test %>% kable()
 ```
 
 #### Curated
+
 ```{r, echo = FALSE, results='asis'}
 
 t_test<-combined_t_test_veteran[["original_5"]][["4-5 years"]] %>% 
@@ -314,12 +324,13 @@ t_test<-t_test %>%
 t_test %>% kable()
 ```
 :::
-</details>
 
+</details>
 
 ### 6-10 Years
 
 <details>
+
 ::: panel-tabset
 #### All
 
@@ -334,7 +345,6 @@ colnames(t_test)<-c('Neighborhood',"CS", "TS",
 t_test %>% kable()
 
 ```
-
 
 #### Curated
 
@@ -358,6 +368,7 @@ t_test %>% kable()
 ### 11-15 Years
 
 <details>
+
 ::: panel-tabset
 #### Full
 
@@ -374,6 +385,7 @@ t_test %>% kable()
 ```
 
 #### Curated
+
 ```{r, echo = FALSE, results='asis'}
 
 t_test<-combined_t_test_veteran[["original_5"]][["11-15 years"]] %>% 
@@ -394,6 +406,7 @@ t_test %>% kable()
 ### 15+ Years
 
 <details>
+
 ::: panel-tabset
 #### Full
 
@@ -427,5 +440,3 @@ t_test %>% kable()
 :::
 
 </details>
-
-
