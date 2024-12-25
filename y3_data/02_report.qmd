@@ -6,7 +6,7 @@ execute:
   warning: false
 format: 
   html:
-    embed-resources: true
+    embed-resources: false
 editor: visual
 ---
 
@@ -14,7 +14,7 @@ editor: visual
 
 Purposes of this document:
 
-1.  Provides Analyses of 
+1.  Provides Analyses of
 
 ```{r}
 #| echo: false
@@ -73,31 +73,24 @@ bar_plots_combined[["overall"]]
 
 </details>
 
-
 ## Retention Rate: Elementary Schools
+
 <details>
+
 ```{r}
 combined_tbls[["elem"]] %>% kable()
 bar_plots_combined[["elem"]]
 ```
+
 </details>
 
 ## Retention: Middle/High Schools
+
 <details>
+
 ```{r}
 combined_tbls[["ms_hs"]] %>% kable()
 bar_plots_combined[["ms_hs"]]
 ```
+
 </details>
-
-
-
-
-
-
-
-
-
-
-
-

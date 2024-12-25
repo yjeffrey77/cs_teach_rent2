@@ -6,7 +6,7 @@ execute:
   warning: false
 format: 
   html:
-    embed-resources: true
+    embed-resources: false
 editor: visual
 ---
 
