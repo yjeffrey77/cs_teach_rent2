@@ -1,0 +1,50 @@
+
+
+<details>
+
+::: panel-tabset
+##### Overall
+```{r}
+rent_plots[['overall']]
+
+rent_tbl[['overall']] %>% kable()
+```
+
+##### 0-3 Years
+```{r}
+rent_plots[['0-3 years']]
+
+rent_tbl[['0-3 years']] %>% kable()
+```
+
+##### 4-5 Years
+```{r}
+rent_plots[['4-5 years']]
+
+rent_tbl[['4-5 years']] %>% kable()
+```
+
+##### 6-10 Years
+```{r}
+rent_plots[['6-10 years']]
+
+rent_tbl[['6-10 years']] %>% kable()
+
+```
+
+##### 11-15 Years
+```{r}
+rent_plots[['11-15 years']]
+
+rent_tbl[['11-15 years']] %>% kable()
+```
+
+##### 15+ Years
+```{r}
+rent_plots[['15+ years']]
+
+rent_tbl[['15+ years']] %>% kable()
+```
+:::
+
+</details>
