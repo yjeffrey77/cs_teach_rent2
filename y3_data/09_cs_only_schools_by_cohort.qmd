@@ -240,8 +240,8 @@ cat(unlist(gxs), sep = '\n')
 </details>
 
 
-### Cohort by Cohort Comparison
-<details>
+## Cohort by Cohort Comparison
+
 ```{r, echo = FALSE, results='asis'}
 teach_yr_string<-c("Overall",
                    names(cohort_bp[["22_23"]][["cohort_3"]]))
@@ -273,4 +273,4 @@ gxs<-lapply(1:length(teach_yr_string), function(x){
 
 cat(unlist(gxs), sep = '\n')
 ```
-</details>
+
