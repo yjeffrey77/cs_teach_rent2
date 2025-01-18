@@ -1,0 +1,24 @@
+
+#### `r str_to_title(teach_year)` 
+
+<details>
+
+::: panel-tabset
+##### Cohort 1
+```{r}
+cohort_1_plot
+```
+
+##### Cohort 2
+```{r}
+cohort_2_plot
+```
+
+##### Cohort 3
+```{r}
+cohort_3_plot
+```
+:::
+
+
+</details>

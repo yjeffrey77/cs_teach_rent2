@@ -238,3 +238,39 @@ cat(unlist(gxs), sep = '\n')
 ```
 
 </details>
+
+
+### Cohort by Cohort Comparison
+<details>
+```{r, echo = FALSE, results='asis'}
+teach_yr_string<-c("Overall",
+                   names(cohort_bp[["22_23"]][["cohort_3"]]))
+
+gxs<-lapply(1:length(teach_yr_string), function(x){
+  
+  teach_year <- teach_yr_string[[x]]
+  
+  if (x == 1){
+    cohort_1_plot<-
+      overall_bp[["all_yrs"]][["cohort_1"]]
+    cohort_2_plot<-
+      overall_bp[["all_yrs"]][["cohort_2"]]
+    cohort_3_plot<-
+      overall_bp[["all_yrs"]][["cohort_3"]]
+  }
+  
+  if (x >1){
+    cohort_1_plot<-cohort_bp[["all_yrs"]][["cohort_1"]][[teach_year]]
+    cohort_2_plot<-cohort_bp[["all_yrs"]][["cohort_2"]][[teach_year]]
+    cohort_3_plot<-cohort_bp[["all_yrs"]][["cohort_3"]][[teach_year]]
+  }
+  
+  knit_child(
+    '_07.5_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+})
+
+cat(unlist(gxs), sep = '\n')
+```
+</details>
