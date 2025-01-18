@@ -14,9 +14,9 @@ editor: visual
 
 This is an update version of the CS Only School report. There are two updates:
 
-1. Retention rates are displayed exclusively for the period after schools became community schools, with data from years prior to this status excluded.
+1.  Retention rates are displayed exclusively for the period after schools became community schools, with data from years prior to this status excluded.
 
-2. Report also includes retention rates broken down by cohort. 
+2.  Report also includes retention rates broken down by cohort.
 
 ```{r}
 #| echo: false
@@ -72,12 +72,12 @@ source(file.path(code_file_dir, "00_school_lists.R"))
 
 # Descriptive Analyses - Retention Rates
 
-
 ## Combined Overall
+
 Includes retention rates only from the time schools became community schools, excluding data from years prior to their community school status.
 
-
 <details>
+
 ```{r, echo = FALSE, results='asis'}
 teach_yr_string<-names(combined_overall_bp[["22_23"]])
 
@@ -97,14 +97,34 @@ gxs<-lapply(1:length(teach_yr_string), function(x){
 cat(unlist(gxs), sep = '\n')
 
 ```
-</details>
 
+</details>
 
 ## By Cohort Analysis
 
 ### Cohort 1
-
 <details>
+
+```{r, echo = FALSE, results='asis'}
+#overall Cohort
+teach_yr_string<-c("overall")
+
+gxs<-lapply(1:length(teach_yr_string), function(x){
+  
+  teach_year <- teach_yr_string[[x]]
+  plot_list_22_23<-overall_bp[["22_23"]][["cohort_1"]]
+  plot_list_all_years<-overall_bp[["all_yrs"]][["cohort_1"]]
+  rent_tbl<-cohort_overall_v2[["cohort_1"]]
+  
+  knit_child(
+    '_07.4_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+})
+
+cat(unlist(gxs), sep = '\n')
+```
+
 
 ```{r, echo = FALSE, results='asis'}
 teach_yr_string<-names(cohort_bp[["22_23"]][["cohort_1"]])
@@ -114,7 +134,8 @@ gxs<-lapply(1:length(teach_yr_string), function(x){
   teach_year <- teach_yr_string[[x]]
   plot_list_22_23<-cohort_bp[["22_23"]][["cohort_1"]]
   plot_list_all_years<-cohort_bp[["all_yrs"]][["cohort_1"]]
-  rent_tbl<-cohort_overall_teach_exp_v2[["cohort_1"]]
+  rent_tbl<-cohort_overall_teach_exp_v2[["cohort_1"]]    
+  
 
   knit_child(
     '_07.3_report_full - child.Rmd', envir = environment(), quiet = TRUE
@@ -124,11 +145,33 @@ gxs<-lapply(1:length(teach_yr_string), function(x){
 
 cat(unlist(gxs), sep = '\n')
 ```
+
 </details>
 
 ### Cohort 2
 
 <details>
+
+```{r, echo = FALSE, results='asis'}
+#overall Cohort
+teach_yr_string<-c("overall")
+
+gxs<-lapply(1:length(teach_yr_string), function(x){
+  
+  teach_year <- teach_yr_string[[x]]
+  plot_list_22_23<-overall_bp[["22_23"]][["cohort_2"]]
+  plot_list_all_years<-overall_bp[["all_yrs"]][["cohort_2"]]
+  rent_tbl<-cohort_overall_v2[["cohort_2"]]
+  
+  knit_child(
+    '_07.4_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+})
+
+cat(unlist(gxs), sep = '\n')
+```
+
 ```{r, echo = FALSE, results='asis'}
 teach_yr_string<-names(cohort_bp[["22_23"]][["cohort_2"]])
 
@@ -147,11 +190,34 @@ gxs<-lapply(1:length(teach_yr_string), function(x){
 
 cat(unlist(gxs), sep = '\n')
 ```
+
 </details>
 
 ### Cohort 3
 
 <details>
+
+```{r, echo = FALSE, results='asis'}
+#overall Cohort
+teach_yr_string<-c("overall")
+
+gxs<-lapply(1:length(teach_yr_string), function(x){
+  
+  teach_year <- teach_yr_string[[x]]
+  plot_list_22_23<-overall_bp[["22_23"]][["cohort_3"]]
+  plot_list_all_years<-overall_bp[["all_yrs"]][["cohort_3"]]
+  rent_tbl<-cohort_overall_v2[["cohort_3"]]
+  
+  knit_child(
+    '_07.4_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+})
+
+cat(unlist(gxs), sep = '\n')
+```
+
+
 ```{r, echo = FALSE, results='asis'}
 teach_yr_string<-names(cohort_bp[["22_23"]][["cohort_3"]])
 
@@ -170,4 +236,5 @@ gxs<-lapply(1:length(teach_yr_string), function(x){
 
 cat(unlist(gxs), sep = '\n')
 ```
+
 </details>
