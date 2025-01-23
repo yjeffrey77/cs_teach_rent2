@@ -523,16 +523,22 @@ school_names_string2<-school_names_tbl_update$school_name_clean %>% unique()
 hr_by_sch<-vector("list", length(school_names_string2))
 names(hr_by_sch)<-school_names_string2
 
+#all teachers
 hr_by_sch<-map(school_names_string2,
                function(x){filter_school(hr_data_wide,x)})
 
 names(hr_by_sch)<-school_names_string2
 
+#teachers of color
+hr_by_sch_color<-map(school_names_string2,
+                     function(x){filter_school(hr_data_color,x)})
+
+names(hr_by_sch_color)<-school_names_string2
 
 #Create list (TOC and by age)
-
 hr_color_by_sch<-map(hr_data_color_list,
           function(x) map(x,create_sch_list))
+
 
 # test<-map(hr_data_color_list,
 #                      function(x) map(x,create_sch_list))  
@@ -552,6 +558,12 @@ hr_by_sch<-map2(hr_by_sch,names(hr_by_sch),
                function(x,y){update_rent_variables(x,y)})
 
 
+#By school 
+hr_by_sch_color<-map2(hr_by_sch_color,names(hr_by_sch_color),
+                      function(x,y){update_rent_variables(x,y)})
+
+
+#by veteran status
 hr_color_by_sch<-map(hr_color_by_sch,
           function(sample) 
             {map(sample,
@@ -561,12 +573,11 @@ hr_color_by_sch<-map(hr_color_by_sch,
                                   function(x,y){update_rent_variables(x,y) %>%
                                       safe_function()})})})})
 
-
 ## -----------------------------------------------------------------------------
 ## Part 5 - Save Data
 ## -----------------------------------------------------------------------------
 
-save(hr_color_by_sch,
+save(hr_color_by_sch, hr_by_sch, hr_by_sch_color,
      file = file.path(code_file_dir,'hr_color_by_sch.RData'))
 
 ## -----------------------------------------------------------------------------

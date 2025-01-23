@@ -102,6 +102,17 @@ cat(unlist(gxs), sep = '\n')
 
 ## By Cohort Analysis
 
+### Interpretation
+<details>
+Among teachers with 0–3 years of experience, retention patterns vary by cohort. Cohort 1 started with retention rates in the 70s, rising sharply to 95% in 2023. Cohort 2 began in the 80s but declined to the mid-70s by 2022–2023. Cohort 3 dropped from 90% in 2021 to 70% by 2023. Similar trends are seen among teachers with 4–5 years of experience.
+
+For 6–10 year veterans, Cohort 1’s retention rates declined steadily from 2020 to 2023. Cohort 2 began at 100% but fell to the mid-80s to low-90s range. Cohort 3 rose from 58% in 2021 to 92% in 2022, then declined to 76% in 2023.
+
+Among 11–15 year veterans, Cohort 1 maintained retention in the 80s throughout. Cohort 2 increased from 72% to 93%, while Cohort 3 dropped from 100% in 2021 to 75% in 2022 before rebounding to 90% in 2023.
+
+For those with 15+ years, Cohorts 1 and 2 maintained steady retention in the high-80s and mid-80s, respectively. Cohort 3 saw a decline in retention from 2021 to 2023.
+</details>
+
 ### Cohort 1
 <details>
 
