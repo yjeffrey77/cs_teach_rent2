@@ -1,0 +1,112 @@
+
+### `r str_to_title(school_name)` 
+
+<details>
+
+::: panel-tabset
+
+### 0-3 Years
+
+::: panel-tabset
+###### Counts
+```{r}
+count_tbl[["0-3 years"]] %>% kable()
+```
+
+###### Percentage
+```{r}
+percent_tbl[["0-3 years"]] %>% kable()
+```
+
+###### Graph
+```{r}
+graphs[["0-3 years"]]
+```
+::: 
+
+### 4-5 Years
+
+::: panel-tabset
+###### Counts
+```{r}
+count_tbl[["4-5 years"]] %>% kable()
+```
+
+###### Percentage
+```{r}
+percent_tbl[["4-5 years"]] %>% kable()
+```
+
+###### Graph
+```{r}
+graphs[["4-5 years"]]
+```
+
+::: 
+
+### 6-10 Years
+
+::: panel-tabset
+###### Counts
+```{r}
+count_tbl[["6-10 years"]] %>% kable()
+```
+
+###### Percentage
+```{r}
+percent_tbl[["6-10 years"]] %>% kable()
+```
+
+###### Graph
+```{r}
+graphs[["6-10 years"]]
+```
+
+
+::: 
+
+### 11-15 Years
+
+::: panel-tabset
+###### Counts
+```{r}
+count_tbl[["11-15 years"]] %>% kable()
+```
+
+###### Percentage
+```{r}
+percent_tbl[["11-15 years"]] %>% kable()
+```
+
+###### Graph
+```{r}
+graphs[["11-15 years"]]
+```
+
+::: 
+
+### 15+ Years
+
+::: panel-tabset
+###### Counts
+```{r}
+count_tbl[["15+ years"]] %>% kable()
+```
+
+###### Percentage
+```{r}
+percent_tbl[["15+ years"]] %>% kable()
+```
+
+###### Graph
+```{r}
+graphs[["15+ years"]]
+```
+
+
+::: 
+
+
+:::
+
+</details>
