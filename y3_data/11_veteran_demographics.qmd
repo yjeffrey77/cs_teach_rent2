@@ -82,7 +82,7 @@ veteran_status_wide_list[["percent"]] %>% kable()
 
 # Combined Version
 
-# 5 Category Version
+# 5 Categories
 
 Includes these categories: 
 
@@ -155,7 +155,7 @@ cat(unlist(gxs), sep = '\n')
 
 
 
-# 2 Category Version
+# 2 Categories
 
 Includes these categories: 
 
@@ -220,7 +220,9 @@ cat(unlist(gxs), sep = '\n')
 
 </details>
 
-# 3 Category Version
+# 3 Categories (Version 1) 
+ 
+ NOTE: Teachers include In-Classroom & Out-of-Classroom Teachers
  
  Includes these categories: 
 
@@ -273,6 +275,76 @@ gxs<-lapply(1:length(school_type_string), function(x){
   percent_tbl<-vet_combined_tbls[["version3"]][["overall"]][["cs"]][[school_type]][["teachers"]][["color"]][["percent"]]
 
   graphs<-plots[["version3"]][[school_type]][["teachers"]][["color"]]
+  
+  knit_child(
+    '_11.3_veteran_demographics - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+})
+
+cat(unlist(gxs), sep = '\n')
+
+``` 
+</details>
+
+</details>
+
+
+# 3 Categories (Version 2) 
+ 
+ NOTE: Only includes Out-of-Classroom Teachers
+ 
+ Includes these categories: 
+
+ - 0-3 years
+ - 4-10 years
+ - 10+ years
+ 
+ 
+<details> 
+ 
+## All Teachers
+<details>
+```{r, echo = FALSE, results='asis'}
+school_type_string<-names(vet_combined_tbls[["version4"]][["overall"]][["cs"]])
+
+gxs<-lapply(1:length(school_type_string), function(x){
+  
+  school_type <- school_type_string[[x]]
+  school_name <- school_name_string[[x]]
+  
+  count_tbl<-vet_combined_tbls[["version4"]][["overall"]][["cs"]][[school_type]][["teachers"]][["all"]][["count"]]
+  
+  percent_tbl<-vet_combined_tbls[["version4"]][["overall"]][["cs"]][[school_type]][["teachers"]][["all"]][["percent"]]
+
+  graphs<-plots[["version4"]][[school_type]][["teachers"]][["all"]]
+  
+  knit_child(
+    '_11.3_veteran_demographics - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+})
+
+cat(unlist(gxs), sep = '\n')
+
+``` 
+ 
+
+## Teachers of Color
+<details>
+```{r, echo = FALSE, results='asis'}
+school_type_string<-names(vet_combined_tbls[["version4"]][["overall"]][["cs"]])
+
+gxs<-lapply(1:length(school_type_string), function(x){
+  
+  school_type <- school_type_string[[x]]
+  school_name <- school_name_string[[x]]
+  
+  count_tbl<-vet_combined_tbls[["version4"]][["overall"]][["cs"]][[school_type]][["teachers"]][["color"]][["count"]]
+  
+  percent_tbl<-vet_combined_tbls[["version4"]][["overall"]][["cs"]][[school_type]][["teachers"]][["color"]][["percent"]]
+
+  graphs<-plots[["version4"]][[school_type]][["teachers"]][["color"]]
   
   knit_child(
     '_11.3_veteran_demographics - child.Rmd', envir = environment(), quiet = TRUE

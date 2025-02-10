@@ -740,6 +740,245 @@ create_veteran_tbl3<-function(df, sch_name, outcome, type = "all"){
 }
 
 
+#only in-classroom teachers
+create_veteran_tbl4<-function(df, sch_name, outcome, type = "all"){
+  
+  test<-df %>% mutate(
+    teacher_years_18_19_cv2 = case_when(
+      teacher_years_18_19_cv2 %in% c("0-3 years")~"0-3 years",
+      teacher_years_18_19_cv2 %in% c("4-5 years", "6-10 years")~"4-10 years",
+      teacher_years_18_19_cv2 %in% c("11-15 years","15+ years")~"10+ years",
+      TRUE ~ NA),
+    teacher_years_19_20_cv2 = case_when(
+      teacher_years_19_20_cv2 %in% c("0-3 years")~"0-3 years",
+      teacher_years_19_20_cv2 %in% c("4-5 years", "6-10 years")~"4-10 years",
+      teacher_years_19_20_cv2 %in% c("11-15 years","15+ years")~"10+ years",
+      TRUE ~ NA),
+    teacher_years_20_21_cv2 = case_when(
+      teacher_years_20_21_cv2 %in% c("0-3 years")~"0-3 years",
+      teacher_years_20_21_cv2 %in% c("4-5 years", "6-10 years")~"4-10 years",
+      teacher_years_20_21_cv2 %in% c("11-15 years","15+ years")~"10+ years",
+      TRUE ~ NA),
+    teacher_years_21_22_cv2 = case_when(
+      teacher_years_21_22_cv2 %in% c("0-3 years")~"0-3 years",
+      teacher_years_21_22_cv2 %in% c("4-5 years", "6-10 years")~"4-10 years",
+      teacher_years_21_22_cv2 %in% c("11-15 years","15+ years")~"10+ years",
+      TRUE ~ NA),
+    teacher_years_22_23_cv2 = case_when(
+      teacher_years_22_23_cv2 %in% c("0-3 years")~"0-3 years",
+      teacher_years_22_23_cv2 %in% c("4-5 years", "6-10 years")~"4-10 years",
+      teacher_years_22_23_cv2 %in% c("11-15 years","15+ years")~"10+ years",
+      TRUE ~ NA),
+    teacher_years_23_24_cv2 = case_when(
+      teacher_years_23_24_cv2 %in% c("0-3 years")~"0-3 years",
+      teacher_years_23_24_cv2 %in% c("4-5 years","6-10 years")~"4-10 years",
+      teacher_years_23_24_cv2 %in% c("11-15 years","15+ years")~"10+ years",
+      TRUE ~ NA)
+  )
+  
+  if (type == "all"){
+    
+    if (outcome == "count"){
+      
+      data19<-test %>% 
+        filter(`school_name_clean_year_2018-19` == sch_name) %>% 
+        group_by(teacher_years_18_19_cv2) %>% summarize(count19 = n())
+      
+      data20<-test %>% 
+        filter(`school_name_clean_year_2019-20` == sch_name) %>% 
+        group_by(teacher_years_19_20_cv2) %>% summarize(count20 = n())
+      
+      data21<-test %>% 
+        filter(`school_name_clean_year_2020-21` == sch_name) %>% 
+        group_by(teacher_years_20_21_cv2) %>% summarize(count21 = n())
+      
+      data22<-test %>% 
+        filter(`school_name_clean_year_2021-22` == sch_name) %>% 
+        group_by(teacher_years_21_22_cv2) %>% summarize(count22 = n())
+      
+      data23<-test %>% 
+        filter(`school_name_clean_year_2022-23` == sch_name) %>% 
+        group_by(teacher_years_22_23_cv2) %>% summarize(count23 = n())
+      
+      data24<-test %>% 
+        filter(`school_name_clean_year_2023-24` == sch_name) %>% 
+        group_by(teacher_years_23_24_cv2) %>% summarize(count24 = n())
+      
+      vet_tbl<-data.frame(vet_status = c("0-3 years","4-10 years",
+                                         "10+ years", NA))
+    }
+    
+    if (outcome == "percent"){
+      
+      #make filtered datasets
+      test19<-test %>% filter(`school_name_clean_year_2018-19` == sch_name) %>% 
+        filter(!is.na(teacher_years_18_19_cv2))
+      
+      test20<-test %>% filter(`school_name_clean_year_2019-20` == sch_name) %>% 
+        filter(!is.na(teacher_years_19_20_cv2))
+      
+      test21<-test %>% filter(`school_name_clean_year_2020-21` == sch_name) %>% 
+        filter(!is.na(teacher_years_20_21_cv2))
+      
+      test22<-test %>% filter(`school_name_clean_year_2021-22` == sch_name) %>% 
+        filter(!is.na(teacher_years_21_22_cv2))
+      
+      test23<-test %>% filter(`school_name_clean_year_2022-23` == sch_name) %>% 
+        filter(!is.na(teacher_years_22_23_cv2))
+      
+      test24<-test %>% filter(`school_name_clean_year_2023-24` == sch_name) %>% 
+        filter(!is.na(teacher_years_23_24_cv2))
+      
+      #make pivot tables
+      data19<-test19 %>% 
+        group_by(teacher_years_18_19_cv2) %>%
+        summarize(percent19 = round((n()/nrow(test19) * 100),2))
+      
+      data20<-test20 %>% 
+        group_by(teacher_years_19_20_cv2) %>% 
+        summarize(percent20 = round((n()/nrow(test20) * 100),2))
+      
+      data21<-test21 %>% 
+        group_by(teacher_years_20_21_cv2) %>% 
+        summarize(percent21 = round((n()/nrow(test21) * 100),2))
+      
+      data22<-test22 %>% 
+        group_by(teacher_years_21_22_cv2) %>% 
+        summarize(percent22 = round((n()/nrow(test22) * 100),2))
+      
+      data23<-test23 %>% 
+        group_by(teacher_years_22_23_cv2) %>% 
+        summarize(percent23 = round((n()/nrow(test23) * 100),2))
+      
+      data24<-test24 %>% 
+        group_by(teacher_years_23_24_cv2) %>% 
+        summarize(percent23 = round((n()/nrow(test24) * 100),2))
+      
+    }
+    
+  }
+  
+  if (type == "teachers"){
+    
+    if (outcome == "count"){
+      
+      data19<-test %>% 
+        filter(`school_name_clean_year_2018-19` == sch_name) %>% 
+        filter(`job_type_year_2018-19` %in% c("teacher (in)")) %>%
+        group_by(teacher_years_18_19_cv2) %>% summarize(count19 = n())
+      
+      data20<-test %>% 
+        filter(`school_name_clean_year_2019-20` == sch_name) %>%
+        filter(`job_type_year_2019-20` %in% c("teacher (in)")) %>%
+        group_by(teacher_years_19_20_cv2) %>% summarize(count20 = n())
+      
+      data21<-test %>% 
+        filter(`school_name_clean_year_2020-21` == sch_name) %>% 
+        filter(`job_type_year_2020-21` %in% c("teacher (in)")) %>%
+        group_by(teacher_years_20_21_cv2) %>% summarize(count21 = n())
+      
+      data22<-test %>% 
+        filter(`school_name_clean_year_2021-22` == sch_name) %>%
+        filter(`job_type_year_2021-22` %in% c("teacher (in)")) %>%
+        group_by(teacher_years_21_22_cv2) %>% summarize(count22 = n())
+      
+      data23<-test %>% 
+        filter(`school_name_clean_year_2022-23` == sch_name) %>%
+        filter(`job_type_year_2022-23` %in% c("teacher (in)")) %>%
+        group_by(teacher_years_22_23_cv2) %>% summarize(count23 = n())
+      
+      data24<-test %>% 
+        filter(`school_name_clean_year_2023-24` == sch_name) %>%
+        filter(`job_type_year_2023-24` %in% c("teacher (in)")) %>%
+        group_by(teacher_years_23_24_cv2) %>% summarize(count24 = n())
+      
+      vet_tbl<-data.frame(vet_status = c("0-3 years","4-10 years","10+ years",NA))
+    }
+    
+    if (outcome == "percent"){
+      
+      #make filtered datasets
+      test19<-test %>% filter(`school_name_clean_year_2018-19` == sch_name) %>%
+        filter(`job_type_year_2018-19` %in% c("teacher (in)")) %>%
+        filter(!is.na(teacher_years_18_19_cv2))
+      
+      test20<-test %>% filter(`school_name_clean_year_2019-20` == sch_name) %>%
+        filter(`job_type_year_2019-20` %in% c("teacher (in)")) %>%
+        filter(!is.na(teacher_years_19_20_cv2))
+      
+      test21<-test %>% filter(`school_name_clean_year_2020-21` == sch_name) %>%
+        filter(`job_type_year_2020-21` %in% c("teacher (in)")) %>%
+        filter(!is.na(teacher_years_20_21_cv2))
+      
+      test22<-test %>% filter(`school_name_clean_year_2021-22` == sch_name) %>% 
+        filter(`job_type_year_2021-22` %in% c("teacher (in)")) %>%
+        filter(!is.na(teacher_years_21_22_cv2))
+      
+      test23<-test %>% filter(`school_name_clean_year_2022-23` == sch_name) %>%
+        filter(`job_type_year_2022-23` %in% c("teacher (in)")) %>%
+        filter(!is.na(teacher_years_22_23_cv2))
+      
+      test24<-test %>% filter(`school_name_clean_year_2023-24` == sch_name) %>% 
+        filter(`job_type_year_2023-24` %in% c("teacher (in)")) %>%
+        filter(!is.na(teacher_years_23_24_cv2))
+      
+      #make pivot tables
+      data19<-test19 %>% 
+        group_by(teacher_years_18_19_cv2) %>%
+        summarize(percent19 = round((n()/nrow(test19) * 100),2))
+      
+      data20<-test20 %>% 
+        group_by(teacher_years_19_20_cv2) %>% 
+        summarize(percent20 = round((n()/nrow(test20) * 100),2))
+      
+      data21<-test21 %>% 
+        group_by(teacher_years_20_21_cv2) %>% 
+        summarize(percent21 = round((n()/nrow(test21) * 100),2))
+      
+      data22<-test22 %>% 
+        group_by(teacher_years_21_22_cv2) %>% 
+        summarize(percent22 = round((n()/nrow(test22) * 100),2))
+      
+      data23<-test23 %>% 
+        group_by(teacher_years_22_23_cv2) %>% 
+        summarize(percent23 = round((n()/nrow(test23) * 100),2))
+      
+      data24<-test24 %>% 
+        group_by(teacher_years_23_24_cv2) %>% 
+        summarize(percent23 = round((n()/nrow(test24) * 100),2))
+      
+      vet_tbl<-data.frame(vet_status = c("0-3 years","4-10 years","10+ years",NA))
+    }
+  }
+  
+  vet_tbl<-data.frame(vet_status = c("0-3 years","4-10 years","10+ years",NA))
+  
+  vet_data<-left_join(vet_tbl,data19, by = c("vet_status" = "teacher_years_18_19_cv2"))
+  vet_data<-left_join(vet_data,data20, by = c("vet_status" = "teacher_years_19_20_cv2"))
+  vet_data<-left_join(vet_data,data21, by = c("vet_status" = "teacher_years_20_21_cv2"))
+  vet_data<-left_join(vet_data,data22, by = c("vet_status" = "teacher_years_21_22_cv2"))
+  vet_data<-left_join(vet_data,data23, by = c("vet_status" = "teacher_years_22_23_cv2"))
+  vet_data<-left_join(vet_data,data24, by = c("vet_status" = "teacher_years_23_24_cv2"))
+  
+  
+  colnames(vet_data)<-c("vet_status", "yr_18_19", "yr_19_20",
+                        "yr_20_21", "yr_21_22", "yr_22_23", "yr_23_24")
+  
+  #filter out rows
+  vet_data<-vet_data %>% filter(!is.na(vet_status))
+  
+  return(vet_data)
+}
+
+#CREATE DEMOGRAPHIC FUNCTION
+
+#create binary variable the considers people who are people of color
+
+#added in the grouping variable
+
+#then see if you can change the table to reflect counts and percentages
+
+
 #combined table
 create_combined_tbl<-function(df_cs, df_ts, df_combined){
   
@@ -921,12 +1160,66 @@ update_vet_tbls3<-function(all_list, toc_list){
   return(vet_tbls)
 }
 
-vet_tbls<-vector("list",3)
-names(vet_tbls)<-c(str_c("version", 1:3))
+update_vet_tbls4<-function(all_list, toc_list){
+  
+  vet_tbls<-vector("list", 2)
+  names(vet_tbls)<-c("staff", "teachers")
+  
+  vet_tbls<-map(vet_tbls, function(x){
+    x<-vector("list", 2)
+    names(x)<-c("all", "color")
+    return(x)
+  })
+  
+  
+  table_type_string<-c("count", "percent")
+  
+  #all staff
+  vet_tbls[["staff"]][["all"]]<-map(table_type_string, 
+                                    function(tbl_type){
+                                      map2(all_list,names(all_list),
+                                           function(x,y){create_veteran_tbl4(x,y, tbl_type)})})
+  
+  names(vet_tbls[["staff"]][["all"]])<- table_type_string
+  
+  
+  vet_tbls[["staff"]][["color"]]<-map(table_type_string, 
+                                      function(tbl_type){
+                                        map2(toc_list,names(toc_list),
+                                             function(x,y){create_veteran_tbl4(x,y, tbl_type)})})
+  
+  names(vet_tbls[["staff"]][["color"]])<- table_type_string
+  
+  #all teachers
+  vet_tbls[["teachers"]][["all"]]<-map(table_type_string, 
+                                       function(tbl_type){
+                                         map2(all_list,names(all_list),
+                                              function(x,y){create_veteran_tbl4(x,y, tbl_type,
+                                                                                type = "teachers")})})
+  
+  names(vet_tbls[["teachers"]][["all"]])<- table_type_string
+  
+  
+  
+  vet_tbls[["teachers"]][["color"]]<-map(table_type_string, 
+                                         function(tbl_type){
+                                           map2(toc_list,names(toc_list),
+                                                function(x,y){create_veteran_tbl4(x,y, tbl_type,
+                                                                                  type = "teachers")})})
+  
+  names(vet_tbls[["teachers"]][["color"]])<- table_type_string
+  
+  return(vet_tbls)
+}
+
+
+vet_tbls<-vector("list",4)
+names(vet_tbls)<-c(str_c("version", 1:4))
   
 vet_tbls[["version1"]]<-update_vet_tbls(hr_by_sch, hr_by_sch_color)
 vet_tbls[["version2"]]<-update_vet_tbls2(hr_by_sch, hr_by_sch_color)
 vet_tbls[["version3"]]<-update_vet_tbls3(hr_by_sch, hr_by_sch_color)
+vet_tbls[["version4"]]<-update_vet_tbls4(hr_by_sch, hr_by_sch_color)
 
 ## -----------------------------------------------------------------------------
 ## Part 2.2 - Add School Strings
@@ -1129,7 +1422,8 @@ create_vet_combined_tbls_list<-function(vet_list, status_string){
 vet_combined_tbls<-map2(vet_tbls,
                         list(version1 = vet_status_string,
                              version2 = c("0-5 years", "5+ years"),
-                             version3 = c("0-3 years", "4-10 years","10+ years")),
+                             version3 = c("0-3 years", "4-10 years","10+ years"),
+                             version4 = c("0-3 years", "4-10 years","10+ years")),
                         function(x,y){
                           create_vet_combined_tbls_list(x,y)})
 ## -----------------------------------------------------------------------------
