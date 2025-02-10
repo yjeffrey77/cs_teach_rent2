@@ -292,7 +292,7 @@ cat(unlist(gxs), sep = '\n')
 
 # 3 Categories (Version 2) 
  
- NOTE: Only includes Out-of-Classroom Teachers
+ NOTE: Only includes In-Classroom Teachers
  
  Includes these categories: 
 
