@@ -52,6 +52,7 @@ school_name_string<-c("all", "Elementary", "Middle/High School")
 ## ---------------------------
 
 load(file.path(code_file_dir, "vet_combined_tbls.RData"))
+load(file.path(code_file_dir, "demo_combined_tbls.RData"))
 load(file.path(code_file_dir,'lausd_veteran.RData'))
 load(file.path(code_file_dir,"veteran_percent_plots.RData"))
 
@@ -358,3 +359,34 @@ cat(unlist(gxs), sep = '\n')
 </details>
 
 </details>
+
+# Demographics - Percentage of Teachers of Color
+<details>
+
+```{r, echo = FALSE, results='asis'}
+school_type_string<-names(demo_combined_tbls[["overall"]][["cs"]])
+
+gxs<-lapply(1:length(school_type_string), function(x){
+  
+  school_type <- school_type_string[[x]]
+  school_name <- school_name_string[[x]]
+  
+  count_tbl<-demo_combined_tbls[["overall"]][["cs"]][[school_type]][["teachers"]][["all"]][["count"]]
+  
+  percent_tbl<-demo_combined_tbls[["overall"]][["cs"]][[school_type]][["teachers"]][["all"]][["percent"]]
+
+  graphs<-plots_demo[[school_type]][["teachers"]][["all"]]
+  
+  knit_child(
+    '_11.3_veteran_demographics - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+})
+
+cat(unlist(gxs), sep = '\n')
+
+``` 
+
+
+</details>
+

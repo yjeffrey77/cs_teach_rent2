@@ -46,13 +46,13 @@ create_combined_tbl<-function(df_cs, df_ts){
   
   #created combined overall table
   
-  cs<-df_cs %>% filter(vet_status == "Percent of Veteran Teachers") %>% 
+  cs<-df_cs %>% filter(vet_status == "Percent of Teachers") %>% 
     mutate(school = case_when(
-      school == "Percent of Veteran Teachers" ~ "CS Percent of Veteran Teachers")) 
+      school == "Percent of Teachers" ~ "CS Percent of Veteran Teachers")) 
   
-  ts<-df_ts %>% filter(vet_status == "Percent of Veteran Teachers") %>% 
+  ts<-df_ts %>% filter(vet_status == "Percent of Teachers") %>% 
     mutate(school = case_when(
-      school == "Percent of Veteran Teachers" ~ "TS Percent of Veteran Teachers")) 
+      school == "Percent of Teachers" ~ "TS Percent of Veteran Teachers")) 
   
   df_update<-rbind(cs, ts) %>% select(-c(vet_status))
   
@@ -192,6 +192,7 @@ create_bar_plot_cs<-function(df, graph_title){
 ## ---------------------------
 
 load(file.path(code_file_dir, "vet_combined_tbls.RData"))
+load(file.path(code_file_dir, "demo_combined_tbls.RData"))
 
 ## -----------------------------------------------------------------------------
 ## Part 1 - Create CS/TS Combined Tables 
@@ -221,6 +222,23 @@ combined_plot_tbls<-map(vet_combined_tbls,
                           return(sch_type_df)
                         })
   
+
+demo_combined_plot_tbls<-map(sch_type_string, function(sch_type){
+                            
+                            map2(demo_combined_tbls[["overall"]][["cs"]][[sch_type]],
+                                 demo_combined_tbls[["overall"]][["ts"]][[sch_type]],
+                                 function(cs_sample, ts_sample){
+                                   map2(cs_sample,ts_sample,
+                                        function(cs_teach,ts_teach){
+                                          map2(cs_teach[["percent"]],
+                                               ts_teach[["percent"]],
+                                               function(x,y) create_combined_tbl(x,y))
+                                        })
+                                 })
+                            
+                          })
+names(demo_combined_plot_tbls)<-sch_type_string                         
+
 ## -----------------------------------------------------------------------------
 ## Part 2 - Transform Tables into Long Versions
 ## -----------------------------------------------------------------------------
@@ -236,6 +254,15 @@ long_plot_tbls<-map(combined_plot_tbls,
                                         map(teach_type,create_plot_tbl)
                                       })})})})
   
+long_plot_tbls_demo<-map(demo_combined_plot_tbls,
+                          function(sch_type){
+                            map(sch_type,
+                                function(sample){
+                                  map(sample,
+                                      function(teach_type){
+                                        map(teach_type,create_plot_tbl)
+                                      })})})
+
 ## -----------------------------------------------------------------------------
 ## Part 3 - Plot Tables
 ## -----------------------------------------------------------------------------
@@ -258,11 +285,27 @@ plots<-map(long_plot_tbls,
 
 plots[["version3"]][["all"]][["staff"]][["color"]][["10+ years"]]
 
+
+plots_demo<-map2(long_plot_tbls_demo, sch_type_string2,
+                       function(sch_type, sch_type_name){
+                         map2(sch_type,names(sch_type),
+                              function(sample, person_type_name){
+                                map2(sample, names(sample),
+                                     function(teach_type, sample_name){
+                                       map2(teach_type,names(teach_type),
+                                            function(x,y) create_bar_plot1(x,
+                                                                           str_c("Percentage of ",sch_type_name," ",
+                                                                                 str_to_title(person_type_name),": ",
+                                                                                 str_to_title(sample_name),", ",
+                                                                                 str_to_title(y))))
+                                     })})})
+
 ## -----------------------------------------------------------------------------
 ## Part 4 - Save Data
 ## -----------------------------------------------------------------------------
 
-save(plots,file = file.path(code_file_dir,"veteran_percent_plots.RData"))
+save(plots,plots_demo, 
+     file = file.path(code_file_dir,"veteran_percent_plots.RData"))
 
 ## -----------------------------------------------------------------------------
 ## END SCRIPT
