@@ -1,0 +1,40 @@
+
+::: panel-tabset
+### 2020-2021
+::: panel-tabset
+#### Demographics
+```{r}
+lausd_data[["td_2020_21"]] %>% kable()
+```
+#### Veteran Status
+```{r}
+lausd_data[["tv_2020_21"]] %>% kable()
+```
+:::
+
+### 2021-2022
+::: panel-tabset
+#### Demographics
+```{r}
+lausd_data[["td_2021_22"]] %>% kable()
+```
+#### Veteran Status
+```{r}
+lausd_data[["tv_2021_22"]] %>% kable()
+```
+:::
+
+### 2022-2023
+::: panel-tabset
+#### Demographics
+```{r}
+lausd_data[["td_2022_23"]] %>% kable()
+```
+#### Veteran Status
+```{r}
+lausd_data[["tv_2022_23"]] %>% kable()
+```
+:::
+
+:::
+

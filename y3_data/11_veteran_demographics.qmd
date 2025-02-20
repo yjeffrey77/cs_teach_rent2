@@ -55,17 +55,34 @@ load(file.path(code_file_dir, "vet_combined_tbls.RData"))
 load(file.path(code_file_dir, "demo_combined_tbls.RData"))
 load(file.path(code_file_dir,'lausd_veteran.RData'))
 load(file.path(code_file_dir,"veteran_percent_plots.RData"))
+load(file.path(code_file_dir, "lausd_vet_data.RData"))
 
 ## Add Lists
 #source(file.path(code_file_dir, "00_school_lists.R"))
-
 
 ```
 
 # LAUSD Data
 
+## LAUSD HR Data
 <details>
+```{r, echo = FALSE, results='asis'}
 
+gxs<-lapply(1:1, function(x){
+  
+  knit_child(
+    '_lausd_data - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+})
+
+cat(unlist(gxs), sep = '\n')
+
+```
+</details>
+
+## State Data
+<details>
 ::: panel-tabset
 #### Count
 ```{r}
@@ -77,9 +94,46 @@ veteran_status_wide_list[["count"]] %>% kable()
 veteran_status_wide_list[["percent"]] %>% kable()
 ```
 :::
-
+</details>
 </details>
 
+
+
+# BIPOC Demographic Data
+
+<details>
+## Derived BIPOC Veteran Teachers
+::: panel-tabset
+#### 2020-2021
+```{r}
+bipoc_names<-c("Elementary (n)",
+               "Elementary (percent)",
+               "Secondary (n)",
+               "Secondary (percent)",
+               "Special Education (n)",
+               "Special Education (percent)",
+               "Total (n)",
+               "Total (percent)")
+
+rownames(bipoc_calculated_lausd_data[["2020-21"]])<-bipoc_names
+
+bipoc_calculated_lausd_data[["2020-21"]] %>% kable()
+```
+
+#### 2021-2022
+```{r}
+rownames(bipoc_calculated_lausd_data[["2021-22"]])<-bipoc_names
+bipoc_calculated_lausd_data[["2021-22"]] %>% kable()
+```
+
+#### 2022-2023
+```{r}
+rownames(bipoc_calculated_lausd_data[["2022-23"]])<-bipoc_names
+bipoc_calculated_lausd_data[["2022-23"]] %>% kable()
+```
+:::
+
+</details>
 
 # Combined Version
 
