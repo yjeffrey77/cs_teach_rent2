@@ -15,7 +15,7 @@
 ## libraries
 ## ---------------------------
 library(tidyverse)
-library(tabulizer)
+#library(tabulizer)
 library(readxl)
 library(janitor)
 
@@ -122,6 +122,8 @@ create_toc_df<-function(df){
     p_total = sum(totals)/total_df$totals
   )
   
+ # df_list<-list(toc_df = df_update, perc_tbl = test2)
+  
   return(test2)
   
 }
@@ -133,124 +135,208 @@ toc_df_list<-map(list(lausd_data[["td_2020_21"]],
 
 names(toc_df_list)<-c("td_2020_21", "td_2021_22", "td_2022_23")
 
+#create BIPOC multiplier table
 
-#test<-lausd_data[["tv_2021_22"]] %>% clean_names()
+#helper function
+create_bipoc_multiplier<-function(df){
+  df_update<-df %>% filter(toc == "BIPOC") %>%   
+    select(p_elementary, p_secondary,
+                           p_special_education, p_total)
+  df_update<-data.frame(t(df_update))
+  
+  df_update$job<-c("Elementary", "Secondary", "Special Ed", "Total")
+  
+  colnames(df_update)<-c("bipoc_percent", "Job")
+  
+  df_update<-df_update %>% select(Job, bipoc_percent)
+  return(df_update)
+}
 
-create_vet_df<-function(df){
+#create table
+bipoc_multiplier_tbl<-map(toc_df_list,create_bipoc_multiplier)
+
+#create BIPOC count table by veteran status
+create_bipoc_count_tbl<-function(vet_df, bipoc_multiple){
+
+  #calculate the number of BIPOC teachers by veteran status
+  df_update<-vet_df %>% left_join(bipoc_multiple, by = "Job") %>% 
+    filter(Job != "Percent")
   
-  df_update<-df %>% clean_names() 
+  #multiply the bipoc number with all the other numbers
+  df_update<-df_update %>%
+    mutate(across(`1`:Total, ~ .x*bipoc_percent))
   
-  # df_update<-df %>% clean_names() %>% 
-  #   filter(job  %in% c("Elementary", "Secondary", "Special Ed"))
-  
-  total_by_year<-df_update %>%  
-    filter(job == "Total")
-  
-  total_by_job<-df_update %>% select(total)
-  
-  
-  df_update<-df_update %>% mutate(
-    p_1 = x1/total,
-    p_2 = x2/total,
-    p_3 = x3/total,
-    p_4 = x4/total,
-    p_5 = x5/total,
-    p_6 = x6/total,
-    p_7 = x7/total,
-    p_8 = x8/total,
-    p_9 = x9/total,
-    p_10 = x10/total,
-  ) %>% select(job,p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10)
+  df_update<-df_update %>% 
+    mutate(across(`1`:Total, ~ round(.x,0)))
   
   return(df_update)
-  
 }
 
-vet_df_list<-map(list(lausd_data[["tv_2020_21"]],
-                      lausd_data[["tv_2021_22"]],
-                      lausd_data[["tv_2022_23"]]),
-                 create_vet_df)
+bipoc_count_tbl<-map2(list(lausd_data[["tv_2020_21"]],
+                           lausd_data[["tv_2021_22"]],
+                           lausd_data[["tv_2022_23"]]),
+                      bipoc_multiplier_tbl,
+                      function(lausd_df, multiple_bipoc){
+                        create_bipoc_count_tbl(lausd_df,multiple_bipoc)
+                      })
 
-names(vet_df_list)<-c("tv_2020_21", "tv_2021_22", "tv_2022_23")
+names(bipoc_count_tbl)<-c("c_2020_21","c_2021_22","c_2022_23")  
 
-
-multiply_toc_data<-function(df, vet_multiplier){
+#create percentage table of BIPOC teachers by experience
+create_perc_tbl_bipoc<-function(lausd_tbl, bipoc_tbl){
   
- df_update<-df %>% mutate(
-   n_elementary = n_elementary * vet_multiplier[1],
-   p_elementary = p_elementary * vet_multiplier[1],
-   n_secondary = n_secondary * vet_multiplier[2],
-   p_secondary = p_secondary * vet_multiplier[2],
-   n_special_education = n_special_education * vet_multiplier[3],
-   p_special_education = p_special_education * vet_multiplier[3],
-   n_total = n_total * vet_multiplier[4],
-   p_total = p_total * vet_multiplier[4],
- ) %>% select(-c(n_resource_specialist, p_resource_specialist)) 
+  lausd_tbl2<-lausd_tbl%>% filter(Job != "Percent")
+  bipoc_tbl2<-bipoc_tbl %>% select(-c(bipoc_percent))
   
- df_update<-df_update %>% 
-   mutate(
-     n_elementary = round(n_elementary,0),
-     p_elementary = round(p_elementary*100, 0),
-     n_secondary = round(n_secondary, 0),
-     p_secondary = round(p_secondary * 100,0),
-     n_special_education = round(n_special_education,0),
-     p_special_education = round(p_special_education * 100,0),
-     n_total = round(n_total,0),
-     p_total = round(p_total * 100, 0)
-   )
- 
- df_update_t<-data.frame(t(df_update))
- colnames(df_update_t)<-df_update$toc
- df_update_t<-df_update_t[-1,]
-# df_update_t<-data.frame(df_update_t)
- 
-  return(df_update_t)
+  df_update<-bipoc_tbl2 %>% mutate(
+    mutate(across(`1`:Total, ~ .x/lausd_tbl2$Total))
+  )
+  
+  df_update<-df_update %>% mutate(
+    mutate(across(`1`:Total, ~ round(.x*100,2)))
+  )
+  
+  return(df_update)
 }
 
-
-
-bipoc_calculated_lausd_data<-map2(toc_df_list,vet_df_list,
-                                  function(demo, vet){
-                                    multiply_toc_data(demo,vet[["p_10"]])
-                                  })
-names(bipoc_calculated_lausd_data)<-c("2020-21", "2021-22", "2022-23")  
+perc_tbl_bipoc<-map2(list(lausd_data[["tv_2020_21"]],
+                          lausd_data[["tv_2021_22"]],
+                          lausd_data[["tv_2022_23"]]),
+                     bipoc_count_tbl,
+                     function(lausd_df, bipoc_count){
+                       create_perc_tbl_bipoc(lausd_df,
+                                             bipoc_count)})
+                     
+names(perc_tbl_bipoc)<-c("2020_21","2021_22","2022_23")  
 
 ## -----------------------------------------------------------------------------
-## Part 3 - Save Data
+## Part 3 - Create Cleaned Teacher of Color Table
 ## -----------------------------------------------------------------------------
 
-save(lausd_data,bipoc_calculated_lausd_data,
+create_cleaned_toc_tbl<-function(df){
+  
+  df_update<-data.frame(t(df))
+  colnames(df_update)<-c("BIPOC", "Not BIPOC")
+  
+  df_update<-df_update %>% filter(BIPOC != "BIPOC")
+  
+  bipoc_names<-c("Elementary (n)",
+                 "Elementary (percent)",
+                 "Secondary (n)",
+                 "Secondary (percent)",
+                 "Special Education (n)",
+                 "Special Education (percent)",
+                 "Resource Specialist (n)",
+                 "Resource Specialist (percent)",
+                 "Total (n)",
+                 "Total (percent)")
+
+  rownames(df_update)<-bipoc_names
+  
+  return(df_update)
+}
+
+bipoc_calculated_lausd_data<-map(toc_df_list,create_cleaned_toc_tbl)
+                                
+names(bipoc_calculated_lausd_data)<-c("2020-21", "2021-22", "2022-23")
+
+## -----------------------------------------------------------------------------
+## Part 4 - Save Data
+## -----------------------------------------------------------------------------
+
+save(lausd_data, bipoc_count_tbl,bipoc_calculated_lausd_data,
+     bipoc_multiplier_tbl, toc_df_list, perc_tbl_bipoc,
      file = file.path(code_file_dir, "lausd_vet_data.RData"))
 
-## -----------------------------------------------------------------------------
-## Part ) - Install Tabulizer
-## -----------------------------------------------------------------------------
-
-#Taken from this site: https://blog.djnavarro.net/posts/2023-06-16_tabulizer/
-
-remotes::install_github(c("ropensci/tabulizerjars", "ropensci/tabulizer"))
-
-
-## -----------------------------------------------------------------------------
-## Part 1 - Extract Tables
-## -----------------------------------------------------------------------------
-
-
-# set Java memory limit to 600 MB (optional)
-options(java.parameters = "-Xmx600m")
-f <- system.file(pdf_folder, "2020-2021 TDemo.pdf", package = "tabulapdf")
-# extract table from first page of example PDF
-tab <- extract_tables(f, pages = 6)
-tab[[1]]
-
-
-## -----------------------------------------------------------------------------
-## Part 3 - Save Data
-## -----------------------------------------------------------------------------
-
-save(vet_combined_tbls,vet_tbls,
-     file = file.path(code_file_dir, "vet_combined_tbls.RData"))
+# save(lausd_data,bipoc_calculated_lausd_data, toc_df_list, vet_df_list,
+#      file = file.path(code_file_dir, "lausd_vet_data.RData"))
 
 ## -----------------------------------------------------------------------------
 ## END SCRIPT
 ## -----------------------------------------------------------------------------
+# 
+# create_vet_df<-function(df, bipoc_multiplier){
+#   
+#   df_update<-df %>% clean_names()
+#   
+#   bipoc_multiplier<-
+#     
+#     # df_update<-df %>% clean_names() %>%
+#     #   filter(job  %in% c("Elementary", "Secondary", "Special Ed"))
+#     
+#     total_by_year<-df_update %>%
+#     filter(job == "Total")
+#   
+#   total_by_job<-df_update %>% select(total)
+#   
+#   
+#   df_update<-df_update %>% mutate(
+#     p_1 = x1/total,
+#     p_2 = x2/total,
+#     p_3 = x3/total,
+#     p_4 = x4/total,
+#     p_5 = x5/total,
+#     p_6 = x6/total,
+#     p_7 = x7/total,
+#     p_8 = x8/total,
+#     p_9 = x9/total,
+#     p_10 = x10/total,
+#   ) #%>% select(job,p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10)
+#   
+#   return(df_update)
+#   
+# }
+# 
+# vet_df_list<-map(list(lausd_data[["tv_2020_21"]],
+#                       lausd_data[["tv_2021_22"]],
+#                       lausd_data[["tv_2022_23"]]),
+#                  create_vet_df)
+# 
+# names(vet_df_list)<-c("tv_2020_21", "tv_2021_22", "tv_2022_23")
+
+# multiply_toc_data<-function(df, vet_multiplier){
+#   
+#   df_update<-df %>% mutate(
+#     n_elementary = n_elementary * vet_multiplier[1],
+#     p_elementary = p_elementary * vet_multiplier[1],
+#     n_secondary = n_secondary * vet_multiplier[2],
+#     p_secondary = p_secondary * vet_multiplier[2],
+#     n_special_education = n_special_education * vet_multiplier[3],
+#     p_special_education = p_special_education * vet_multiplier[3],
+#     n_total = n_total * vet_multiplier[4],
+#     p_total = p_total * vet_multiplier[4],
+#   ) %>% select(-c(n_resource_specialist, p_resource_specialist))
+#   
+#   df_update<-df_update %>%
+#     mutate(
+#       n_elementary = round(n_elementary,0),
+#       p_elementary = round(p_elementary*100, 0),
+#       n_secondary = round(n_secondary, 0),
+#       p_secondary = round(p_secondary * 100,0),
+#       n_special_education = round(n_special_education,0),
+#       p_special_education = round(p_special_education * 100,0),
+#       n_total = round(n_total,0),
+#       p_total = round(p_total * 100, 0)
+#     )
+#   
+#   df_update_t<-data.frame(t(df_update))
+#   colnames(df_update_t)<-df_update$toc
+#   df_update_t<-df_update_t[-1,]
+#   # df_update_t<-data.frame(df_update_t)
+#   
+#   return(df_update_t)
+# }
+# 
+# bipoc_calculated_lausd_data<-map2(toc_df_list,vet_df_list,
+#                                   function(demo, vet){
+#                                     multiply_toc_data(demo,vet[["p_10"]])
+#                                   })
+# names(bipoc_calculated_lausd_data)<-c("2020-21", "2021-22", "2022-23")
+
+
+# ## -----------------------------------------------------------------------------
+# ## Part 3 - Save Data
+# ## -----------------------------------------------------------------------------
+# 
+# save(vet_combined_tbls,vet_tbls, toc_df_list, vet_df_list,
+#      file = file.path(code_file_dir, "vet_combined_tbls.RData"))

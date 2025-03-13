@@ -20,6 +20,9 @@ library(readxl)
 library(openxlsx)
 library(janitor)
 library(purrr)
+library(future)
+library(furrr)
+library(parallel)
 
 ## ---------------------------
 ## directory paths
@@ -106,6 +109,11 @@ add_toc_var<-function(df){
 }
 
 #test<-add_toc_var(hr_by_sch[["107th Street Elementary"]])
+
+#detect cores
+num_cores<-detectCores()
+
+plan(multisession, workers = num_cores-2)
 
 ## -----------------------------------------------------------------------------
 ## Part 1 - Add Functions
@@ -1537,7 +1545,7 @@ update_vet_tbls<-function(all_list, toc_list){
   table_type_string<-c("count", "percent")
   
   #all staff
-  vet_tbls[["staff"]][["all"]]<-map(table_type_string, 
+  vet_tbls[["staff"]][["all"]]<-future_map(table_type_string, 
                                     function(tbl_type){
                                       map2(all_list,names(all_list),
                                            function(x,y){create_veteran_tbl(x,y, tbl_type)})})
@@ -1545,7 +1553,7 @@ update_vet_tbls<-function(all_list, toc_list){
   names(vet_tbls[["staff"]][["all"]])<- table_type_string
   
   
-  vet_tbls[["staff"]][["color"]]<-map(table_type_string, 
+  vet_tbls[["staff"]][["color"]]<-future_map(table_type_string, 
                                       function(tbl_type){
                                         map2(toc_list,names(toc_list),
                                              function(x,y){create_veteran_tbl(x,y, tbl_type)})})
@@ -1553,7 +1561,7 @@ update_vet_tbls<-function(all_list, toc_list){
   names(vet_tbls[["staff"]][["color"]])<- table_type_string
   
   #all teachers
-  vet_tbls[["teachers"]][["all"]]<-map(table_type_string, 
+  vet_tbls[["teachers"]][["all"]]<-future_map(table_type_string, 
                                     function(tbl_type){
                                       map2(all_list,names(all_list),
                                            function(x,y){create_veteran_tbl(x,y, tbl_type,
@@ -1563,7 +1571,7 @@ update_vet_tbls<-function(all_list, toc_list){
   
   
   
-  vet_tbls[["teachers"]][["color"]]<-map(table_type_string, 
+  vet_tbls[["teachers"]][["color"]]<-future_map(table_type_string, 
                                       function(tbl_type){
                                         map2(toc_list,names(toc_list),
                                              function(x,y){create_veteran_tbl(x,y, tbl_type,
@@ -1589,7 +1597,7 @@ update_vet_tbls2<-function(all_list, toc_list){
   table_type_string<-c("count", "percent")
   
   #all staff
-  vet_tbls[["staff"]][["all"]]<-map(table_type_string, 
+  vet_tbls[["staff"]][["all"]]<-future_map(table_type_string, 
                                     function(tbl_type){
                                       map2(all_list,names(all_list),
                                            function(x,y){create_veteran_tbl2(x,y, tbl_type)})})
@@ -1597,7 +1605,7 @@ update_vet_tbls2<-function(all_list, toc_list){
   names(vet_tbls[["staff"]][["all"]])<- table_type_string
   
   
-  vet_tbls[["staff"]][["color"]]<-map(table_type_string, 
+  vet_tbls[["staff"]][["color"]]<-future_map(table_type_string, 
                                       function(tbl_type){
                                         map2(toc_list,names(toc_list),
                                              function(x,y){create_veteran_tbl2(x,y, tbl_type)})})
@@ -1605,7 +1613,7 @@ update_vet_tbls2<-function(all_list, toc_list){
   names(vet_tbls[["staff"]][["color"]])<- table_type_string
   
   #all teachers
-  vet_tbls[["teachers"]][["all"]]<-map(table_type_string, 
+  vet_tbls[["teachers"]][["all"]]<-future_map(table_type_string, 
                                        function(tbl_type){
                                          map2(all_list,names(all_list),
                                               function(x,y){create_veteran_tbl2(x,y, tbl_type,
@@ -1615,7 +1623,7 @@ update_vet_tbls2<-function(all_list, toc_list){
   
   
   
-  vet_tbls[["teachers"]][["color"]]<-map(table_type_string, 
+  vet_tbls[["teachers"]][["color"]]<-future_map(table_type_string, 
                                          function(tbl_type){
                                            map2(toc_list,names(toc_list),
                                                 function(x,y){create_veteran_tbl2(x,y, tbl_type,
@@ -1641,7 +1649,7 @@ update_vet_tbls3<-function(all_list, toc_list){
   table_type_string<-c("count", "percent")
   
   #all staff
-  vet_tbls[["staff"]][["all"]]<-map(table_type_string, 
+  vet_tbls[["staff"]][["all"]]<-future_map(table_type_string, 
                                     function(tbl_type){
                                       map2(all_list,names(all_list),
                                            function(x,y){create_veteran_tbl3(x,y, tbl_type)})})
@@ -1649,7 +1657,7 @@ update_vet_tbls3<-function(all_list, toc_list){
   names(vet_tbls[["staff"]][["all"]])<- table_type_string
   
   
-  vet_tbls[["staff"]][["color"]]<-map(table_type_string, 
+  vet_tbls[["staff"]][["color"]]<-future_map(table_type_string, 
                                       function(tbl_type){
                                         map2(toc_list,names(toc_list),
                                              function(x,y){create_veteran_tbl3(x,y, tbl_type)})})
@@ -1657,7 +1665,7 @@ update_vet_tbls3<-function(all_list, toc_list){
   names(vet_tbls[["staff"]][["color"]])<- table_type_string
   
   #all teachers
-  vet_tbls[["teachers"]][["all"]]<-map(table_type_string, 
+  vet_tbls[["teachers"]][["all"]]<-future_map(table_type_string, 
                                        function(tbl_type){
                                          map2(all_list,names(all_list),
                                               function(x,y){create_veteran_tbl3(x,y, tbl_type,
@@ -1667,7 +1675,7 @@ update_vet_tbls3<-function(all_list, toc_list){
   
   
   
-  vet_tbls[["teachers"]][["color"]]<-map(table_type_string, 
+  vet_tbls[["teachers"]][["color"]]<-future_map(table_type_string, 
                                          function(tbl_type){
                                            map2(toc_list,names(toc_list),
                                                 function(x,y){create_veteran_tbl3(x,y, tbl_type,
@@ -1693,7 +1701,7 @@ update_vet_tbls4<-function(all_list, toc_list){
   table_type_string<-c("count", "percent")
   
   #all staff
-  vet_tbls[["staff"]][["all"]]<-map(table_type_string, 
+  vet_tbls[["staff"]][["all"]]<-future_map(table_type_string, 
                                     function(tbl_type){
                                       map2(all_list,names(all_list),
                                            function(x,y){create_veteran_tbl4(x,y, tbl_type)})})
@@ -1701,7 +1709,7 @@ update_vet_tbls4<-function(all_list, toc_list){
   names(vet_tbls[["staff"]][["all"]])<- table_type_string
   
   
-  vet_tbls[["staff"]][["color"]]<-map(table_type_string, 
+  vet_tbls[["staff"]][["color"]]<-future_map(table_type_string, 
                                       function(tbl_type){
                                         map2(toc_list,names(toc_list),
                                              function(x,y){create_veteran_tbl4(x,y, tbl_type)})})
@@ -1709,7 +1717,7 @@ update_vet_tbls4<-function(all_list, toc_list){
   names(vet_tbls[["staff"]][["color"]])<- table_type_string
   
   #all teachers
-  vet_tbls[["teachers"]][["all"]]<-map(table_type_string, 
+  vet_tbls[["teachers"]][["all"]]<-future_map(table_type_string, 
                                        function(tbl_type){
                                          map2(all_list,names(all_list),
                                               function(x,y){create_veteran_tbl4(x,y, tbl_type,
@@ -1719,7 +1727,7 @@ update_vet_tbls4<-function(all_list, toc_list){
   
   
   
-  vet_tbls[["teachers"]][["color"]]<-map(table_type_string, 
+  vet_tbls[["teachers"]][["color"]]<-future_map(table_type_string, 
                                          function(tbl_type){
                                            map2(toc_list,names(toc_list),
                                                 function(x,y){create_veteran_tbl4(x,y, tbl_type,
@@ -1755,7 +1763,7 @@ update_demo_tbls<-function(all_list){
   table_type_string<-c("count", "percent")
   
   #all staff
-  vet_tbls[["staff"]][["all"]]<-map(table_type_string, 
+  vet_tbls[["staff"]][["all"]]<-future_map(table_type_string, 
                                     function(tbl_type){
                                       map2(all_list,names(all_list),
                                            function(x,y){create_demo_veteran_tbl(x,y, tbl_type)})})
@@ -1764,16 +1772,13 @@ update_demo_tbls<-function(all_list){
   
   
   #all teachers
-  vet_tbls[["teachers"]][["all"]]<-map(table_type_string, 
+  vet_tbls[["teachers"]][["all"]]<-future_map(table_type_string, 
                                        function(tbl_type){
                                          map2(all_list,names(all_list),
                                               function(x,y){create_demo_veteran_tbl(x,y, tbl_type,
                                                                                 type = "teachers")})})
   
   names(vet_tbls[["teachers"]][["all"]])<- table_type_string
-  
-  
-  
   
   return(vet_tbls)
 }
@@ -1793,7 +1798,7 @@ update_demo_tbls_overall<-function(all_list){
   table_type_string<-c("count", "percent")
   
   #all staff
-  vet_tbls[["staff"]][["all"]]<-map(table_type_string, 
+  vet_tbls[["staff"]][["all"]]<-future_map(table_type_string, 
                                     function(tbl_type){
                                       map2(all_list,names(all_list),
                                            function(x,y){create_demo_veteran_tbl_overall(x,y, tbl_type)})})
@@ -1802,7 +1807,7 @@ update_demo_tbls_overall<-function(all_list){
   
   
   #all teachers
-  vet_tbls[["teachers"]][["all"]]<-map(table_type_string, 
+  vet_tbls[["teachers"]][["all"]]<-future_map(table_type_string, 
                                        function(tbl_type){
                                          map2(all_list,names(all_list),
                                               function(x,y){create_demo_veteran_tbl_overall(x,y, tbl_type,
@@ -1815,7 +1820,7 @@ update_demo_tbls_overall<-function(all_list){
 
 demo_tbl<-update_demo_tbls(hr_by_sch)
 
-demo_tbl_overall<-update_demo_tbls_overall(hr_by_sch)
+#demo_tbl_overall<-update_demo_tbls_overall(hr_by_sch)
   
 ## -----------------------------------------------------------------------------
 ## Part 2.2 - Add School Strings
@@ -2024,7 +2029,7 @@ vet_combined_tbls<-map2(vet_tbls,
                           create_vet_combined_tbls_list(x,y)})
 
 ## -----------------------------------------------------------------------------
-## Part 2.3 - Create TOC Tables - Overall
+## Part 2.3 - Create Teacher Demographic Tables - Overall
 ## -----------------------------------------------------------------------------
 
 #create demo overall
@@ -2033,17 +2038,28 @@ create_overall_vet_tbl_demo<-function(df, school_string,status_vet){
   df_update<-df %>% keep(names(df) %in% school_string)
   
   #Create Overall Retention Rate
-  
+
   rent_overall<-bind_rows(df_update, .id = 'school') %>%
     filter(vet_status == status_vet)
+
+  rent_overall <- rent_overall %>%
+    group_by(school, vet_status) %>%
+    summarise(yr_18_19 = sum(yr_18_19, na.rm = T),
+              yr_19_20 = sum(yr_19_20, na.rm = T),
+              yr_20_21 = sum(yr_20_21, na.rm = T),
+              yr_21_22 = sum(yr_21_22, na.rm = T),
+              yr_22_23 = sum(yr_22_23, na.rm = T),
+              yr_23_24 = sum(yr_23_24, na.rm = T)) %>% 
+    ungroup()
+  
   
   #remove TOC
-  
-  if ("toc" %in% colnames(rent_overall)){
-    rent_overall<-rent_overall %>% select(-c(toc))
-  }
-  
- 
+
+  # if ("toc" %in% colnames(rent_overall)){
+  #   rent_overall<-rent_overall %>% select(-c(toc))
+ # }
+
+
   rent_overall<-rent_overall %>%
     mutate(
       yr_18_19 = as.numeric(yr_18_19),
@@ -2053,7 +2069,7 @@ create_overall_vet_tbl_demo<-function(df, school_string,status_vet){
       yr_22_23 = as.numeric(yr_22_23),
       yr_23_24 = as.numeric(yr_23_24),
     )
-  
+
   pivot_rent<-rent_overall %>%
     summarize(
       yr_18_19 = sum(yr_18_19, na.rm = T)/n() %>% round(),
@@ -2062,20 +2078,20 @@ create_overall_vet_tbl_demo<-function(df, school_string,status_vet){
       yr_21_22 = sum(yr_21_22, na.rm = T)/n() %>% round(),
       yr_22_23 = sum(yr_22_23, na.rm = T)/n() %>% round(),
       yr_23_24 = sum(yr_23_24, na.rm = T)/n() %>% round(),
-      
+
     )
-  
+
   pivot_rent$school<- "Percent of Teachers"
-  
+
   pivot_rent$vet_status<- "Percent of Teachers"
-  
+
   pivot_rent<-pivot_rent %>% select(school, vet_status, everything())
-  
+
   #if (tbl_type == "Retention Rate %"){
   rent_overall<-rbind(rent_overall, pivot_rent)
-  
+
   #round rental numbers to whole numbers
-  
+
   rent_overall<-rent_overall %>%
     mutate(yr_18_19 = round(yr_18_19),
            yr_19_20 = round(yr_19_20),
@@ -2083,11 +2099,17 @@ create_overall_vet_tbl_demo<-function(df, school_string,status_vet){
            yr_21_22 = round(yr_21_22),
            yr_22_23 = round(yr_22_23),
            yr_23_24 = round(yr_23_24)
-    )
-  
-  
+    ) 
+
+
   return(rent_overall)
 }
+# 
+# test<-create_overall_vet_tbl_demo(demo_tbl[["teachers"]][["all"]][["count"]],
+#                                   cs_string, "10+ years")
+# 
+# test2<-create_overall_vet_tbl_demo(demo_tbl[["teachers"]][["all"]][["count"]],
+#                                    cs_string, "10+ years")
 
 #overall demo tables
 create_vet_tbls_overall_list_demo<-function(df_tbls, schools, status_string){
@@ -2236,8 +2258,6 @@ create_overall_vet_tbl_demo2<-function(df, school_string,status_vet){
   
   return(rent_overall)
 }
-
-
 
 ## -----------------------------------------------------------------------------
 ## Part 3 - Save Data

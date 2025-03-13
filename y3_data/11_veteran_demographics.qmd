@@ -65,7 +65,9 @@ load(file.path(code_file_dir, "lausd_vet_data.RData"))
 # LAUSD Data
 
 ## LAUSD HR Data
+
 <details>
+
 ```{r, echo = FALSE, results='asis'}
 
 gxs<-lapply(1:1, function(x){
@@ -79,78 +81,213 @@ gxs<-lapply(1:1, function(x){
 cat(unlist(gxs), sep = '\n')
 
 ```
+
 </details>
 
 ## State Data
+
 <details>
+
 ::: panel-tabset
 #### Count
+
 ```{r}
 veteran_status_wide_list[["count"]] %>% kable()
 ```
 
 #### Percent
+
 ```{r}
 veteran_status_wide_list[["percent"]] %>% kable()
 ```
 :::
-</details>
+
 </details>
 
-
+</details>
 
 # BIPOC Demographic Data
 
-<details>
 ## Derived BIPOC Veteran Teachers
+
+<details>
 ::: panel-tabset
 #### 2020-2021
 ```{r}
-bipoc_names<-c("Elementary (n)",
-               "Elementary (percent)",
-               "Secondary (n)",
-               "Secondary (percent)",
-               "Special Education (n)",
-               "Special Education (percent)",
-               "Total (n)",
-               "Total (percent)")
+perc_tbl_bipoc[["2020_21"]] %>% kable()
+```
 
-rownames(bipoc_calculated_lausd_data[["2020-21"]])<-bipoc_names
+In **2020-2021:**
 
+Among **Elementary Teachers:** 
+
+- `r perc_tbl_bipoc[["2020_21"]][1,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2020_21"]][1,12]`% are **BIPOC** 
+ 
+Among **Secondary Teachers:** 
+ 
+ - `r perc_tbl_bipoc[["2020_21"]][2,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2020_21"]][2,12]`% are **BIPOC** 
+
+Among **Special Education Teachers:** 
+ 
+ - `r perc_tbl_bipoc[["2020_21"]][3,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2020_21"]][3,12]`% are **BIPOC** 
+
+Among **Teachers Overall:** 
+ 
+ - `r perc_tbl_bipoc[["2020_21"]][4,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2020_21"]][4,12]`% are **BIPOC** 
+
+#### 2021-2022
+```{r}
+perc_tbl_bipoc[["2021_22"]] %>% kable()
+
+```
+
+In **2021-2022:**
+
+Among **Elementary Teachers:** 
+
+- `r perc_tbl_bipoc[["2021_22"]][1,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2021_22"]][1,12]`% are **BIPOC** 
+ 
+Among **Secondary Teachers:** 
+ 
+ - `r perc_tbl_bipoc[["2021_22"]][2,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2021_22"]][2,12]`% are **BIPOC** 
+
+Among **Special Education Teachers:** 
+ 
+ - `r perc_tbl_bipoc[["2021_22"]][3,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2021_22"]][3,12]`% are **BIPOC** 
+
+Among **Teachers Overall:** 
+ 
+ - `r perc_tbl_bipoc[["2021_22"]][4,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2021_22"]][4,12]`% are **BIPOC** 
+
+#### 2022-2023
+```{r}
+perc_tbl_bipoc[["2022_23"]] %>% kable()
+```
+
+In **2022-2023:**
+
+Among **Elementary Teachers:** 
+
+- `r perc_tbl_bipoc[["2022_23"]][1,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2022_23"]][1,12]`% are **BIPOC** 
+ 
+Among **Secondary Teachers:** 
+ 
+ - `r perc_tbl_bipoc[["2022_23"]][2,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2022_23"]][2,12]`% are **BIPOC** 
+
+Among **Special Education Teachers:** 
+ 
+ - `r perc_tbl_bipoc[["2022_23"]][3,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2022_23"]][3,12]`% are **BIPOC** 
+
+Among **Teachers Overall:** 
+ 
+ - `r perc_tbl_bipoc[["2022_23"]][4,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2022_23"]][4,12]`% are **BIPOC** 
+
+:::
+
+</details>
+
+## Process
+<details>
+
+### Formulas
+
+<details>
+
+We used the following formulas to calculate the BIPOC values:
+
+**Calculate the Number of BIPOC Veteran Teachers**
+$$ 
+\text{(Total Number of Veteran Teachers)} \times \text{(Proportion BIPOC)}
+$$
+$$
+= \text{Number of BIPOC Veteran Teachers} 
+$$
+
+
+
+ 
+For example, below is a more precise formula to calculate the **number of BIPOC teachers with 10+ years of experience**. 
+
+$$ 
+\begin{aligned}
+\text{(Total Number of Teachers with over 10+ years of experience)} 
+\times \text{(Proportion BIPOC)} \\ 
+= \text{Number of BIPOC Teachers with over 10 years of experience} 
+\end{aligned}
+$$
+
+**Calculate Percent BIPOC Veteran Teachers**
+
+$$
+\frac{\text {Number of BIPOC Veteran Teachers}} {\text {Number of All Teachers}} = 
+\text{Percent of BIPOC Veteran Teachers}
+$$
+</details>
+
+### Number of BIPOC Teachers by Veteran Status
+
+To determine the number of BIPOC teachers by veteran status, we first determined the percentage of BIPOC teachers in the sample (see tables below).
+
+::: panel-tabset
+#### 2020-2021
+```{r}
 bipoc_calculated_lausd_data[["2020-21"]] %>% kable()
 ```
 
 #### 2021-2022
 ```{r}
-rownames(bipoc_calculated_lausd_data[["2021-22"]])<-bipoc_names
 bipoc_calculated_lausd_data[["2021-22"]] %>% kable()
 ```
 
 #### 2022-2023
 ```{r}
-rownames(bipoc_calculated_lausd_data[["2022-23"]])<-bipoc_names
 bipoc_calculated_lausd_data[["2022-23"]] %>% kable()
 ```
 :::
 
+Using the first formula, we then calculated the number of BIPOC teachers by veteran status.
+
+::: panel-tabset
+#### 2020-2021
+```{r}
+bipoc_count_tbl[["c_2020_21"]] %>% kable()
+```
+
+#### 2021-2022
+```{r}
+bipoc_count_tbl[["c_2021_22"]] %>% kable()
+```
+
+#### 2022-2023
+```{r}
+bipoc_count_tbl[["c_2022_23"]]%>% kable()
+```
+:::
+
+With this table, we then use the second formula to determine the percentage of BIPOC veteran teachers (see **Derived BIPOC Veteran Teachers** section).
+
+
+</details>
 </details>
 
 # Combined Version
 
 # 5 Categories
 
-Includes these categories: 
+Includes these categories:
 
- - 0-3 years
- - 4-5 years
- - 6-10 years 
- - 11-15 years 
- - 15+ years
+-   0-3 years
+-   4-5 years
+-   6-10 years
+-   11-15 years
+-   15+ years
 
 <details>
+
 ## All Teachers
 
 <details>
+
 ```{r, echo = FALSE, results='asis'}
 school_type_string<-names(vet_combined_tbls[["version1"]][["overall"]][["cs"]])
 
@@ -175,11 +312,10 @@ cat(unlist(gxs), sep = '\n')
 
 ```
 
-
-
-
 ## Teachers of color
+
 <details>
+
 ```{r, echo = FALSE, results='asis'}
 school_type_string<-names(vet_combined_tbls[["version1"]][["overall"]][["cs"]])
 
@@ -203,24 +339,24 @@ gxs<-lapply(1:length(school_type_string), function(x){
 cat(unlist(gxs), sep = '\n')
 
 ```
-</details>
-
 
 </details>
 
-
+</details>
 
 # 2 Categories
 
-Includes these categories: 
+Includes these categories:
 
- - 0-5 years
- - 5+ years
+-   0-5 years
+-   5+ years
 
 <details>
 
 ## All Teachers
+
 <details>
+
 ```{r, echo = FALSE, results='asis'}
 school_type_string<-names(vet_combined_tbls[["version1"]][["overall"]][["cs"]])
 
@@ -245,9 +381,10 @@ cat(unlist(gxs), sep = '\n')
 
 ```
 
-
 ## Teachers of Color
+
 <details>
+
 ```{r, echo = FALSE, results='asis'}
 school_type_string<-names(vet_combined_tbls[["version1"]][["overall"]][["cs"]])
 
@@ -271,25 +408,27 @@ gxs<-lapply(1:length(school_type_string), function(x){
 cat(unlist(gxs), sep = '\n')
 
 ```
-</details>
 
 </details>
 
-# 3 Categories (Version 1) 
- 
- NOTE: Teachers include In-Classroom & Out-of-Classroom Teachers
- 
- Includes these categories: 
+</details>
 
- - 0-3 years
- - 4-10 years
- - 10+ years
- 
- 
-<details> 
- 
-## All Teachers
+# 3 Categories (Version 1)
+
+NOTE: Teachers include In-Classroom & Out-of-Classroom Teachers
+
+Includes these categories:
+
+-   0-3 years
+-   4-10 years
+-   10+ years
+
 <details>
+
+## All Teachers
+
+<details>
+
 ```{r, echo = FALSE, results='asis'}
 school_type_string<-names(vet_combined_tbls[["version3"]][["overall"]][["cs"]])
 
@@ -312,11 +451,12 @@ gxs<-lapply(1:length(school_type_string), function(x){
 
 cat(unlist(gxs), sep = '\n')
 
-``` 
- 
+```
 
 ## Teachers of Color
+
 <details>
+
 ```{r, echo = FALSE, results='asis'}
 school_type_string<-names(vet_combined_tbls[["version1"]][["overall"]][["cs"]])
 
@@ -339,27 +479,28 @@ gxs<-lapply(1:length(school_type_string), function(x){
 
 cat(unlist(gxs), sep = '\n')
 
-``` 
-</details>
+```
 
 </details>
 
+</details>
 
-# 3 Categories (Version 2) 
- 
- NOTE: Only includes In-Classroom Teachers
- 
- Includes these categories: 
+# 3 Categories (Version 2)
 
- - 0-3 years
- - 4-10 years
- - 10+ years
- 
- 
-<details> 
- 
-## All Teachers
+NOTE: Only includes In-Classroom Teachers
+
+Includes these categories:
+
+-   0-3 years
+-   4-10 years
+-   10+ years
+
 <details>
+
+## All Teachers
+
+<details>
+
 ```{r, echo = FALSE, results='asis'}
 school_type_string<-names(vet_combined_tbls[["version4"]][["overall"]][["cs"]])
 
@@ -382,11 +523,12 @@ gxs<-lapply(1:length(school_type_string), function(x){
 
 cat(unlist(gxs), sep = '\n')
 
-``` 
- 
+```
 
 ## Teachers of Color
+
 <details>
+
 ```{r, echo = FALSE, results='asis'}
 school_type_string<-names(vet_combined_tbls[["version4"]][["overall"]][["cs"]])
 
@@ -409,12 +551,14 @@ gxs<-lapply(1:length(school_type_string), function(x){
 
 cat(unlist(gxs), sep = '\n')
 
-``` 
+```
+
 </details>
 
 </details>
 
 # Demographics - Percentage of Teachers of Color
+
 <details>
 
 ```{r, echo = FALSE, results='asis'}
@@ -439,8 +583,6 @@ gxs<-lapply(1:length(school_type_string), function(x){
 
 cat(unlist(gxs), sep = '\n')
 
-``` 
-
+```
 
 </details>
-
