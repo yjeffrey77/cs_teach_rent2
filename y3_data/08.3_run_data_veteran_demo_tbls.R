@@ -10,6 +10,8 @@
 #Goal: Runs Analyses and Stores them in Pivot Tables by veteran status and 
 # demographics.
 
+#NOTE: May not need given 08_run_data_veteran_tbls.R
+
 ################################################################################
 
 ## ---------------------------

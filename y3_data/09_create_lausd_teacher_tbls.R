@@ -80,14 +80,36 @@ safe_function<-function(expr, version){
 ## Part 1 - Read in LAUSD Data
 ## -----------------------------------------------------------------------------
 
-lausd_data<-lapply(1:6,
+lausd_data<-lapply(1:10,
              function(i) read_excel(file.path("..", "HR Veteran Data",
                                               "hr_demo_data.xlsx"),
                                     sheet = i)
              )
 names(lausd_data)<-c("tv_2020_21", "td_2020_21",
                      "tv_2021_22", "td_2021_22",
-                     "tv_2022_23", "td_2022_23")
+                     "tv_2022_23", "td_2022_23",
+                     "tv_2023_24", "td_2023_24",
+                     "tv_2024_25", "td_2024_25")
+
+#create lists
+demo_list<-list(lausd_data[["td_2020_21"]],
+                lausd_data[["td_2021_22"]],
+                lausd_data[["td_2022_23"]],
+                lausd_data[["td_2023_24"]],
+                lausd_data[["td_2024_25"]])
+
+names(demo_list)<-c("td_2020_21", "td_2021_22", "td_2022_23",
+                      "td_2023_24","td_2024_25")
+
+#vet list
+vet_list<-list(lausd_data[["tv_2020_21"]],
+                lausd_data[["tv_2021_22"]],
+                lausd_data[["tv_2022_23"]],
+                lausd_data[["tv_2023_24"]],
+                lausd_data[["tv_2024_25"]])
+
+names(vet_list)<-c("tv_2020_21", "tv_2021_22", "tv_2022_23",
+                    "tv_2023_24","tv_2024_25")
 
 ## -----------------------------------------------------------------------------
 ## Part 2 - Create Calculated Teacher of Color
@@ -128,12 +150,9 @@ create_toc_df<-function(df){
   
 }
 
-toc_df_list<-map(list(lausd_data[["td_2020_21"]],
-                      lausd_data[["td_2021_22"]],
-                      lausd_data[["td_2022_23"]]),
-                 create_toc_df)
+toc_df_list<-map(demo_list,create_toc_df)
 
-names(toc_df_list)<-c("td_2020_21", "td_2021_22", "td_2022_23")
+names(toc_df_list)<-names(demo_list)
 
 #create BIPOC multiplier table
 
@@ -172,15 +191,13 @@ create_bipoc_count_tbl<-function(vet_df, bipoc_multiple){
   return(df_update)
 }
 
-bipoc_count_tbl<-map2(list(lausd_data[["tv_2020_21"]],
-                           lausd_data[["tv_2021_22"]],
-                           lausd_data[["tv_2022_23"]]),
+bipoc_count_tbl<-map2(vet_list,
                       bipoc_multiplier_tbl,
                       function(lausd_df, multiple_bipoc){
                         create_bipoc_count_tbl(lausd_df,multiple_bipoc)
                       })
 
-names(bipoc_count_tbl)<-c("c_2020_21","c_2021_22","c_2022_23")  
+names(bipoc_count_tbl)<-names(vet_list)  
 
 #create percentage table of BIPOC teachers by experience
 create_perc_tbl_bipoc<-function(lausd_tbl, bipoc_tbl){
@@ -199,15 +216,13 @@ create_perc_tbl_bipoc<-function(lausd_tbl, bipoc_tbl){
   return(df_update)
 }
 
-perc_tbl_bipoc<-map2(list(lausd_data[["tv_2020_21"]],
-                          lausd_data[["tv_2021_22"]],
-                          lausd_data[["tv_2022_23"]]),
+perc_tbl_bipoc<-map2(vet_list,
                      bipoc_count_tbl,
                      function(lausd_df, bipoc_count){
                        create_perc_tbl_bipoc(lausd_df,
                                              bipoc_count)})
-                     
-names(perc_tbl_bipoc)<-c("2020_21","2021_22","2022_23")  
+
+names(perc_tbl_bipoc)<-gsub("tv_", "", names(vet_list))  
 
 ## -----------------------------------------------------------------------------
 ## Part 3 - Create Cleaned Teacher of Color Table
@@ -238,7 +253,7 @@ create_cleaned_toc_tbl<-function(df){
 
 bipoc_calculated_lausd_data<-map(toc_df_list,create_cleaned_toc_tbl)
                                 
-names(bipoc_calculated_lausd_data)<-c("2020-21", "2021-22", "2022-23")
+names(bipoc_calculated_lausd_data)<-names(perc_tbl_bipoc)
 
 ## -----------------------------------------------------------------------------
 ## Part 4 - Save Data

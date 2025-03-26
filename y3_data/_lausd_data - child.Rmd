@@ -36,5 +36,29 @@ lausd_data[["tv_2022_23"]] %>% kable()
 ```
 :::
 
+### 2023-2024
+::: panel-tabset
+#### Demographics
+```{r}
+lausd_data[["td_2023_24"]] %>% kable()
+```
+#### Veteran Status
+```{r}
+lausd_data[["tv_2023_24"]] %>% kable()
+```
+:::
+
+### 2024-2025
+::: panel-tabset
+#### Demographics
+```{r}
+lausd_data[["td_2024_25"]] %>% kable()
+```
+#### Veteran Status
+```{r}
+lausd_data[["tv_2024_25"]] %>% kable()
+```
+:::
+
 :::
 
