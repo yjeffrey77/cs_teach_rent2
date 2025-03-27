@@ -113,29 +113,31 @@ veteran_status_wide_list[["percent"]] %>% kable()
 
 ::: panel-tabset
 #### 2020-2021
+
 ```{r}
 perc_tbl_bipoc[["2020_21"]] %>% kable()
 ```
 
 In **2020-2021:**
 
-Among **Elementary Teachers:** 
+Among **Elementary Teachers:**
 
-- `r perc_tbl_bipoc[["2020_21"]][1,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2020_21"]][1,12]`% are **BIPOC** 
- 
-Among **Secondary Teachers:** 
- 
- - `r perc_tbl_bipoc[["2020_21"]][2,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2020_21"]][2,12]`% are **BIPOC** 
+-   `r perc_tbl_bipoc[["2020_21"]][1,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2020_21"]][1,12]`% are **BIPOC**
 
-Among **Special Education Teachers:** 
- 
- - `r perc_tbl_bipoc[["2020_21"]][3,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2020_21"]][3,12]`% are **BIPOC** 
+Among **Secondary Teachers:**
 
-Among **Teachers Overall:** 
- 
- - `r perc_tbl_bipoc[["2020_21"]][4,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2020_21"]][4,12]`% are **BIPOC** 
+-   `r perc_tbl_bipoc[["2020_21"]][2,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2020_21"]][2,12]`% are **BIPOC**
+
+Among **Special Education Teachers:**
+
+-   `r perc_tbl_bipoc[["2020_21"]][3,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2020_21"]][3,12]`% are **BIPOC**
+
+Among **Teachers Overall:**
+
+-   `r perc_tbl_bipoc[["2020_21"]][4,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2020_21"]][4,12]`% are **BIPOC**
 
 #### 2021-2022
+
 ```{r}
 perc_tbl_bipoc[["2021_22"]] %>% kable()
 
@@ -143,98 +145,97 @@ perc_tbl_bipoc[["2021_22"]] %>% kable()
 
 In **2021-2022:**
 
-Among **Elementary Teachers:** 
+Among **Elementary Teachers:**
 
-- `r perc_tbl_bipoc[["2021_22"]][1,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2021_22"]][1,12]`% are **BIPOC** 
- 
-Among **Secondary Teachers:** 
- 
- - `r perc_tbl_bipoc[["2021_22"]][2,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2021_22"]][2,12]`% are **BIPOC** 
+-   `r perc_tbl_bipoc[["2021_22"]][1,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2021_22"]][1,12]`% are **BIPOC**
 
-Among **Special Education Teachers:** 
- 
- - `r perc_tbl_bipoc[["2021_22"]][3,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2021_22"]][3,12]`% are **BIPOC** 
+Among **Secondary Teachers:**
 
-Among **Teachers Overall:** 
- 
- - `r perc_tbl_bipoc[["2021_22"]][4,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2021_22"]][4,12]`% are **BIPOC** 
+-   `r perc_tbl_bipoc[["2021_22"]][2,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2021_22"]][2,12]`% are **BIPOC**
+
+Among **Special Education Teachers:**
+
+-   `r perc_tbl_bipoc[["2021_22"]][3,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2021_22"]][3,12]`% are **BIPOC**
+
+Among **Teachers Overall:**
+
+-   `r perc_tbl_bipoc[["2021_22"]][4,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2021_22"]][4,12]`% are **BIPOC**
 
 #### 2022-2023
+
 ```{r}
 perc_tbl_bipoc[["2022_23"]] %>% kable()
 ```
 
 In **2022-2023:**
 
-Among **Elementary Teachers:** 
+Among **Elementary Teachers:**
 
-- `r perc_tbl_bipoc[["2022_23"]][1,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2022_23"]][1,12]`% are **BIPOC** 
- 
-Among **Secondary Teachers:** 
- 
- - `r perc_tbl_bipoc[["2022_23"]][2,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2022_23"]][2,12]`% are **BIPOC** 
+-   `r perc_tbl_bipoc[["2022_23"]][1,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2022_23"]][1,12]`% are **BIPOC**
 
-Among **Special Education Teachers:** 
- 
- - `r perc_tbl_bipoc[["2022_23"]][3,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2022_23"]][3,12]`% are **BIPOC** 
+Among **Secondary Teachers:**
 
-Among **Teachers Overall:** 
- 
- - `r perc_tbl_bipoc[["2022_23"]][4,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2022_23"]][4,12]`% are **BIPOC** 
+-   `r perc_tbl_bipoc[["2022_23"]][2,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2022_23"]][2,12]`% are **BIPOC**
 
+Among **Special Education Teachers:**
 
+-   `r perc_tbl_bipoc[["2022_23"]][3,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2022_23"]][3,12]`% are **BIPOC**
+
+Among **Teachers Overall:**
+
+-   `r perc_tbl_bipoc[["2022_23"]][4,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2022_23"]][4,12]`% are **BIPOC**
 
 #### 2023-2024
+
 ```{r}
 perc_tbl_bipoc[["2023_24"]] %>% kable()
 ```
 
 In **2023-2024:**
 
-Among **Elementary Teachers:** 
+Among **Elementary Teachers:**
 
-- `r perc_tbl_bipoc[["2023_24"]][1,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2023_24"]][1,12]`% are **BIPOC** 
- 
-Among **Secondary Teachers:** 
- 
- - `r perc_tbl_bipoc[["2023_24"]][2,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2023_24"]][2,12]`% are **BIPOC** 
+-   `r perc_tbl_bipoc[["2023_24"]][1,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2023_24"]][1,12]`% are **BIPOC**
 
-Among **Special Education Teachers:** 
- 
- - `r perc_tbl_bipoc[["2023_24"]][3,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2023_24"]][3,12]`% are **BIPOC** 
+Among **Secondary Teachers:**
 
-Among **Teachers Overall:** 
- 
- - `r perc_tbl_bipoc[["2023_24"]][4,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2023_24"]][4,12]`% are **BIPOC** 
+-   `r perc_tbl_bipoc[["2023_24"]][2,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2023_24"]][2,12]`% are **BIPOC**
 
+Among **Special Education Teachers:**
+
+-   `r perc_tbl_bipoc[["2023_24"]][3,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2023_24"]][3,12]`% are **BIPOC**
+
+Among **Teachers Overall:**
+
+-   `r perc_tbl_bipoc[["2023_24"]][4,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2023_24"]][4,12]`% are **BIPOC**
 
 #### 2024-2025
+
 ```{r}
 perc_tbl_bipoc[["2024_25"]] %>% kable()
 ```
 
 In **2024-2025:**
 
-Among **Elementary Teachers:** 
+Among **Elementary Teachers:**
 
-- `r perc_tbl_bipoc[["2024_25"]][1,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2024_25"]][1,12]`% are **BIPOC** 
- 
-Among **Secondary Teachers:** 
- 
- - `r perc_tbl_bipoc[["2024_25"]][2,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2024_25"]][2,12]`% are **BIPOC** 
+-   `r perc_tbl_bipoc[["2024_25"]][1,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2024_25"]][1,12]`% are **BIPOC**
 
-Among **Special Education Teachers:** 
- 
- - `r perc_tbl_bipoc[["2024_25"]][3,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2024_25"]][3,12]`% are **BIPOC** 
+Among **Secondary Teachers:**
 
-Among **Teachers Overall:** 
- 
- - `r perc_tbl_bipoc[["2024_25"]][4,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2024_25"]][4,12]`% are **BIPOC** 
+-   `r perc_tbl_bipoc[["2024_25"]][2,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2024_25"]][2,12]`% are **BIPOC**
 
+Among **Special Education Teachers:**
+
+-   `r perc_tbl_bipoc[["2024_25"]][3,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2024_25"]][3,12]`% are **BIPOC**
+
+Among **Teachers Overall:**
+
+-   `r perc_tbl_bipoc[["2024_25"]][4,11]`% are **BIPOC & have 10+ years of teaching experience**, `r perc_tbl_bipoc[["2024_25"]][4,12]`% are **BIPOC**
 :::
 
-
 ## Process
+
 <details>
 
 ### Formulas
@@ -243,18 +244,13 @@ Among **Teachers Overall:**
 
 We used the following formulas to calculate the BIPOC values:
 
-**Calculate the Number of BIPOC Veteran Teachers**
-$$ 
+**Calculate the Number of BIPOC Veteran Teachers** $$ 
 \text{(Total Number of Veteran Teachers)} \times \text{(Proportion BIPOC)}
-$$
-$$
+$$ $$
 = \text{Number of BIPOC Veteran Teachers} 
 $$
 
-
-
- 
-For example, below is a more precise formula to calculate the **number of BIPOC teachers with 10+ years of experience**. 
+For example, below is a more precise formula to calculate the **number of BIPOC teachers with 10+ years of experience**.
 
 $$ 
 \begin{aligned}
@@ -270,6 +266,7 @@ $$
 \frac{\text {Number of BIPOC Veteran Teachers}} {\text {Number of All Teachers}} = 
 \text{Percent of BIPOC Veteran Teachers}
 $$
+
 </details>
 
 ### Number of BIPOC Teachers by Veteran Status
@@ -278,26 +275,31 @@ To determine the number of BIPOC teachers by veteran status, we first determined
 
 ::: panel-tabset
 #### 2020-2021
+
 ```{r}
 bipoc_calculated_lausd_data[["2020_21"]] %>% kable()
 ```
 
 #### 2021-2022
+
 ```{r}
 bipoc_calculated_lausd_data[["2021_22"]] %>% kable()
 ```
 
 #### 2022-2023
+
 ```{r}
 bipoc_calculated_lausd_data[["2022_23"]] %>% kable()
 ```
 
 #### 2023-2024
+
 ```{r}
 bipoc_calculated_lausd_data[["2023_24"]] %>% kable()
 ```
 
 #### 2024-2025
+
 ```{r}
 bipoc_calculated_lausd_data[["2024_25"]] %>% kable()
 ```
@@ -307,26 +309,31 @@ Using the first formula, we then calculated the number of BIPOC teachers by vete
 
 ::: panel-tabset
 #### 2020-2021
+
 ```{r}
 bipoc_count_tbl[["tv_2020_21"]] %>% kable()
 ```
 
 #### 2021-2022
+
 ```{r}
 bipoc_count_tbl[["tv_2021_22"]] %>% kable()
 ```
 
 #### 2022-2023
+
 ```{r}
 bipoc_count_tbl[["tv_2022_23"]]%>% kable()
 ```
 
 #### 2023-2024
+
 ```{r}
 bipoc_count_tbl[["tv_2023_24"]]%>% kable()
 ```
 
 #### 2024-2025
+
 ```{r}
 bipoc_count_tbl[["tv_2024_25"]]%>% kable()
 ```
@@ -334,59 +341,92 @@ bipoc_count_tbl[["tv_2024_25"]]%>% kable()
 
 With this table, we then use the second formula to determine the percentage of BIPOC veteran teachers (see **Derived BIPOC Veteran Teachers** section).
 
-
 </details>
+
 </details>
 
 # Percentage Plots of BIPOC Veteran Teachers
 
-NOTE: Only includes In-Classroom Teachers who are teachers of color, and have over 10 years for experience.
-
+NOTE: Only includes In-Classroom Teachers who are teachers of color and have over 10 years for experience.
 
 ## Overall
 
 <details>
 
 ::: panel-tabset
-
 ### All
+
 ```{r}
-update_plots_demo[["original_sch"]][["all"]][["teachers"]][["all"]][["10+ years"]] 
+update_plots_demo_cs[["original_sch"]][["all"]][["teachers"]][["all"]][["10+ years"]] 
 ```
 
 ### Elementary
+
 ```{r}
-update_plots_demo[["original_sch"]][["elem"]][["teachers"]][["all"]][["10+ years"]] 
+update_plots_demo_cs[["original_sch"]][["elem"]][["teachers"]][["all"]][["10+ years"]] 
 ```
 
 ### Secondary
-```{r}
-update_plots_demo[["original_sch"]][["mid_hi"]][["teachers"]][["all"]][["10+ years"]]
-```
 
+```{r}
+update_plots_demo_cs[["original_sch"]][["mid_hi"]][["teachers"]][["all"]][["10+ years"]]
+```
 :::
 
 </details>
 
 ## Percentage Plots of BIPOC Veteran Teachers by Cohort
-<details>
-::: panel-tabset
 
+<details>
+
+::: panel-tabset
 ### Cohort 1
+
 ```{r}
 update_plot_tbls_demo_cohort[["cohort_sch"]][["cohort1"]][["teachers"]][["10+ years"]]
 ```
 
 ### Cohort 2
+
 ```{r}
 update_plot_tbls_demo_cohort[["cohort_sch"]][["cohort2"]][["teachers"]][["10+ years"]]
 ```
 
 ### Cohort 3
+
 ```{r}
 update_plot_tbls_demo_cohort[["cohort_sch"]][["cohort3"]][["teachers"]][["10+ years"]]
 ```
+:::
 
+</details>
+
+# Additional Plots
+
+**Percentage Plots of BIPOC Veteran Teachers**
+
+NOTE: Only includes In-Classroom Teachers who are teachers of color and have over 10 years for experience. Results also show percentages of comparison sites.
+
+<details>
+
+::: panel-tabset
+### All
+
+```{r}
+update_plots_demo[["original_sch"]][["all"]][["teachers"]][["all"]][["10+ years"]] 
+```
+
+### Elementary
+
+```{r}
+update_plots_demo[["original_sch"]][["elem"]][["teachers"]][["all"]][["10+ years"]] 
+```
+
+### Secondary
+
+```{r}
+update_plots_demo[["original_sch"]][["mid_hi"]][["teachers"]][["all"]][["10+ years"]]
+```
 :::
 
 </details>

@@ -95,8 +95,31 @@ create_bar_plot_cs<-function(df, graph_title){
   return(bar_graph)
 }
 
+create_bar_plot_cs_no_ts<-function(df, graph_title){
+  
+  bar_graph<-ggplot(df, aes(x = Year, y = Percent, fill = School)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    geom_text(aes(label = paste0(Percent, "%")), 
+              position = position_dodge(width = 0.9), 
+              vjust = -0.5) +  # Places the text above the bars
+    labs(title = graph_title, x = "Year",
+         y = "Teacher Percentage (%)") +
+    scale_fill_manual(values = c("CS" = "#2D68C4",
+                                 "LAUSD" = "#4CAF50")) +
+    theme_minimal() + 
+    theme(plot.title = element_text(hjust = 0.5))
+  
+  return(bar_graph)
+}
+
 create_bar_plot_cs_cohort<-function(df, graph_title){
 
+  df<-df %>% 
+    mutate(Percent = case_when(
+      Percent == 0 ~ NA,
+      TRUE ~ Percent
+    ))
+  
   bar_graph<-ggplot(df, aes(x = Year, y = Percent, fill = School)) +
     geom_bar(stat = "identity", position = "dodge") +
     geom_text(aes(label = paste0(Percent, "%")), 
@@ -379,6 +402,13 @@ update_long_plot_tbls_demo<-update_long_plot_tbls_demo %>%
     school == "TS Percent of TOC Teachers" ~ "TS"
   ))
 
+update_long_plot_tbls_demo_cs<-update_long_plot_tbls_demo %>% 
+  mutate(School = case_when(
+    school == "CS Percent of TOC Teachers" ~ "CS",
+    school == "TS Percent of TOC Teachers" ~ "TS"
+  )) %>% filter(School != "TS")
+  
+#CS, TS, LAUSD Version
 #make into list
 update_long_plot_tbls_demo<-make_list(update_long_plot_tbls_demo)
 
@@ -387,8 +417,17 @@ update_long_plot_tbls_demo<-map(update_long_plot_tbls_demo,
                            function(x) add_lausd_across_grades_demo(x,
                                                                     lausd_tbls))
 
+#CS and LAUSD Version Only
+update_long_plot_tbls_demo_cs<-make_list(update_long_plot_tbls_demo_cs)
+
+
+#update update_long_plot_tbls_demo
+update_long_plot_tbls_demo_cs<-map(update_long_plot_tbls_demo_cs,
+                                function(x) add_lausd_across_grades_demo(x,
+                                                                         lausd_tbls))
+
 ## -----------------------------------------------------------------------------
-## Part 2.3 - Transform update long_plot_tbls_demo_cohort
+## Part 2.4 - Transform update long_plot_tbls_demo_cohort
 ## -----------------------------------------------------------------------------
 
 #flatten dataset
@@ -459,6 +498,8 @@ update_long_plot_tbls_demo_cohort<-map(update_long_plot_tbls_demo_cohort,
 
 sch_type_string2<-c("all","elementary","secondary")
 
+#Version: Among all teachers (or among all TOC teachers), what is the percentage
+#breakup by veteran status. (DECIDE NOT TO USE IN GRAPHS)
 update_plots<-map(update_long_plot_tbls,
                 function(version){
                   map2(version, sch_type_string2,
@@ -478,6 +519,11 @@ update_plots<-map(update_long_plot_tbls,
   
 update_plots[["original"]][["mid_hi"]][["teachers"]][["color"]][["10+ years"]]
 
+#percentage of TOCs in a school. 
+#Two types - vet version: focused on the percentage of vet TOCs within a vet status 
+#school version: focused on the percentage of vet TOCs within a school
+# My plan is to use the "school version"
+
 update_plots_demo<-map(update_long_plot_tbls_demo,
                 function(version){
                   map2(version, sch_type_string2,
@@ -489,14 +535,37 @@ update_plots_demo<-map(update_long_plot_tbls_demo,
                                        map2(teach_type,names(teach_type),
                                             function(x,y) create_bar_plot_cs(x,
                                     str_c("Percentage of ",
-                                          str_to_title(sch_type_name)," ",
+                                          str_to_title(sch_type_name)," BIPOC ",
                                     str_to_title(person_type_name),": ",
-                                    str_to_title(sample_name),", ",
+                                    #str_to_title(sample_name),", ",
                                     str_to_title(y))))
                                      })})})})
 
 update_plots_demo[["original_sch"]][["all"]][["teachers"]][["all"]][["10+ years"]]
 
+#CS and LAUSD only version of update_plots_demo
+
+update_plots_demo_cs<-map(update_long_plot_tbls_demo_cs,
+                       function(version){
+                         map2(version, sch_type_string2,
+                              function(sch_type, sch_type_name){
+                                map2(sch_type,names(sch_type),
+                                     function(sample, person_type_name){
+                                       map2(sample, names(sample),
+                                            function(teach_type, sample_name){
+                                              map2(teach_type,names(teach_type),
+                                                   function(x,y) create_bar_plot_cs_no_ts(x,
+                                                                                    str_c("Percentage of ",
+                                                                                          str_to_title(sch_type_name)," BIPOC ",
+                                                                                          str_to_title(person_type_name),": ",
+                                                                                          #str_to_title(sample_name),", ",
+                                                                                          str_to_title(y))))
+                                            })})})})
+
+update_plots_demo_cs[["original_sch"]][["elem"]][["teachers"]][["all"]][["10+ years"]]
+
+
+#percentage of TOCs by cohort 
 update_plot_tbls_demo_cohort<-map(update_long_plot_tbls_demo_cohort,
                            function(version){
                              map(version,
@@ -512,12 +581,14 @@ update_plot_tbls_demo_cohort<-map(update_long_plot_tbls_demo_cohort,
                                                          str_to_title(name_vet_status))
                                                    )})})})})
 
-update_plot_tbls_demo_cohort[["original_sch"]][["cohort1"]][["teachers"]][["10+ years"]]
+update_plot_tbls_demo_cohort[["cohort_sch"]][["cohort2"]][["teachers"]][["10+ years"]]
+
 ## -----------------------------------------------------------------------------
 ## Part 4 - Save Data
 ## -----------------------------------------------------------------------------
 
 save(update_plots,update_plots_demo, update_plot_tbls_demo_cohort,
+     update_long_plot_tbls_demo_cs,update_plots_demo_cs,
      file = file.path(code_file_dir,"lasud_cs_veteran_plots.RData"))
 
 ## -----------------------------------------------------------------------------
