@@ -38,6 +38,7 @@ data_file_dir<-file.path("C:/Users/yjeff/Box/LAUSD TR Data Year 3")
 
 data_file_dir_yr2<-file.path("C:/Users/yjeff/Box/LAUSD TR Data")
 
+#Note: LAUSD represents District
 ## ---------------------------
 ## helper functions
 ## ---------------------------
@@ -54,7 +55,7 @@ create_bar_plot1 <- function(df, graph_title) {
          y = "Teacher Percentage (%)") +
     scale_fill_manual(values = c("CS" = "#2D68C4", 
                                  "TS" = "#F2A900",
-                                 "LAUSD" = "#4CAF50")) +  # Added color for LAUSD
+                                 "District" = "#4CAF50")) +  # Added color for LAUSD
     theme_minimal() + 
     theme(plot.title = element_text(hjust = 0.5))
   
@@ -88,7 +89,7 @@ create_bar_plot_cs<-function(df, graph_title){
     labs(title = graph_title, x = "Year",
          y = "Teacher Percentage (%)") +
     scale_fill_manual(values = c("CS" = "#2D68C4", "TS" = "#F2A900",
-                                 "LAUSD" = "#4CAF50")) +
+                                 "District" = "#4CAF50")) +
     theme_minimal() + 
     theme(plot.title = element_text(hjust = 0.5))
 
@@ -105,7 +106,7 @@ create_bar_plot_cs_no_ts<-function(df, graph_title){
     labs(title = graph_title, x = "Year",
          y = "Teacher Percentage (%)") +
     scale_fill_manual(values = c("CS" = "#2D68C4",
-                                 "LAUSD" = "#4CAF50")) +
+                                 "District" = "#4CAF50")) +
     theme_minimal() + 
     theme(plot.title = element_text(hjust = 0.5))
   
@@ -127,7 +128,7 @@ create_bar_plot_cs_cohort<-function(df, graph_title){
               vjust = -0.5) +  # Places the text above the bars
     labs(title = graph_title, x = "Year",
          y = "Teacher Percentage (%)") +
-    scale_fill_manual(values = c("CS" = "#2D68C4", "LAUSD" = "#4CAF50")) +
+    scale_fill_manual(values = c("CS" = "#2D68C4", "District" = "#4CAF50")) +
     theme_minimal() + 
     theme(plot.title = element_text(hjust = 0.5))
   
@@ -166,7 +167,7 @@ extract_lausd_vet_data_overall<-function(df, fit_criteria){
   
   #make variables to follow long tables 
   df_update<-df_update %>% mutate(
-    school = "LAUSD",
+    school = "District", #District is LAUSD
     Year = case_when(
       year == "2020_21" ~ "2021",
       year == "2021_22" ~ "2022", 
@@ -192,7 +193,7 @@ extract_lausd_vet_data<-function(df, fit_criteria){
   
   #make variables to follow long tables 
   df_update<-df_update %>% mutate(
-    school = "LAUSD",
+    school = "District",
     Year = case_when(
       year == "2020_21" ~ "2021",
       year == "2021_22" ~ "2022", 
