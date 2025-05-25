@@ -1,7 +1,7 @@
 ################################################################################
 ##
 ## [ PROJ ] < Community School Teacher Retention Study >
-## [ FILE ] < 03_run_data.R >
+## [ FILE ] < 03.1_run_data.R >
 ## [ AUTH ] < Jeffrey Yo >
 ## [ INIT ] < 8/26/24 >
 ##
@@ -185,6 +185,7 @@ for(teach_year in teach_year_string){
 
 #select and merge variables
 
+#function merges all the specific years together by veteran status
 create_teach_exp_rent_tbl<-function(df, teach_year, sch_name){
   
   test<-df[[teach_year]][["18_19"]][[sch_name]] %>%

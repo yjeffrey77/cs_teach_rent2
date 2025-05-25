@@ -1,5 +1,5 @@
 ---
-title: "Descriptive Analysis"
+title: "Descriptive Analysis - Shifting"
 execute:
   echo: false
   message: false
@@ -14,7 +14,7 @@ editor: visual
 
 Purposes of this document:
 
-1.  Provides descriptive analyses of retention rates for Community Schools and Traditional Public Schools.
+1.  Provides descriptive analyses of shifting rates for Community Schools and Traditional Public Schools.
 
 ```{r}
 #| echo: false
@@ -62,12 +62,12 @@ update_tbl_names<-function(df){
 ## load & inspect data
 ## ---------------------------
 
-load(file.path(code_file_dir, "rent_tbls.RData"))
-load(file.path(code_file_dir, "rent_plots.RData"))
+load(file.path(code_file_dir, "shift_tbls.RData"))
+load(file.path(code_file_dir, "shift_plots.RData"))
 
 #toc tables
-load(file.path(code_file_dir, "toc_rent_tbls.RData"))
-load(file.path(code_file_dir, "rent_plots_toc.RData"))
+load(file.path(code_file_dir, "toc_shift_tbls.RData"))
+load(file.path(code_file_dir, "shift_plots_toc.RData"))
 
 load(file.path(code_file_dir, "hr_by_sch.RData"))
 
@@ -80,7 +80,7 @@ source(file.path(code_file_dir, "00_school_lists.R"))
 
 # Descriptive Analyses
 
-## Retention Rate: All Schools
+## Shifting Rates: All Schools
 
 ### All Teachers
 
@@ -92,9 +92,9 @@ combined_tbls[["overall"]] %>% kable()
 bar_plots_combined[["overall"]]
 ```
 
-**Number of CS:** `r nrow(cs_rent_tbls) -1`
+**Number of CS:** `r nrow(cs_shift_tbls) -1`
 
-**Number of TS:** `r nrow(ts_rent_tbls) -1`
+**Number of TS:** `r nrow(ts_shift_tbls) -1`
 
 </details>
 
@@ -109,15 +109,15 @@ toc_combined_tbls[["overall"]][["overall"]]%>% kable()
 toc_bar_plots_combined[["overall"]][["overall"]]
 ```
 
-**Number of CS:** `r nrow(toc_rent_overall[["cs"]][["overall"]]) -1`
+**Number of CS:** `r nrow(toc_shift_overall[["cs"]][["overall"]]) -1`
 
-**Number of TS:** `r nrow(toc_rent_overall[["ts"]][["overall"]]) -1`
+**Number of TS:** `r nrow(toc_shift_overall[["ts"]][["overall"]]) -1`
 
-**Findings**: Overall retention rates between CS and TS are very similar from each other. There is a dip in retention during the 2022 year, which also corresponds following the physical school closures in LAUSD.
+**Findings**: Overall shifting rates between CS and TS are very similar from each other.
 
 </details>
 
-## Retention Rate: Elementary Schools
+## Shifting Rates: Elementary Schools
 
 ### All Teachers
 
@@ -129,9 +129,9 @@ combined_tbls[["elem"]] %>% kable()
 bar_plots_combined[["elem"]]
 ```
 
-**Number of CS:** `r nrow(cs_elem_rent_tbls) -1`
+**Number of CS:** `r nrow(cs_elem_shift_tbls) -1`
 
-**Number of TS:** `r nrow(ts_elem_rent_tbls) -1`
+**Number of TS:** `r nrow(ts_elem_shift_tbls) -1`
 
 </details>
 
@@ -146,15 +146,15 @@ toc_combined_tbls[["elem"]][["overall"]]%>% kable()
 toc_bar_plots_combined[["elem"]][["overall"]]
 ```
 
-**Number of CS:** `r nrow(toc_rent_overall_elem[["cs"]][["overall"]]) -1`
+**Number of CS:** `r nrow(toc_shift_overall_elem[["cs"]][["overall"]]) -1`
 
-**Number of TS:** `r nrow(toc_rent_overall_elem[["ts"]][["overall"]]) -1`
+**Number of TS:** `r nrow(toc_shift_overall_elem[["ts"]][["overall"]]) -1`
 
-**Findings**: Overall retention rates between CS and TS elementary schools are very similar from each other.
+**Findings**: Overall shifting rates between CS and TS elementary schools are very similar from each other.
 
 </details>
 
-## Retention: Middle/High Schools
+## Shifting Rates: Middle/High Schools
 
 ### All Teachers
 
@@ -166,11 +166,11 @@ combined_tbls[["ms_hs"]] %>% kable()
 bar_plots_combined[["ms_hs"]]
 ```
 
-**Number of CS:** `r nrow(cs_ms_hs_rent_tbls) -1`
+**Number of CS:** `r nrow(cs_ms_hs_shift_tbls) -1`
 
-**Number of TS:** `r nrow(ts_ms_hs_rent_tbls) -1`
+**Number of TS:** `r nrow(ts_ms_hs_shift_tbls) -1`
 
-**Findings**: Overall retention rates between CS and TS Middle/High schools are very similar from each other.
+**Findings**: Overall shifting rates between CS and TS Middle/High schools are very similar from each other.
 
 </details>
 
@@ -185,22 +185,22 @@ toc_combined_tbls[["ms_hs"]][["overall"]]%>% kable()
 toc_bar_plots_combined[["ms_hs"]][["overall"]]
 ```
 
-**Number of CS:** `r nrow(toc_rent_overall_ms_hs[["cs"]][["overall"]]) -1`
+**Number of CS:** `r nrow(toc_shift_overall_ms_hs[["cs"]][["overall"]]) -1`
 
-**Number of TS:** `r nrow(toc_rent_overall_ms_hs[["cs"]][["overall"]]) -1`
+**Number of TS:** `r nrow(toc_shift_overall_ms_hs[["cs"]][["overall"]]) -1`
 
-**Findings**: Overall retention rates between CS and TS Middle/High schools are very similar from each other.
+**Findings**: Overall shifting rates between CS and TS Middle/High schools are very similar from each other.
 
 </details>
 
-## Retention: By Cohort
+## Shifting Rates: By Cohort
 
 ### Cohort 1
 
 <details>
 
 ```{r}
-rent_cohort_1[["cs"]] %>% kable()
+shift_cohort_1[["cs"]] %>% kable()
 ```
 
 </details>
@@ -210,7 +210,7 @@ rent_cohort_1[["cs"]] %>% kable()
 <details>
 
 ```{r}
-rent_cohort_2_3[["cs"]] %>% kable()
+shift_cohort_2_3[["cs"]] %>% kable()
 ```
 
 </details>
@@ -220,14 +220,14 @@ rent_cohort_2_3[["cs"]] %>% kable()
 <details>
 
 ```{r}
-rent_cohort_2_only[["cs"]] %>% kable()
+shift_cohort_2_only[["cs"]] %>% kable()
 ```
 
 </details>
 
-## Retention by Teacher Veteran Status (Teachers of Color)
+## Shifting Rates by Teacher Veteran Status (Teachers of Color)
 
-**Main Finding**: Community Schools seem to have a higher retention rate among young teachers (0-5 years) compared to Traditional Public Schools. Among veteran teachers, retention rate between CS and TS are comparable.
+**Main Finding**: Community Schools seem to have a higher shifting rate among young teachers (0-5 years) compared to Traditional Public Schools. Among veteran teachers, shifting rate between CS and TS are comparable.
 
 ### Count of Teachers
 
@@ -410,11 +410,11 @@ toc_bar_plots_combined[["overall"]][["15+ years"]]
 
 </details>
 
-## Retention: By Neighborhood
+## Shifting Rates: By Neighborhood
 
-**Main Finding:** Teacher Retention among Community Schools varies by neighborhood.
+**Main Finding:** Teacher shifting among Community Schools varies by neighborhood.
 
-In some neighborhoods, teacher retention is higher in Community Schools compared to the teacher retention of traditional public schools in the area.
+In some neighborhoods, teacher shifting is higher in Community Schools compared to the teacher shifting of traditional public schools in the area.
 
 For example, see **Boyle Heights:**
 
@@ -424,23 +424,23 @@ For example, see **Boyle Heights:**
 bar_plots_neigh[["boyle_heights"]]
 ```
 
-**Number of CS:** `r nrow(rent_by_neighborhood[["boyle_heights"]][["cs"]]) -1`
+**Number of CS:** `r nrow(shift_by_neighborhood[["boyle_heights"]][["cs"]]) -1`
 
-**Number of TS:** `r nrow(rent_by_neighborhood[["boyle_heights"]][["ts"]]) -1`
+**Number of TS:** `r nrow(shift_by_neighborhood[["boyle_heights"]][["ts"]]) -1`
 
 **Overall Combined Table**
 
 ```{r, echo=FALSE}
-rent_by_neighborhood[["boyle_heights"]][["combined_overall"]]<-rent_by_neighborhood[["boyle_heights"]][["combined_overall"]] %>% select(-c(rent))
+shift_by_neighborhood[["boyle_heights"]][["combined_overall"]]<-shift_by_neighborhood[["boyle_heights"]][["combined_overall"]] %>% select(-c(shift))
 
-rent_by_neighborhood[["boyle_heights"]][["combined_overall"]]<-update_tbl_names(rent_by_neighborhood[["boyle_heights"]][["combined_overall"]])
+shift_by_neighborhood[["boyle_heights"]][["combined_overall"]]<-update_tbl_names(shift_by_neighborhood[["boyle_heights"]][["combined_overall"]])
 
-rent_by_neighborhood[["boyle_heights"]][["combined_overall"]] %>% kable()
+shift_by_neighborhood[["boyle_heights"]][["combined_overall"]] %>% kable()
 ```
 
 </details>
 
-In other neighborhoods, teacher retention between Community Schools and Traditional Public Schools are similar to each other.
+In other neighborhoods, teacher shifting between Community Schools and Traditional Public Schools are similar to each other.
 
 An example of this is the **Monroe** neighborhood:
 
@@ -450,23 +450,23 @@ An example of this is the **Monroe** neighborhood:
 bar_plots_neigh[["monroe"]]
 ```
 
-**Number of CS:** `r nrow(rent_by_neighborhood[["monroe"]][["cs"]]) -1`
+**Number of CS:** `r nrow(shift_by_neighborhood[["monroe"]][["cs"]]) -1`
 
-**Number of TS:** `r nrow(rent_by_neighborhood[["monroe"]][["ts"]]) -1`
+**Number of TS:** `r nrow(shift_by_neighborhood[["monroe"]][["ts"]]) -1`
 
 **Overall Combined Table**
 
 ```{r, echo=FALSE}
-rent_by_neighborhood[["monroe"]][["combined_overall"]]<-rent_by_neighborhood[["monroe"]][["combined_overall"]] %>% select(-c(rent))
+shift_by_neighborhood[["monroe"]][["combined_overall"]]<-shift_by_neighborhood[["monroe"]][["combined_overall"]] %>% select(-c(shift))
 
-rent_by_neighborhood[["monroe"]][["combined_overall"]]<-update_tbl_names(rent_by_neighborhood[["monroe"]][["combined_overall"]])
+shift_by_neighborhood[["monroe"]][["combined_overall"]]<-update_tbl_names(shift_by_neighborhood[["monroe"]][["combined_overall"]])
 
-rent_by_neighborhood[["monroe"]][["combined_overall"]] %>% kable()
+shift_by_neighborhood[["monroe"]][["combined_overall"]] %>% kable()
 ```
 
 </details>
 
-Lastly, in other neighborhoods, teacher retention in Community Schools is lower than Traditional Public Schools.
+Lastly, in other neighborhoods, teacher shifting in Community Schools is lower than Traditional Public Schools.
 
 An example of this is the **MacArthur Park** neighborhood:
 
@@ -476,36 +476,36 @@ An example of this is the **MacArthur Park** neighborhood:
 bar_plots_neigh[["macarthur_park"]]
 ```
 
-**Number of CS:** `r nrow(rent_by_neighborhood[["macarthur_park"]][["cs"]]) -1`
+**Number of CS:** `r nrow(shift_by_neighborhood[["macarthur_park"]][["cs"]]) -1`
 
-**Number of TS:** `r nrow(rent_by_neighborhood[["macarthur_park"]][["ts"]]) -1`
+**Number of TS:** `r nrow(shift_by_neighborhood[["macarthur_park"]][["ts"]]) -1`
 
 **Overall Combined Table**
 
 ```{r, echo=FALSE}
-rent_by_neighborhood[["macarthur_park"]][["combined_overall"]]<-rent_by_neighborhood[["macarthur_park"]][["combined_overall"]] %>% select(-c(rent))
+shift_by_neighborhood[["macarthur_park"]][["combined_overall"]]<-shift_by_neighborhood[["macarthur_park"]][["combined_overall"]] %>% select(-c(shift))
 
-rent_by_neighborhood[["macarthur_park"]][["combined_overall"]]<-update_tbl_names(rent_by_neighborhood[["macarthur_park"]][["combined_overall"]])
+shift_by_neighborhood[["macarthur_park"]][["combined_overall"]]<-update_tbl_names(shift_by_neighborhood[["macarthur_park"]][["combined_overall"]])
 
-rent_by_neighborhood[["macarthur_park"]][["combined_overall"]] %>% kable()
+shift_by_neighborhood[["macarthur_park"]][["combined_overall"]] %>% kable()
 ```
 
 </details>
 
 # Appendix
 
-## Community School Retention Rate
+## Community School Shifting Rates
 
-**Main Finding:** There is a large variance among retention rates among the Community Schools. For instance, retention rate can range from the low 60s to the high 90s. This is true among Elementary, Middle, and High Schools.
+**Main Finding:** There is a large variance among shifting rates among the Community Schools. For instance, shifting rate can range from the low 60s to the high 90s. This is true among Elementary, Middle, and High Schools.
 
 ### CS: Overall
 
 <details>
 
 ```{r}
-cs_rent_tbls<-cs_rent_tbls2 %>% select(-c(rent))
-cs_rent_tbls<-update_tbl_names(cs_rent_tbls)
-cs_rent_tbls %>% kable()
+cs_shift_tbls<-cs_shift_tbls2 %>% select(-c(shift))
+cs_shift_tbls<-update_tbl_names(cs_shift_tbls)
+cs_shift_tbls %>% kable()
 ```
 
 **Note:** The numbers in the parentheses represents the number of teachers in that schools for the previous school year. For instance, (39) in the 2019 column says that there are 39 teachers in the 2018-2019 school year.
@@ -517,9 +517,9 @@ cs_rent_tbls %>% kable()
 <details>
 
 ```{r}
-cs_elem_rent_tbls<-cs_elem_rent_tbls %>% select(-c(rent))
-cs_elem_rent_tbls<-update_tbl_names(cs_elem_rent_tbls)
-cs_elem_rent_tbls %>% kable()
+cs_elem_shift_tbls<-cs_elem_shift_tbls %>% select(-c(shift))
+cs_elem_shift_tbls<-update_tbl_names(cs_elem_shift_tbls)
+cs_elem_shift_tbls %>% kable()
 ```
 
 </details>
@@ -529,25 +529,25 @@ cs_elem_rent_tbls %>% kable()
 <details>
 
 ```{r}
-cs_ms_hs_rent_tbls<-cs_ms_hs_rent_tbls %>% select(-c(rent))
-cs_ms_hs_rent_tbls<-update_tbl_names(cs_ms_hs_rent_tbls)
-cs_ms_hs_rent_tbls %>% kable()
+cs_ms_hs_shift_tbls<-cs_ms_hs_shift_tbls %>% select(-c(shift))
+cs_ms_hs_shift_tbls<-update_tbl_names(cs_ms_hs_shift_tbls)
+cs_ms_hs_shift_tbls %>% kable()
 ```
 
 </details>
 
-## Traditional Public Schools Retention Rate
+## Traditional Public Schools Shifting Rates
 
-**Main Finding:** There is a large variance among retention rates among Traditional Schools. This is true among Elementary, Middle, and High Schools.
+**Main Finding:** There is a large variance among shifting rates among Traditional Schools. This is true among Elementary, Middle, and High Schools.
 
 ### TS: Overall
 
 <details>
 
 ```{r}
-ts_rent_tbls<-ts_rent_tbls %>% select(-c(rent))
-ts_rent_tbls<-update_tbl_names(ts_rent_tbls)
-ts_rent_tbls %>% kable()
+ts_shift_tbls<-ts_shift_tbls %>% select(-c(shift))
+ts_shift_tbls<-update_tbl_names(ts_shift_tbls)
+ts_shift_tbls %>% kable()
 ```
 
 </details>
@@ -557,9 +557,9 @@ ts_rent_tbls %>% kable()
 <details>
 
 ```{r}
-ts_elem_rent_tbls<-ts_elem_rent_tbls %>% select(-c(rent))
-ts_elem_rent_tbls<-update_tbl_names(ts_elem_rent_tbls)
-ts_elem_rent_tbls %>% kable()
+ts_elem_shift_tbls<-ts_elem_shift_tbls %>% select(-c(shift))
+ts_elem_shift_tbls<-update_tbl_names(ts_elem_shift_tbls)
+ts_elem_shift_tbls %>% kable()
 ```
 
 </details>
@@ -569,9 +569,9 @@ ts_elem_rent_tbls %>% kable()
 <details>
 
 ```{r}
-ts_ms_hs_rent_tbls<-ts_ms_hs_rent_tbls %>% select(-c(rent))
-ts_ms_hs_rent_tbls<-update_tbl_names(ts_ms_hs_rent_tbls)
-ts_ms_hs_rent_tbls %>% kable()
+ts_ms_hs_shift_tbls<-ts_ms_hs_shift_tbls %>% select(-c(shift))
+ts_ms_hs_shift_tbls<-update_tbl_names(ts_ms_hs_shift_tbls)
+ts_ms_hs_shift_tbls %>% kable()
 ```
 
 </details>
@@ -583,10 +583,10 @@ ts_ms_hs_rent_tbls %>% kable()
 gxs<-lapply(1:length(update_neigh_string), function(x){
   
   neighborhood_title <- update_neigh_string[[x]]
-  neighborhood<-names(rent_by_neighborhood)[[x]]
+  neighborhood<-names(shift_by_neighborhood)[[x]]
 
   knit_child(
-    '_03_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    '_03.1_report_full - child.Rmd', envir = environment(), quiet = TRUE
     
   )
   

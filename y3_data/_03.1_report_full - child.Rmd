@@ -1,0 +1,62 @@
+
+### `r neighborhood_title` 
+
+<details>
+#### Overall
+
+<details>
+```{r, echo=FALSE}
+shift_by_neighborhood[[neighborhood]][["overall"]]<-shift_by_neighborhood[[neighborhood]][["overall"]] %>% select(-c(shift))
+
+shift_by_neighborhood[[neighborhood]][["overall"]]<-update_tbl_names(shift_by_neighborhood[[neighborhood]][["overall"]])
+
+shift_by_neighborhood[[neighborhood]][["overall"]] %>% kable()
+```
+</details>
+
+#### CS
+<details>
+```{r, echo=FALSE}
+shift_by_neighborhood[[neighborhood]][["cs"]]<-shift_by_neighborhood[[neighborhood]][["cs"]] %>% select(-c(shift))
+
+shift_by_neighborhood[[neighborhood]][["cs"]]<-update_tbl_names(shift_by_neighborhood[[neighborhood]][["cs"]])
+
+shift_by_neighborhood[[neighborhood]][["cs"]] %>% kable()
+```
+</details>
+
+#### TS
+<details>
+```{r, echo=FALSE}
+shift_by_neighborhood[[neighborhood]][["ts"]]<-shift_by_neighborhood[[neighborhood]][["ts"]] %>% select(-c(shift))
+
+shift_by_neighborhood[[neighborhood]][["ts"]]<-update_tbl_names(shift_by_neighborhood[[neighborhood]][["ts"]])
+
+shift_by_neighborhood[[neighborhood]][["ts"]] %>% kable()
+```
+</details>
+
+#### Graph
+<details>
+```{r, echo=FALSE}
+bar_plots_neigh[[neighborhood]]
+```
+
+**Number of CS:** `r nrow(shift_by_neighborhood[[neighborhood]][["cs"]]) -1` 
+
+**Number of TS:** `r nrow(shift_by_neighborhood[[neighborhood]][["ts"]]) -1` 
+
+</details>
+
+**Overall Combined Table** 
+<details>
+```{r, echo=FALSE}
+shift_by_neighborhood[[neighborhood]][["combined_overall"]]<-shift_by_neighborhood[[neighborhood]][["combined_overall"]] #%>% select(-c(shift))
+
+shift_by_neighborhood[[neighborhood]][["combined_overall"]]<-update_tbl_names(shift_by_neighborhood[[neighborhood]][["combined_overall"]])
+
+shift_by_neighborhood[[neighborhood]][["combined_overall"]] %>% kable()
+```
+</details>
+
+</details>

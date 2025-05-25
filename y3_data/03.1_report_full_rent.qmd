@@ -1,0 +1,597 @@
+---
+title: "Descriptive Analysis - Retention"
+execute:
+  echo: false
+  message: false
+  warning: false
+format: 
+  html:
+    embed-resources: false
+editor: visual
+---
+
+## Purpose
+
+Purposes of this document:
+
+1.  Provides descriptive analyses of retention rates for Community Schools and Traditional Public Schools.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+## Housekeeping
+
+## ---------------------------
+## libraries
+## ---------------------------
+library(tidyverse)
+library(readxl)
+library(openxlsx)
+library(janitor)
+library(kableExtra)
+library(pwr)
+library(kableExtra)
+library(knitr)
+
+## ---------------------------
+## directory paths
+## ---------------------------
+
+#see current directory
+#getwd()
+
+#set current directory
+code_file_dir<-file.path("C:/Users/yjeff/Desktop/Community Schools/Teacher Retention Data",
+                "Analyses", "cs_teach_rent2", "y3_data")
+
+data_file_dir<-file.path("C:/Users/yjeff/Box/LAUSD TR Data Year 3")
+
+## ---------------------------
+## helper functions
+## ---------------------------
+
+update_tbl_names<-function(df){
+  df_update<-df
+  colnames(df_update)<-c("School", "2019", "2020", "2021", "2022", "2023")
+  return(df_update)
+}
+
+## ---------------------------
+## load & inspect data
+## ---------------------------
+
+load(file.path(code_file_dir, "rent_tbls.RData"))
+load(file.path(code_file_dir, "rent_plots.RData"))
+
+#toc tables
+load(file.path(code_file_dir, "toc_rent_tbls.RData"))
+load(file.path(code_file_dir, "rent_plots_toc.RData"))
+
+load(file.path(code_file_dir, "hr_by_sch.RData"))
+
+
+## Add Lists
+source(file.path(code_file_dir, "00_school_lists.R"))
+
+
+```
+
+# Descriptive Analyses
+
+## Retention Rate: All Schools
+
+### All Teachers
+
+<details>
+
+```{r}
+combined_tbls[["overall"]]<-update_tbl_names(combined_tbls[["overall"]])
+combined_tbls[["overall"]] %>% kable()
+bar_plots_combined[["overall"]]
+```
+
+**Number of CS:** `r nrow(cs_rent_tbls) -1`
+
+**Number of TS:** `r nrow(ts_rent_tbls) -1`
+
+</details>
+
+### Teachers of Color
+
+<details>
+
+```{r}
+toc_combined_tbls[["overall"]][["overall"]]<-
+  update_tbl_names(toc_combined_tbls[["overall"]][["overall"]])
+toc_combined_tbls[["overall"]][["overall"]]%>% kable()
+toc_bar_plots_combined[["overall"]][["overall"]]
+```
+
+**Number of CS:** `r nrow(toc_rent_overall[["cs"]][["overall"]]) -1`
+
+**Number of TS:** `r nrow(toc_rent_overall[["ts"]][["overall"]]) -1`
+
+**Findings**: Overall retention rates between CS and TS are very similar from each other. There is a dip in retention during the 2022 year, which also corresponds following the physical school closures in LAUSD.
+
+</details>
+
+## Retention Rate: Elementary Schools
+
+### All Teachers
+
+<details>
+
+```{r}
+combined_tbls[["elem"]]<-update_tbl_names(combined_tbls[["elem"]])
+combined_tbls[["elem"]] %>% kable()
+bar_plots_combined[["elem"]]
+```
+
+**Number of CS:** `r nrow(cs_elem_rent_tbls) -1`
+
+**Number of TS:** `r nrow(ts_elem_rent_tbls) -1`
+
+</details>
+
+### Teachers of Color
+
+<details>
+
+```{r}
+toc_combined_tbls[["elem"]][["overall"]]<-
+  update_tbl_names(toc_combined_tbls[["elem"]][["overall"]])
+toc_combined_tbls[["elem"]][["overall"]]%>% kable()
+toc_bar_plots_combined[["elem"]][["overall"]]
+```
+
+**Number of CS:** `r nrow(toc_rent_overall_elem[["cs"]][["overall"]]) -1`
+
+**Number of TS:** `r nrow(toc_rent_overall_elem[["ts"]][["overall"]]) -1`
+
+**Findings**: Overall retention rates between CS and TS elementary schools are very similar from each other.
+
+</details>
+
+## Retention: Middle/High Schools
+
+### All Teachers
+
+<details>
+
+```{r}
+combined_tbls[["ms_hs"]]<-update_tbl_names(combined_tbls[["ms_hs"]])
+combined_tbls[["ms_hs"]] %>% kable()
+bar_plots_combined[["ms_hs"]]
+```
+
+**Number of CS:** `r nrow(cs_ms_hs_rent_tbls) -1`
+
+**Number of TS:** `r nrow(ts_ms_hs_rent_tbls) -1`
+
+**Findings**: Overall retention rates between CS and TS Middle/High schools are very similar from each other.
+
+</details>
+
+### Teachers of Color
+
+<details>
+
+```{r}
+toc_combined_tbls[["ms_hs"]][["overall"]]<-
+  update_tbl_names(toc_combined_tbls[["ms_hs"]][["overall"]])
+toc_combined_tbls[["ms_hs"]][["overall"]]%>% kable()
+toc_bar_plots_combined[["ms_hs"]][["overall"]]
+```
+
+**Number of CS:** `r nrow(toc_rent_overall_ms_hs[["cs"]][["overall"]]) -1`
+
+**Number of TS:** `r nrow(toc_rent_overall_ms_hs[["cs"]][["overall"]]) -1`
+
+**Findings**: Overall retention rates between CS and TS Middle/High schools are very similar from each other.
+
+</details>
+
+## Retention: By Cohort
+
+### Cohort 1
+
+<details>
+
+```{r}
+rent_cohort_1[["cs"]] %>% kable()
+```
+
+</details>
+
+### Cohort 2 and 3
+
+<details>
+
+```{r}
+rent_cohort_2_3[["cs"]] %>% kable()
+```
+
+</details>
+
+### Cohort 2 Only
+
+<details>
+
+```{r}
+rent_cohort_2_only[["cs"]] %>% kable()
+```
+
+</details>
+
+## Retention by Teacher Veteran Status (Teachers of Color)
+
+**Main Finding**: Community Schools seem to have a higher retention rate among young teachers (0-5 years) compared to Traditional Public Schools. Among veteran teachers, retention rate between CS and TS are comparable.
+
+### Count of Teachers
+
+<details>
+
+**Main Finding**: Looking at the teacher count by veteran status. Veteran teachers (over 15 years teaching) is the largest group followed by the most junior cohort (5 or less years of teaching). The 6-10 and 11-15 year categories have the least number of teachers. This could suggest that many young teachers leave within the first 5 years.
+
+```{r}
+hr_color_list[["overall"]]<-hr_color_list[["overall"]] %>% mutate(
+  sch_type_18_19 = case_when(
+    `school_name_clean_year_2018-19` %in% cs_string ~ "cs",
+    `school_name_clean_year_2018-19` %in% ts_sch_string ~ "ts",
+    TRUE ~ NA),
+  sch_type_19_20 = case_when(
+    `school_name_clean_year_2019-20` %in% cs_string ~ "cs",
+    `school_name_clean_year_2019-20` %in% ts_sch_string ~ "ts",
+    TRUE ~ NA),
+  sch_type_20_21 = case_when(
+    (`school_name_clean_year_2020-21` %in% cs_string) ~ "cs",
+    (`school_name_clean_year_2020-21` %in% ts_sch_string) ~ "ts",
+    TRUE ~ NA),
+  sch_type_21_22 = case_when(
+    (`school_name_clean_year_2021-22` %in% cs_string) ~ "cs",
+    (`school_name_clean_year_2021-22` %in% ts_sch_string) ~ "ts",
+    TRUE ~ NA),
+  sch_type_22_23 = case_when(
+    (`school_name_clean_year_2022-23` %in% cs_string) ~ "cs",
+    (`school_name_clean_year_2022-23` %in% ts_sch_string) ~ "ts",
+    TRUE ~ NA),
+  sch_type_23_24 = case_when(
+    (`school_name_clean_year_2023-24` %in% cs_string) ~ "cs",
+    (`school_name_clean_year_2023-24` %in% ts_sch_string) ~ "ts",
+    TRUE ~ NA),
+)
+```
+
+**Teacher Count in 2018-2019**
+
+```{r}
+sch_count_18_19<-hr_color_list[["overall"]] %>% count(teacher_years_18_19_c,sch_type_18_19) %>% 
+  pivot_wider(names_from = teacher_years_18_19_c,
+              values_from = n) %>% 
+  select(sch_type_18_19, `0-5 years`, `6-10 years`,
+         `11-15 years`, `15+ years`) %>% filter(!is.na(sch_type_18_19))
+
+colnames(sch_count_18_19)[1]<-"School Type"
+
+sch_count_18_19 %>% kable()
+```
+
+**Teacher Count in 2019-2020**
+
+```{r}
+sch_count_19_20<-hr_color_list[["overall"]] %>% count(teacher_years_19_20_c,sch_type_19_20) %>% 
+  pivot_wider(names_from = teacher_years_19_20_c,
+              values_from = n) %>% 
+  select(sch_type_19_20, `0-5 years`, `6-10 years`,
+         `11-15 years`, `15+ years`) %>% filter(!is.na(sch_type_19_20))
+
+colnames(sch_count_19_20)[1]<-"School Type"
+
+sch_count_19_20 %>% kable()
+```
+
+**Teacher Count in 2020-2021**
+
+```{r}
+sch_count_20_21<-hr_color_list[["overall"]] %>% count(teacher_years_20_21_c,sch_type_20_21) %>% 
+  pivot_wider(names_from = teacher_years_20_21_c,
+              values_from = n) %>% 
+  select(sch_type_20_21, `0-5 years`, `6-10 years`,
+         `11-15 years`, `15+ years`)%>% filter(!is.na(sch_type_20_21))
+
+colnames(sch_count_20_21)[1]<-"School Type"
+
+sch_count_20_21 %>% kable()
+```
+
+**Teacher Count in 2021-2022**
+
+```{r}
+sch_count_21_22<-hr_color_list[["overall"]] %>% count(teacher_years_21_22_c,sch_type_21_22) %>% 
+  pivot_wider(names_from = teacher_years_21_22_c,
+              values_from = n) %>% 
+  select(sch_type_21_22, `0-5 years`, `6-10 years`,
+         `11-15 years`, `15+ years`)%>% filter(!is.na(sch_type_21_22))
+
+colnames(sch_count_21_22)[1]<-"School Type"
+
+sch_count_21_22 %>% kable()
+```
+
+**Teacher Count in 2022-2023**
+
+```{r}
+sch_count_22_23<-hr_color_list[["overall"]] %>% count(teacher_years_22_23_c,sch_type_22_23) %>% 
+  pivot_wider(names_from = teacher_years_22_23_c,
+              values_from = n) %>% 
+  select(sch_type_22_23, `0-5 years`, `6-10 years`,
+         `11-15 years`, `15+ years`)%>% filter(!is.na(sch_type_22_23))
+
+colnames(sch_count_22_23)[1]<-"School Type"
+
+sch_count_22_23 %>% kable()
+```
+
+**Teacher Count in 2023-2024**
+
+```{r}
+sch_count_23_24<-hr_color_list[["overall"]] %>% count(teacher_years_23_24_c,sch_type_23_24) %>% 
+  pivot_wider(names_from = teacher_years_23_24_c,
+              values_from = n) %>% 
+  select(sch_type_23_24, `0-5 years`, `6-10 years`,
+         `11-15 years`, `15+ years`)%>% filter(!is.na(sch_type_23_24))
+
+colnames(sch_count_23_24)[1]<-"School Type"
+
+sch_count_23_24 %>% kable()
+```
+
+</details>
+
+### 0-5 Years Teaching Experience
+
+<details>
+
+**All Schools**
+
+```{r}
+toc_combined_tbls[["overall"]][["0-5 years"]]<-
+  update_tbl_names(toc_combined_tbls[["overall"]][["0-5 years"]])
+toc_combined_tbls[["overall"]][["0-5 years"]]%>% kable()
+toc_bar_plots_combined[["overall"]][["0-5 years"]]
+```
+
+</details>
+
+### 6-10 Years Teaching Experience
+
+<details>
+
+**All Schools**
+
+```{r}
+toc_combined_tbls[["overall"]][["6-10 years"]]<-
+  update_tbl_names(toc_combined_tbls[["overall"]][["6-10 years"]])
+toc_combined_tbls[["overall"]][["6-10 years"]]%>% kable()
+toc_bar_plots_combined[["overall"]][["6-10 years"]]
+```
+
+</details>
+
+### 11-15 Years Teaching Experience
+
+<details>
+
+**All Schools**
+
+```{r}
+toc_combined_tbls[["overall"]][["11-15 years"]]<-
+  update_tbl_names(toc_combined_tbls[["overall"]][["11-15 years"]])
+toc_combined_tbls[["overall"]][["11-15 years"]]%>% kable()
+toc_bar_plots_combined[["overall"]][["11-15 years"]]
+```
+
+</details>
+
+### 15+ Years Teaching Experience
+
+<details>
+
+**All Schools**
+
+```{r}
+toc_combined_tbls[["overall"]][["15+ years"]]<-
+  update_tbl_names(toc_combined_tbls[["overall"]][["15+ years"]])
+toc_combined_tbls[["overall"]][["15+ years"]]%>% kable()
+toc_bar_plots_combined[["overall"]][["15+ years"]]
+```
+
+</details>
+
+## Retention: By Neighborhood
+
+**Main Finding:** Teacher Retention among Community Schools varies by neighborhood.
+
+In some neighborhoods, teacher retention is higher in Community Schools compared to the teacher retention of traditional public schools in the area.
+
+For example, see **Boyle Heights:**
+
+<details>
+
+```{r, echo=FALSE}
+bar_plots_neigh[["boyle_heights"]]
+```
+
+**Number of CS:** `r nrow(rent_by_neighborhood[["boyle_heights"]][["cs"]]) -1`
+
+**Number of TS:** `r nrow(rent_by_neighborhood[["boyle_heights"]][["ts"]]) -1`
+
+**Overall Combined Table**
+
+```{r, echo=FALSE}
+rent_by_neighborhood[["boyle_heights"]][["combined_overall"]]<-rent_by_neighborhood[["boyle_heights"]][["combined_overall"]] %>% select(-c(rent))
+
+rent_by_neighborhood[["boyle_heights"]][["combined_overall"]]<-update_tbl_names(rent_by_neighborhood[["boyle_heights"]][["combined_overall"]])
+
+rent_by_neighborhood[["boyle_heights"]][["combined_overall"]] %>% kable()
+```
+
+</details>
+
+In other neighborhoods, teacher retention between Community Schools and Traditional Public Schools are similar to each other.
+
+An example of this is the **Monroe** neighborhood:
+
+<details>
+
+```{r, echo=FALSE}
+bar_plots_neigh[["monroe"]]
+```
+
+**Number of CS:** `r nrow(rent_by_neighborhood[["monroe"]][["cs"]]) -1`
+
+**Number of TS:** `r nrow(rent_by_neighborhood[["monroe"]][["ts"]]) -1`
+
+**Overall Combined Table**
+
+```{r, echo=FALSE}
+rent_by_neighborhood[["monroe"]][["combined_overall"]]<-rent_by_neighborhood[["monroe"]][["combined_overall"]] %>% select(-c(rent))
+
+rent_by_neighborhood[["monroe"]][["combined_overall"]]<-update_tbl_names(rent_by_neighborhood[["monroe"]][["combined_overall"]])
+
+rent_by_neighborhood[["monroe"]][["combined_overall"]] %>% kable()
+```
+
+</details>
+
+Lastly, in other neighborhoods, teacher retention in Community Schools is lower than Traditional Public Schools.
+
+An example of this is the **MacArthur Park** neighborhood:
+
+<details>
+
+```{r, echo=FALSE}
+bar_plots_neigh[["macarthur_park"]]
+```
+
+**Number of CS:** `r nrow(rent_by_neighborhood[["macarthur_park"]][["cs"]]) -1`
+
+**Number of TS:** `r nrow(rent_by_neighborhood[["macarthur_park"]][["ts"]]) -1`
+
+**Overall Combined Table**
+
+```{r, echo=FALSE}
+rent_by_neighborhood[["macarthur_park"]][["combined_overall"]]<-rent_by_neighborhood[["macarthur_park"]][["combined_overall"]] %>% select(-c(rent))
+
+rent_by_neighborhood[["macarthur_park"]][["combined_overall"]]<-update_tbl_names(rent_by_neighborhood[["macarthur_park"]][["combined_overall"]])
+
+rent_by_neighborhood[["macarthur_park"]][["combined_overall"]] %>% kable()
+```
+
+</details>
+
+# Appendix
+
+## Community School Retention Rate
+
+**Main Finding:** There is a large variance among retention rates among the Community Schools. For instance, retention rate can range from the low 60s to the high 90s. This is true among Elementary, Middle, and High Schools.
+
+### CS: Overall
+
+<details>
+
+```{r}
+cs_rent_tbls<-cs_rent_tbls2 %>% select(-c(rent))
+cs_rent_tbls<-update_tbl_names(cs_rent_tbls)
+cs_rent_tbls %>% kable()
+```
+
+**Note:** The numbers in the parentheses represents the number of teachers in that schools for the previous school year. For instance, (39) in the 2019 column says that there are 39 teachers in the 2018-2019 school year.
+
+</details>
+
+### CS: Elementary Schools
+
+<details>
+
+```{r}
+cs_elem_rent_tbls<-cs_elem_rent_tbls %>% select(-c(rent))
+cs_elem_rent_tbls<-update_tbl_names(cs_elem_rent_tbls)
+cs_elem_rent_tbls %>% kable()
+```
+
+</details>
+
+### CS: Middle/High Schools
+
+<details>
+
+```{r}
+cs_ms_hs_rent_tbls<-cs_ms_hs_rent_tbls %>% select(-c(rent))
+cs_ms_hs_rent_tbls<-update_tbl_names(cs_ms_hs_rent_tbls)
+cs_ms_hs_rent_tbls %>% kable()
+```
+
+</details>
+
+## Traditional Public Schools Retention Rate
+
+**Main Finding:** There is a large variance among retention rates among Traditional Schools. This is true among Elementary, Middle, and High Schools.
+
+### TS: Overall
+
+<details>
+
+```{r}
+ts_rent_tbls<-ts_rent_tbls %>% select(-c(rent))
+ts_rent_tbls<-update_tbl_names(ts_rent_tbls)
+ts_rent_tbls %>% kable()
+```
+
+</details>
+
+### TS: Elementary Schools
+
+<details>
+
+```{r}
+ts_elem_rent_tbls<-ts_elem_rent_tbls %>% select(-c(rent))
+ts_elem_rent_tbls<-update_tbl_names(ts_elem_rent_tbls)
+ts_elem_rent_tbls %>% kable()
+```
+
+</details>
+
+### TS: Middle/High Schools
+
+<details>
+
+```{r}
+ts_ms_hs_rent_tbls<-ts_ms_hs_rent_tbls %>% select(-c(rent))
+ts_ms_hs_rent_tbls<-update_tbl_names(ts_ms_hs_rent_tbls)
+ts_ms_hs_rent_tbls %>% kable()
+```
+
+</details>
+
+## By Neighborhood Analyses
+
+```{r, echo = FALSE, results='asis'}
+
+gxs<-lapply(1:length(update_neigh_string), function(x){
+  
+  neighborhood_title <- update_neigh_string[[x]]
+  neighborhood<-names(rent_by_neighborhood)[[x]]
+
+  knit_child(
+    '_03_report_full - child.Rmd', envir = environment(), quiet = TRUE
+    
+  )
+  
+})
+
+cat(unlist(gxs), sep = '\n')
+
+```

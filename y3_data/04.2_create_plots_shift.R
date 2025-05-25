@@ -1,13 +1,13 @@
 ################################################################################
 ##
 ## [ PROJ ] < Community School Teacher Retention Study >
-## [ FILE ] < 04_create_plots.R >
+## [ FILE ] < 04.1_create_plots_shift.R >
 ## [ AUTH ] < Jeffrey Yo >
-## [ INIT ] < 9/2/24 >
+## [ INIT ] < 5/24/25 >
 ##
 ################################################################################
 
-#Goal: Create Plots
+#Goal: Create Plots for shifting
 
 ################################################################################
 
@@ -47,15 +47,15 @@ create_combined_tbl<-function(df_cs, df_ts){
   
   #created combined overall table
   
-  cs<-df_cs %>% filter(rent == "Overall Retention Rate %") %>% 
+  cs<-df_cs %>% filter(shift == "Overall Shifting Rate %") %>% 
     mutate(school = case_when(
-      school == "Overall Retention Rate %" ~ "CS Overall Retention Rate")) 
+      school == "Overall Shifting Rate %" ~ "CS Overall Shifting Rate")) 
   
-  ts<-df_ts %>% filter(rent == "Overall Retention Rate %") %>% 
+  ts<-df_ts %>% filter(shift == "Overall Shifting Rate %") %>% 
     mutate(school = case_when(
-      school == "Overall Retention Rate %" ~ "TS Overall Retention Rate")) 
+      school == "Overall Shifting Rate %" ~ "TS Overall Shifting Rate")) 
   
-  df_update<-rbind(cs, ts) %>% select(-c(rent))
+  df_update<-rbind(cs, ts) %>% select(-c(shift))
   
   return(df_update)
 }
@@ -65,13 +65,13 @@ create_plot_tbl <- function(df) {
   data_long <- pivot_longer(df, 
                             cols = starts_with("yr_"), 
                             names_to = "Year", 
-                            values_to = "Retention") %>% 
+                            values_to = "Shifting") %>% 
     mutate(
       School = case_when(
-        school == "CS Overall Retention Rate" ~ "CS",
-        school == "TS Overall Retention Rate" ~ "TS",
-        school == "Combined Overall Retention Rate" ~ "Overall",
-        ),
+        school == "CS Overall Shifting Rate" ~ "CS",
+        school == "TS Overall Shifting Rate" ~ "TS",
+        school == "Combined Overall Shifting Rate" ~ "Overall",
+      ),
       Year = case_when(
         Year == "yr_2019" ~ "2019",
         Year == "yr_2020" ~ "2020",
@@ -85,13 +85,13 @@ create_plot_tbl <- function(df) {
 
 create_bar_plot1<-function(df, graph_title){
   
-  bar_graph<-ggplot(df, aes(x = Year, y = Retention, fill = School)) +
+  bar_graph<-ggplot(df, aes(x = Year, y = Shifting, fill = School)) +
     geom_bar(stat = "identity", position = "dodge") +
-    geom_text(aes(label = paste0(Retention, "%")), 
+    geom_text(aes(label = paste0(Shifting, "%")), 
               position = position_dodge(width = 0.9), 
               vjust = -0.5) +  # Places the text above the bars
     labs(title = graph_title, x = "Year",
-         y = "Retention Rate (%)") +
+         y = "Shifting Rate (%)") +
     scale_fill_manual(values = c("CS" = "#2D68C4", "TS" = "#F2A900")) +
     theme_minimal() + 
     theme(plot.title = element_text(hjust = 0.5))
@@ -101,13 +101,13 @@ create_bar_plot1<-function(df, graph_title){
 
 create_bar_plot2<-function(df, graph_title){
   
-  bar_graph<-ggplot(df, aes(x = Year, y = Retention, fill = School)) +
+  bar_graph<-ggplot(df, aes(x = Year, y = Shifting, fill = School)) +
     geom_bar(stat = "identity", position = "dodge") +
-    geom_text(aes(label = paste0(Retention, "%")), 
+    geom_text(aes(label = paste0(Shifting, "%")), 
               position = position_dodge(width = 0.9), 
               vjust = -0.5) +  # Places the text above the bars
     labs(title = graph_title, x = "Year",
-         y = "Retention Rate (%)") +
+         y = "Shifting Rate (%)") +
     scale_fill_manual(values = c("CS" = "#2D68C4", "TS" = "#F2A900",
                                  "Overall" = "gray")) +
     theme_minimal() + 
@@ -120,9 +120,9 @@ create_bar_plot2<-function(df, graph_title){
 ## load & inspect data
 ## ---------------------------
 
-load(file.path(code_file_dir, "rent_tbls.RData"))
+load(file.path(code_file_dir, "shift_tbls.RData"))
 
-load(file.path(code_file_dir, "toc_rent_tbls.RData"))
+load(file.path(code_file_dir, "toc_shift_tbls.RData"))
 
 ## -----------------------------------------------------------------------------
 ## Part 1 - Create CS/TS Combined Tables 
@@ -132,18 +132,18 @@ combined_tbls<-vector("list", 3)
 names(combined_tbls)<-c("overall", "elem", "ms_hs")
 
 #CS/TS Overall
-combined_tbls[["overall"]]<-create_combined_tbl(cs_rent_tbls,ts_rent_tbls) 
+combined_tbls[["overall"]]<-create_combined_tbl(cs_shift_tbls,ts_shift_tbls) 
 
 #CS/TS Elementary
-combined_tbls[["elem"]]<-create_combined_tbl(cs_elem_rent_tbls,ts_elem_rent_tbls) 
+combined_tbls[["elem"]]<-create_combined_tbl(cs_elem_shift_tbls,ts_elem_shift_tbls) 
 
 #CS/TS Middle/High School
-combined_tbls[["ms_hs"]]<-create_combined_tbl(cs_ms_hs_rent_tbls,ts_ms_hs_rent_tbls) 
+combined_tbls[["ms_hs"]]<-create_combined_tbl(cs_ms_hs_shift_tbls,ts_ms_hs_shift_tbls) 
 
 
 #TOC List
 
-teach_year_string<-names(toc_rent_overall[["cs"]])
+teach_year_string<-names(toc_shift_overall[["cs"]])
 toc_combined_tbls<-vector("list", 3)
 names(toc_combined_tbls)<-c("overall", "elem", "ms_hs")
 
@@ -156,20 +156,20 @@ for (teach_type in names(toc_combined_tbls)){
 
 for (teach in teach_year_string){
   toc_combined_tbls[["overall"]][[teach]]<-
-    create_combined_tbl(toc_rent_overall[["cs"]][[teach]],
-                        toc_rent_overall[["ts"]][[teach]])
+    create_combined_tbl(toc_shift_overall[["cs"]][[teach]],
+                        toc_shift_overall[["ts"]][[teach]])
 }
 
 for (teach in teach_year_string){
   toc_combined_tbls[["elem"]][[teach]]<-
-    create_combined_tbl(toc_rent_overall_elem[["cs"]][[teach]],
-                        toc_rent_overall_elem[["ts"]][[teach]])
+    create_combined_tbl(toc_shift_overall_elem[["cs"]][[teach]],
+                        toc_shift_overall_elem[["ts"]][[teach]])
 }
 
 for (teach in teach_year_string){
   toc_combined_tbls[["ms_hs"]][[teach]]<-
-    create_combined_tbl(toc_rent_overall_ms_hs[["cs"]][[teach]],
-                        toc_rent_overall_ms_hs[["ts"]][[teach]])
+    create_combined_tbl(toc_shift_overall_ms_hs[["cs"]][[teach]],
+                        toc_shift_overall_ms_hs[["ts"]][[teach]])
 }
 
 ## -----------------------------------------------------------------------------
@@ -185,15 +185,15 @@ names(bar_plots_combined)<-c("overall", "elem", "ms_hs")
 
 bar_plots_combined[["overall"]]<-
   create_bar_plot1(plot_combined_tbls[["overall"]],
-                   "2019-2023 Retention Rate: Overall")
+                   "2019-2023 Shifting Rate: Overall")
 
 bar_plots_combined[["elem"]]<-
   create_bar_plot1(plot_combined_tbls[["elem"]],
-                   "2019-2023 Retention Rate: Elementary Schools")
+                   "2019-2023 Shifting Rate: Elementary Schools")
 
 bar_plots_combined[["ms_hs"]]<-
   create_bar_plot1(plot_combined_tbls[["ms_hs"]],
-                   "2019-2023 Retention Rate: Middle/High Schools")
+                   "2019-2023 Shifting Rate: Middle/High Schools")
 
 
 #TOC
@@ -218,13 +218,13 @@ for (teach_type in names(toc_combined_tbls)){
 
 toc_bar_plots_combined[["overall"]][["overall"]]<-
   create_bar_plot1(toc_plot_combined_tbls[["overall"]][["overall"]],
-                   "2019-2023 TOC Retention Rate: Overall")
+                   "2019-2023 TOC Shifting Rate: Overall")
 
 for (a in c("0-5 years","6-10 years","11-15 years","15+ years")){
   
   toc_bar_plots_combined[["overall"]][[a]]<-
     create_bar_plot1(toc_plot_combined_tbls[["overall"]][[a]],
-                     str_c("2019-2023 TOC Retention Rate: ", a))
+                     str_c("2019-2023 TOC Shifting Rate: ", a))
 }
 
 #Elementary and High School
@@ -238,26 +238,24 @@ for (b in c("elem", "ms_hs")){
   toc_bar_plots_combined[[b]][["overall"]]<-
     create_bar_plot1(toc_plot_combined_tbls[["overall"]][["overall"]],
                      str_c("2019-2023 TOC ", c,
-                           " Retention Rate: Overall"))
+                           " Shifting Rate: Overall"))
   
   for (a in c("0-5 years","6-10 years","11-15 years","15+ years")){
     
     toc_bar_plots_combined[[b]][[a]]<-
       create_bar_plot1(toc_plot_combined_tbls[["overall"]][[a]],
                        str_c("2019-2023 TOC ",c,
-                             " Retention Rate: ", a))
+                             " Shifting Rate: ", a))
   }
   
 }
 
-
 ## -----------------------------------------------------------------------------
 ## Part 2 - Neighborhood Combined Tables & Plots
 ## -----------------------------------------------------------------------------
-
-plot_neigh_tbls<-map(names(rent_by_neighborhood),
-                              function(x) create_plot_tbl(rent_by_neighborhood[[x]][["combined_overall"]]))
-names(plot_neigh_tbls)<-names(rent_by_neighborhood)
+plot_neigh_tbls<-map(names(shift_by_neighborhood),
+                     function(x) create_plot_tbl(shift_by_neighborhood[[x]][["combined_overall"]]))
+names(plot_neigh_tbls)<-names(shift_by_neighborhood)
 
 #create function to transform string
 transform_neighborhood_string <- function(string) {
@@ -275,13 +273,13 @@ update_neigh_string<-transform_neighborhood_string(names(plot_neigh_tbls))
 
 bar_plots_neigh<-map2(plot_neigh_tbls, update_neigh_string,
                       function(x,y) create_bar_plot2(x,
-                                                     str_c("2019-2023 Retention Rate: ",
+                                                     str_c("2019-2023 Shifting Rate: ",
                                                            y)))
 
 #TOC
-plot_neigh_tbls_toc<-map(names(rent_by_neighborhood_toc),
-                     function(x) create_plot_tbl(rent_by_neighborhood_toc[[x]][["combined_overall"]]))
-names(plot_neigh_tbls_toc)<-names(rent_by_neighborhood_toc)
+plot_neigh_tbls_toc<-map(names(shift_by_neighborhood_toc),
+                         function(x) create_plot_tbl(shift_by_neighborhood_toc[[x]][["combined_overall"]]))
+names(plot_neigh_tbls_toc)<-names(shift_by_neighborhood_toc)
 
 
 update_neigh_string<-transform_neighborhood_string(names(plot_neigh_tbls_toc))
@@ -290,9 +288,9 @@ update_neigh_string<-transform_neighborhood_string(names(plot_neigh_tbls_toc))
 #bar_plots_neigh<-vector("list", length(update_neigh_string))
 
 toc_bar_plots_neigh<-map2(plot_neigh_tbls_toc, update_neigh_string,
-                      function(x,y) create_bar_plot2(x,
-                                                     str_c("2019-2023 TOC Retention Rate: ",
-                                                           y)))
+                          function(x,y) create_bar_plot2(x,
+                                                         str_c("2019-2023 TOC Shifting Rate: ",
+                                                               y)))
 
 ## -----------------------------------------------------------------------------
 ## Part 3 - Save Data
@@ -300,12 +298,11 @@ toc_bar_plots_neigh<-map2(plot_neigh_tbls_toc, update_neigh_string,
 
 save(combined_tbls,plot_combined_tbls,bar_plots_combined,
      plot_neigh_tbls, bar_plots_neigh, update_neigh_string,
-     file = file.path(code_file_dir, "rent_plots.RData"))
-
+     file = file.path(code_file_dir, "shift_plots.RData"))
 
 save(toc_combined_tbls,toc_plot_combined_tbls,toc_bar_plots_combined,
      plot_neigh_tbls_toc, toc_bar_plots_neigh, update_neigh_string,
-     file = file.path(code_file_dir,  "rent_plots_toc.RData"))
+     file = file.path(code_file_dir,  "shift_plots_toc.RData"))
 
 ## -----------------------------------------------------------------------------
 ## END SCRIPT
