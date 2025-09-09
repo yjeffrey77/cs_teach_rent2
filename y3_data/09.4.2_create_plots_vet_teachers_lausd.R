@@ -1,13 +1,19 @@
 ################################################################################
 ##
 ## [ PROJ ] < Community School Teacher Retention Study >
-## [ FILE ] < 09.4_create_plots_vet_teachers_lausd.R >
+## [ FILE ] < 09.4.2_create_plots_vet_teachers_lausd.R >
 ## [ AUTH ] < Jeffrey Yo >
-## [ INIT ] < 3/25/25 >
+## [ INIT ] < 9/8/25 >
 ##
 ################################################################################
 
 #Goal: Create Plots of the percentage of veteran teachers in a school
+#For articles.
+
+#Hence does the following changes:
+#1. Removes years 2019 and 2020
+#2. Change "District" to "LAUSD"
+#3. Update Years to 2020-2021, 2021-2022, 2022-2023, 2023-2024
 
 ################################################################################
 
@@ -55,7 +61,7 @@ create_bar_plot1 <- function(df, graph_title) {
          y = "Teacher Percentage (%)") +
     scale_fill_manual(values = c("CS" = "#2D68C4", 
                                  "TS" = "#F2A900",
-                                 "District" = "#4CAF50")) +  # Added color for LAUSD
+                                 "LAUSD" = "#4CAF50")) +  # Added color for LAUSD
     theme_minimal() + 
     theme(plot.title = element_text(hjust = 0.5))
   
@@ -89,7 +95,7 @@ create_bar_plot_cs<-function(df, graph_title){
     labs(title = graph_title, x = "Year",
          y = "Teacher Percentage (%)") +
     scale_fill_manual(values = c("CS" = "#2D68C4", "TS" = "#F2A900",
-                                 "District" = "#4CAF50")) +
+                                 "LAUSD" = "#4CAF50")) +
     theme_minimal() + 
     theme(plot.title = element_text(hjust = 0.5))
 
@@ -106,7 +112,7 @@ create_bar_plot_cs_no_ts<-function(df, graph_title){
     labs(title = graph_title, x = "Year",
          y = "Teacher Percentage (%)") +
     scale_fill_manual(values = c("CS" = "#2D68C4",
-                                 "District" = "#4CAF50")) +
+                                 "LAUSD" = "#4CAF50")) +
     theme_minimal() + 
     theme(plot.title = element_text(hjust = 0.5))
   
@@ -128,7 +134,7 @@ create_bar_plot_cs_cohort<-function(df, graph_title){
               vjust = -0.5) +  # Places the text above the bars
     labs(title = graph_title, x = "Year",
          y = "Teacher Percentage (%)") +
-    scale_fill_manual(values = c("CS" = "#2D68C4", "District" = "#4CAF50")) +
+    scale_fill_manual(values = c("CS" = "#2D68C4", "LAUSD" = "#4CAF50")) +
     theme_minimal() + 
     theme(plot.title = element_text(hjust = 0.5))
   
@@ -236,6 +242,26 @@ names(lausd_vet_perc_bipoc_tbl)<-sch_string
 lausd_tbls<-list(lausd_vet_perc_overall_tbl, lausd_vet_perc_bipoc_tbl)
 names(lausd_tbls)<-c("overall", "bipoc")
 
+#update school function
+update_school <- function(x) {
+  if (is.data.frame(x)) {
+    if ("School" %in% names(x)) {
+      x <- x %>%
+        mutate(School = if_else(School == "District", "LAUSD", School),
+               school = if_else(school == "District", "LAUSD", school))
+    }
+    return(x)
+  } else if (is.list(x)) {
+    return(lapply(x, update_school))
+  } else {
+    return(x)
+  }
+}
+
+#update school column
+lausd_tbls<-update_school(lausd_tbls)
+
+
 ## -----------------------------------------------------------------------------
 ## Part 2.1 - Transform update_long_plot_tbls
 ## -----------------------------------------------------------------------------
@@ -260,6 +286,12 @@ update_long_plot_tbls<-map(long_plot_tbls,
                 }) %>% bind_rows(.id = "sch_type")
            return(type_df) 
           }) %>% bind_rows(.id = "type_df")
+
+#remove years 2019 and 2020
+
+update_long_plot_tbls<-update_long_plot_tbls %>% 
+  filter(!c(Year %in% c("2019","2020")))
+
 
 make_list<-function(df_list){
   
@@ -336,6 +368,9 @@ add_lausd_across_grades<-function(df_list, district_tbls){
 update_long_plot_tbls<-map(update_long_plot_tbls,
                            function(x) add_lausd_across_grades(x,lausd_tbls))
 
+#update the results 
+update_long_plot_tbls<-update_school(update_long_plot_tbls)
+
 ## -----------------------------------------------------------------------------
 ## Part 2.2 - Transform update_long_plot_tbls_demo
 ## -----------------------------------------------------------------------------
@@ -395,19 +430,22 @@ update_long_plot_tbls_demo<-flatten_toc_list(long_plot_tbls_demo)
 
 #Filter and clean values
 update_long_plot_tbls_demo<-update_long_plot_tbls_demo %>% 
-  filter(ppl_type == "teachers" & vet_status == "10+ years")
+  filter(ppl_type == "teachers" & vet_status == "10+ years") %>% 
+  filter(!c(Year %in% c("2019","2020")))
 
 update_long_plot_tbls_demo<-update_long_plot_tbls_demo %>% 
   mutate(School = case_when(
     school == "CS Percent of TOC Teachers" ~ "CS",
     school == "TS Percent of TOC Teachers" ~ "TS"
-  ))
+  )) %>% 
+  filter(!c(Year %in% c("2019","2020")))
 
 update_long_plot_tbls_demo_cs<-update_long_plot_tbls_demo %>% 
   mutate(School = case_when(
     school == "CS Percent of TOC Teachers" ~ "CS",
     school == "TS Percent of TOC Teachers" ~ "TS"
-  )) %>% filter(School != "TS")
+  )) %>% filter(School != "TS") %>% 
+  filter(!c(Year %in% c("2019","2020")))
   
 #CS, TS, LAUSD Version
 #make into list
@@ -436,13 +474,16 @@ update_long_plot_tbls_demo_cohort<-flatten_toc_list(long_plot_tbls_demo_cohort)
 
 #Filter and clean values
 update_long_plot_tbls_demo_cohort<-update_long_plot_tbls_demo_cohort %>% 
-  filter(ppl_type == "teachers" & teach_sample == "10+ years")
+  filter(ppl_type == "teachers" & teach_sample == "10+ years") %>% 
+  filter(!c(Year %in% c("2019","2020")))
 
 update_long_plot_tbls_demo_cohort<-update_long_plot_tbls_demo_cohort %>% 
   mutate(School = case_when(
     school == "CS Percent of TOC Teachers" ~ "CS",
     school == "TS Percent of TOC Teachers" ~ "TS"
-  ))
+  )) %>% 
+  filter(!c(Year %in% c("2019","2020")))
+
 
 #make into list
 make_list2<-function(df_list){
@@ -493,8 +534,44 @@ update_long_plot_tbls_demo_cohort<-map(update_long_plot_tbls_demo_cohort,
                                                              lausd_tbls[["bipoc"]][["Total"]])
                             })})})})
   
+
+#Filter out 2019 and 2020
+# update_long_plot_tbls_demo_cohort<-update_long_plot_tbls_demo_cohort %>%
+#   filter(!c(Year %in% c("2019","2020")))
+
 ## -----------------------------------------------------------------------------
-## Part 3 - Plot Tables
+## Part 3 - Plot Tables names
+## -----------------------------------------------------------------------------
+
+#update school function
+update_year_names <- function(x) {
+  if (is.data.frame(x)) {
+    if ("Year" %in% names(x)) {
+      x <- x %>%
+        mutate(Year = case_when(
+          Year == "2021" ~ "2020-2021",
+          Year == "2022" ~ "2021-2022",
+          Year == "2023" ~ "2022-2023",
+          Year == "2024" ~ "2023-2024",
+          TRUE ~ Year
+        ))
+    }
+    return(x)
+  } else if (is.list(x)) {
+    return(lapply(x, update_year_names))
+  } else {
+    return(x)
+  }
+}
+
+#update table lists
+update_long_plot_tbls<-update_year_names(update_long_plot_tbls)
+update_long_plot_tbls_demo<-update_year_names(update_long_plot_tbls_demo)
+update_long_plot_tbls_demo_cs<-update_year_names(update_long_plot_tbls_demo_cs)
+update_long_plot_tbls_demo_cohort<-update_year_names(update_long_plot_tbls_demo_cohort)
+
+## -----------------------------------------------------------------------------
+## Part 4 - Plot Tables Version 2
 ## -----------------------------------------------------------------------------
 
 sch_type_string2<-c("all","elementary","secondary")
@@ -590,7 +667,7 @@ update_plot_tbls_demo_cohort[["cohort_sch"]][["cohort2"]][["teachers"]][["10+ ye
 
 save(update_plots,update_plots_demo, update_plot_tbls_demo_cohort,
      update_long_plot_tbls_demo_cs,update_plots_demo_cs,
-     file = file.path(code_file_dir,"lasud_cs_veteran_plots.RData"))
+     file = file.path(code_file_dir,"lasud_cs_veteran_plots_2.RData"))
 
 ## -----------------------------------------------------------------------------
 ## END SCRIPT

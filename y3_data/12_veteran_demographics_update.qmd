@@ -37,7 +37,7 @@ library(knitr)
 #getwd()
 
 #set current directory
-code_file_dir<-file.path("C:/Users/yjeff/Desktop/Community Schools/Teacher Retention Data","Analyses", "cs_teach_rent2","y3_data")
+code_file_dir<-file.path("C:/Users/yjeff/Desktop/Community Schools/Teacher Retention Data","LA", "Analyses", "cs_teach_rent2","y3_data")
 
 data_file_dir<-file.path("C:/Users/yjeff/Box/LAUSD TR Data Year 3")
 
@@ -56,7 +56,8 @@ load(file.path(code_file_dir, "demo_combined_tbls.RData"))
 load(file.path(code_file_dir,'lausd_veteran.RData'))
 load(file.path(code_file_dir,"veteran_percent_plots.RData"))
 load(file.path(code_file_dir, "lausd_vet_data.RData"))
-load(file.path(code_file_dir, "lasud_cs_veteran_plots.RData"))
+#load(file.path(code_file_dir, "lasud_cs_veteran_plots.RData"))
+load(file.path(code_file_dir, "lasud_cs_veteran_plots_2.RData"))
 
 ## Add Lists
 #source(file.path(code_file_dir, "00_school_lists.R"))
